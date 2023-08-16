@@ -6,9 +6,8 @@ import IconHamburger from '@/components/icon/IconHamburger'
 import { Button } from '@/components/ui/button'
 import LinkGroup from './LinkGroup';
 
-
 export default function Navbar() {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
   const sidebarRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function Navbar() {
     <>
       <div className="flex justify-end mt-4">
         {showSidebar ? (
-          <Button className="z-30 rounded-full text-lg font-bold" onClick={() => setShowSidebar(false)}>X</Button>
+          <Button className="z-30 rounded-full text-lg font-bold drop-shadow-lg" onClick={() => setShowSidebar(false)}>X</Button>
         ) : (
           <>
             <Button variant="link" className="p-2 md:hidden" onClick={() => setShowSidebar(true)}>
@@ -39,8 +38,9 @@ export default function Navbar() {
           </>
         )}
       </div>
+      {showSidebar && (<div className='top-0 left-0 absolute w-full h-full bg-gray-800 z-10 opacity-30'></div>)}
 
-      <div className={`top-0 end-0 h-full w-8/12 z-20 bg-secondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'}`} ref={sidebarRef}>
+      <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-secondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'}`} ref={sidebarRef}>
         <div className='mt-6 flex'>
           <Image src="/logo.svg" width={30} height={30} alt="logo image" />
           <span className='mt-auto ml-1'>媞藝術空間</span>
