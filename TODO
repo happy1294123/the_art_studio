@@ -5,8 +5,14 @@ layout:
   ✔ rwd: sidebar @done(23-08-16 09:58)
   ✔ footer @done(23-08-16 12:58)
   ✔ set color @done(23-08-16 12:58)
-
-☐ git push setting
+  ✔ git push setting @done(23-08-16 20:37)
 
 預約課程:
   ☐ 預約課程頁面
+
+sidebar:
+  ☐ login / register / logout
+  ☐ 個人頁面
+
+all page:
+  ☐ nprogress

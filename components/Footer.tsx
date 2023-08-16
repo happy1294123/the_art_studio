@@ -8,7 +8,7 @@ export default function Footer() {
         <a href="https://www.facebook.com/TheArtStudio2022/"><Image src="/facebook.svg" width={20} height={20} alt="facebook" className='pt-0.5' /></a>
         <a href="https://line.me/ti/p/~@theartstudio"><Image src="/line.svg" width={24} height={24} alt="line" /></a>
       </div>
-      <span className="text-[10px] text-gray-500 flex justify-center">2023 ©  Thé Art Studio. All Rights Reserved.</span>
+      <span className="text-[10px] text-fontColor flex justify-center">2023 ©  Thé Art Studio. All Rights Reserved.</span>
     </div>
   )
 }

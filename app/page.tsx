@@ -1,5 +1,6 @@
 export default function Home() {
   return (
-    <div>這是主頁</div>
+    <div className="text-fontColor">主頁</div>
   )
 }
+ 
