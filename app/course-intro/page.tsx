@@ -1,10 +1,13 @@
-import NprogressBar from '@/components/NprogressBar';
+import makeSleep from '@/lib/makeSleep'
 
-export default function CourseIntro() {
+// try async fetch
+export default async function CourseIntro() {
+  const re: Promise<Todo> = makeSleep()
+  const data = await re
+
   return (
     <>
-      {/* <NprogressBar /> */}
-      <div>CourseIntro</div>
+      <div>CourseIntro {JSON.stringify(data)}</div>
     </>
   )
 }

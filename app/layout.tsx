@@ -40,10 +40,10 @@ export default function RootLayout({
 
   return (
     <html>
-      <body className={LXGWWenKai.className}>
+      <body className={`${LXGWWenKai.variable} font-sans`}>
         <div className='container'>
           <Navbar />
-          <main>{children}</main>
+          <main className="my-6">{children}</main>
         </div>
         <Footer />
       </body>

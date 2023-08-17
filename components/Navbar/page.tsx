@@ -34,7 +34,10 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-between mt-4">
+        <div className={pathname !== '/' ? 'visible my-auto' : 'invisible'}>
+          <Image src="/logo.svg" width={30} height={30} alt="logo" />
+        </div>
         {showSidebar ? (
           <Button className="z-30 rounded-full text-lg font-bold drop-shadow-lg" onClick={() => setShowSidebar(false)}>X</Button>
         ) : (

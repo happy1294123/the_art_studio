@@ -11,9 +11,16 @@
 //   }
 // }
 
-type Todo = {
-  "userId": number,
-  "id": number,
-  "title": string,
-  "completed": boolean
+// type Todo = {
+//   "userId": number,
+//   "id": number,
+//   "title": string,
+//   "completed": boolean
+// }
+
+type MyDate = {
+  "year": number,
+  "month": number, // start from 0
+  "date": number,
+  "day": number, // 星期一 == 1, 星期天 == 0
 }

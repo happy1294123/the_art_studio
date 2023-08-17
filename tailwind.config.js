@@ -17,6 +17,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        myGradient: ' -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 60%)',
         fontColor: "#734E31",
         bgColor: "#EBE4D4",
         border: "hsl(var(--border))",
