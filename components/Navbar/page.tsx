@@ -50,7 +50,7 @@ export default function Navbar() {
       </div>
       {showSidebar && (<div className='top-0 left-0 absolute w-full h-full bg-gray-800 z-10 opacity-30'></div>)}
 
-      <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-secondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
+      <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-bgColor fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
         <div className='mt-6 flex cursor-pointer' onClick={() => handleNavigate('/')}>
           <Image src="/logo.svg" width={40} height={40} alt="logo image" />
           <span className='mt-auto ml-1 text-fontColor text-2xl'>媞藝術空間</span>
