@@ -4,8 +4,11 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 235, 228, 212;
-  --background-end-rgb: 235, 228, 212;
+  /* 米白色 */
+  /* --background-start-rgb: 235, 228, 212;
+  --background-end-rgb: 235, 228, 212; */
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
 }
 
 /* @media (prefers-color-scheme: dark) {
