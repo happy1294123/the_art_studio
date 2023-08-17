@@ -7,6 +7,6 @@ export default function Loading() {
 
   useEffect(() => {
     NProgress.start()
-    return () => NProgress.done()
+    return () => { NProgress.done() }
   }, [])
 }
