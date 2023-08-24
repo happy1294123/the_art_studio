@@ -26,11 +26,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.main-height {
+  min-height: calc(100% - 50px);
+}
+
 /* custom utility classes */
 @layer components {
   .my-list-item {
     @apply hover:bg-fontColor hover:text-white md:hover:bg-fontColor rounded-xl duration-300 cursor-pointer;
   }
+}
+
+.flex-center {
+  @apply flex justify-center items-center
 }
 
 /* NProgress Style */

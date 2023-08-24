@@ -1,10 +1,10 @@
 import TheTitle from '@/components/TheTitle'
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <TheTitle>主頁</TheTitle>
-      {/* {process.env.DATABASE_URL} */}
+      {process.env.HOST}
     </>
   )
 }

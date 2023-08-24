@@ -42,11 +42,13 @@ export default function RootLayout({
         <link rel='icon' href='/logo.svg' />
       </head>
       <body className={`${LXGWWenKai.variable} font-sans`}>
-        <div className='container'>
-          <Navbar />
-          <main className="my-6">{children}</main>
+        <div className="flex flex-col min-h-screen justify-between">
+          <div className='container'>
+            <Navbar />
+            <main className="my-6">{children}</main>
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </body>
     </html >
   )

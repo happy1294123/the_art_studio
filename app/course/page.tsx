@@ -1,29 +1,23 @@
-import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
-import CourseList from '@/components/course/CourseList'
+import CoursesShower from '@/components/course/CoursesShower'
 import TheTitle from '@/components/TheTitle'
 
-export default async function Course({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | undefined };
-}) {
+async function getCourses(): Promise<Course[]> {
+  const res = await fetch(`http://127.0.0.1:3000/api/course`)
+  return res.json()
+}
 
-  const makeTodayDate = () => {
-    const today = new Date()
-    return `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`
-  }
-  const date = searchParams?.date || makeTodayDate()
+export default async function Course() {
+  const courses = await getCourses()
+
   return (
     <>
       <TheTitle>預約課程</TheTitle>
-      <div className="md:flex justify-around gap-4">
-        <div id="HalfScreenDatePicker" className="mr-4 mt-6 hidden md:block"></div>
+      <div className="md:flex justify-center gap-4">
+        <div id="HalfScreenDatePicker" className="mr-4 mt-6 relative hidden md:block"></div>
         <div className="my-4 md:w-[600px]">
-          <OneLineDatePicker date={date} />
-          <CourseList date={date} />
+          <CoursesShower courses={courses} />
         </div>
       </div>
     </>
   )
-
 }
