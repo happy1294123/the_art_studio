@@ -39,3 +39,8 @@ type Course = {
   "total_reservations": number
   "reservations": number
 }
+
+type Users = {
+  "id": number | null,
+  "name": string | null
+}

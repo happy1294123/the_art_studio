@@ -1,7 +1,10 @@
+import TheTitle from '@/components/TheTitle'
+
 export default function Home() {
   return (
     <>
-      <div className="text-3xl text-fontColor font-bold">主頁</div>
+      <TheTitle>主頁</TheTitle>
+      {/* {process.env.DATABASE_URL} */}
     </>
   )
 }
