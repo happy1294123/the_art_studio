@@ -1,5 +1,5 @@
 'use client'
-import DatePicker from '@/components/course/DatePicker'
+import DatePicker from '@/components/course/DatePicker/main'
 import CourseItem from '@/components/course/CourseItem'
 import { useState, useMemo } from 'react'
 

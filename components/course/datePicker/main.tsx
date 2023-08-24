@@ -53,7 +53,7 @@ type Props = {
   courses: Course[]
 }
 
-export default function OneLineDatePicker({ selectedDate, setSelectedDate, courses }: Props) {
+export default function DatePicker({ selectedDate, setSelectedDate, courses }: Props) {
   const dateList = useMemo(() => createDateList(), [])
 
   // let keepScroll: any
