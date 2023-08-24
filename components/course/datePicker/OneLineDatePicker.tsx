@@ -71,7 +71,7 @@ export default function OneLineDatePicker({ date }: Props) {
 
   useEffect(() => {
     router.push(`/course?date=${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1}/${selectedDate.getDate()}`)
-  }, [selectedDate])
+  }, [selectedDate, router])
 
   // let keepScroll: any
   // const handleMoveScroll = (direction: 'left' | 'right') => {
