@@ -1,0 +1,15 @@
+.myGradient {
+    mask-image: radial-gradient(
+        circle at 50% 0,
+        rgba(0,0,0,1) 70%,
+        rgba(255, 0, 0, 0) 100%
+    );
+    scroll-snap-align: center;
+    /* scrollbar-color: red yellow !important; */
+
+ /* scrollbar-width: none !important; */
+}
+
+.myGradient::-webkit-scrollbar {
+    display: none;
+}

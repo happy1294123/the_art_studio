@@ -17,24 +17,21 @@ module.exports = {
     },
     extend: {
       colors: {
-        myGradient: ' -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 5%, rgba(0, 0, 0, 1) 60%)',
-        fontColor: "#734E31",
-        bgColor: "#EBE4D4",
+        fontColor: "#403931",
+        headingColor: "#947964",
+        bgColorSecondary: "#D1C0AD",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#947964",
-          foreground: "#E7FBFF",
-          // DEFAULT: "hsl(var(--primary))",
-          // foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#B34744",
+          foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "#DCC9B4",
-          // DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#F1D5CD",
+          foreground: "#6C370D",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

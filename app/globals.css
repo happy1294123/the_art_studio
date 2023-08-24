@@ -3,12 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  /* 米白色 */
-  /* --background-start-rgb: 235, 228, 212;
-  --background-end-rgb: 235, 228, 212; */
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 64, 57, 49;
+  --background-start-rgb: 255, 245, 237;
+  --background-end-rgb: 255, 245, 237;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -29,8 +26,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-/* NProgress Style */
+/* custom utility classes */
+@layer components {
+  .my-list-item {
+    @apply hover:bg-fontColor hover:text-white md:hover:bg-fontColor rounded-xl duration-300 cursor-pointer;
+  }
+}
 
+/* NProgress Style */
 #nprogress {
   pointer-events: none;
 }

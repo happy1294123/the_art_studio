@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar/page'
 import Footer from '@/components/Footer'
-import NprogressBar from '@/components/NprogressBar';
 import localFont from 'next/font/local'
 const LXGWWenKai = localFont({
   src: [
@@ -37,9 +36,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   return (
     <html>
+      <head>
+        <link rel='icon' href='/logo.svg' />
+      </head>
       <body className={`${LXGWWenKai.variable} font-sans`}>
         <div className='container'>
           <Navbar />

@@ -11,5 +11,5 @@ export default function Loading() {
     return () => { NProgress.done() }
   }, [])
 
-  // return <>loading...</>
+  // return <LoadingSkeleton />
 }
