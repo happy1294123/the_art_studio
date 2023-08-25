@@ -23,6 +23,7 @@ type MyDate = {
   "month": number, // start from 0
   "date": number,
   "day": number, // 星期一 == 1, 星期天 == 0
+  "hasCourse": boolean
 }
 
 type Course = {

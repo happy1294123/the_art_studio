@@ -39,7 +39,7 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
       {dateList.map(d => (
         <div key={`${d.month}/${d.date}`}
           className={`grid text-center snap-center 
-                    ${isSelectDate(d.month, d.date) ? 'font-bold' : 'text-gray-300'}
+                    ${d.hasCourse ? 'font-bold' : 'text-gray-300'}
                       cursor-pointer`}
           data-date={`${d.year}/${d.month + 1}/${d.date}`}
           onClick={handleSelect}

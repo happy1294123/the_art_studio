@@ -45,83 +45,13 @@ export async function GET(request: Request) {
       "total_reservations": 4
     },
     {
-      "id": 3,
+      "id": 4,
       "name": '初階瑜伽',
       "type": {
         "name": '空中瑜伽',
         "color": 'red'
       },
-      "date": '2023/8/26',
-      "time": '13:00 ~ 14:00',
-      "teacher_image": "/anonymous.svg",
-      "teacher": 'Abby老師',
-      "reservations": 2,
-      "total_reservations": 4
-    },
-    {
-      "id": 3,
-      "name": '初階瑜伽',
-      "type": {
-        "name": '空中瑜伽',
-        "color": 'red'
-      },
-      "date": '2023/8/26',
-      "time": '13:00 ~ 14:00',
-      "teacher_image": "/anonymous.svg",
-      "teacher": 'Abby老師',
-      "reservations": 2,
-      "total_reservations": 4
-    },
-    {
-      "id": 3,
-      "name": '初階瑜伽',
-      "type": {
-        "name": '空中瑜伽',
-        "color": 'red'
-      },
-      "date": '2023/8/26',
-      "time": '13:00 ~ 14:00',
-      "teacher_image": "/anonymous.svg",
-      "teacher": 'Abby老師',
-      "reservations": 2,
-      "total_reservations": 4
-    },
-    {
-      "id": 3,
-      "name": '初階瑜伽',
-      "type": {
-        "name": '空中瑜伽',
-        "color": 'red'
-      },
-      "date": '2023/8/26',
-      "time": '13:00 ~ 14:00',
-      "teacher_image": "/anonymous.svg",
-      "teacher": 'Abby老師',
-      "reservations": 2,
-      "total_reservations": 4
-    },
-    {
-      "id": 3,
-      "name": '初階瑜伽',
-      "type": {
-        "name": '空中瑜伽',
-        "color": 'red'
-      },
-      "date": '2023/8/26',
-      "time": '13:00 ~ 14:00',
-      "teacher_image": "/anonymous.svg",
-      "teacher": 'Abby老師',
-      "reservations": 2,
-      "total_reservations": 4
-    },
-    {
-      "id": 3,
-      "name": '初階瑜伽',
-      "type": {
-        "name": '空中瑜伽',
-        "color": 'red'
-      },
-      "date": '2023/8/26',
+      "date": '2023/8/31',
       "time": '13:00 ~ 14:00',
       "teacher_image": "/anonymous.svg",
       "teacher": 'Abby老師',
