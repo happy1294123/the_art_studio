@@ -35,7 +35,7 @@ type Props = {
 }
 
 export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateSet, weekDayMap }: Props) {
-  const ref = useRef()
+  const ref = useRef<HTMLDivElement>(null)
   const dateList = useMemo(() => createDateList(dateSet), [dateSet])
 
   let keepScroll: any

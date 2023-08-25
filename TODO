@@ -11,18 +11,18 @@ layout:
 
 預約課程:
   ☐ 預約課程頁面
-  ☐ date picker  
-    ☐ 有課程的字體黑色，無課程的字體灰色
-    ☐ auto load date
-    ☐ limit selectable date
+  ✔ date picker @done(23-08-25 15:53)
+    ✔ 有課程的字體黑色，無課程的字體灰色 @done(23-08-25 15:52)
+    ✔ auto load date @done(23-08-25 15:52)
+    ✔ limit selectable date @done(23-08-25 15:52)
     ✔ one line picker @done(23-08-24 16:49)
       ✔ hightlight today @done(23-08-20 22:56)
         ✔ init +- 20 days @done(23-08-20 21:25)
         ✔ load more 10 days @done(23-08-24 16:48)
       ✔ use calander to pick date @done(23-08-24 16:48)
       ✔ slider date @done(23-08-20 22:57)
-  ☐ get rid of searchParams
-  ☐ make outside server
+  ✔ get rid of searchParams @done(23-08-25 15:52)
+  ✘ make outside server @cancelled(23-08-25 15:52)
 
 sidebar:
   ☐ login / register / logout
