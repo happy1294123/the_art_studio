@@ -1,32 +1,18 @@
 
 layout:
-  ✔ add fonts @done(23-08-15 16:18)
-  ✔ navbar @done(23-08-16 09:58)
-  ✔ rwd: sidebar @done(23-08-16 09:58)
-  ✔ footer @done(23-08-16 12:58)
-  ✔ set color @done(23-08-16 12:58)
-  ✔ git push setting @done(23-08-16 20:37)
-  ✔ update color @done(23-08-20 16:09)
-  ✔ favicon @done(23-08-20 17:38)
+  ☐ clear logo
+  ☐ navbar
+    ☐ show list
+      ☐ desktop hover to show list
+      ☐ mobile click to show list
+      ☐ only show one list
+    ☐ top bg color
+    ☐ 當前位置標記
 
 預約課程:
   ☐ 預約課程頁面
-  ✔ date picker @done(23-08-25 15:53)
-    ✔ 有課程的字體黑色，無課程的字體灰色 @done(23-08-25 15:52)
-    ✔ auto load date @done(23-08-25 15:52)
-    ✔ limit selectable date @done(23-08-25 15:52)
-    ✔ one line picker @done(23-08-24 16:49)
-      ✔ hightlight today @done(23-08-20 22:56)
-        ✔ init +- 20 days @done(23-08-20 21:25)
-        ✔ load more 10 days @done(23-08-24 16:48)
-      ✔ use calander to pick date @done(23-08-24 16:48)
-      ✔ slider date @done(23-08-20 22:57)
-  ✔ get rid of searchParams @done(23-08-25 15:52)
-  ✘ make outside server @cancelled(23-08-25 15:52)
+    ☐ 點擊預約彈出 modal
 
 sidebar:
   ☐ login / register / logout
   ☐ 個人頁面
-
-all page:
-  ✔ nprogress @done(23-08-17 13:03)

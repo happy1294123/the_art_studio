@@ -34,18 +34,18 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex justify-between mt-4">
-        <Link href="/">
-          <Image src="/logoWithText.svg" className='mt-2' width={150} height={35} alt="logo" />
+      <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}`}>
+        <Link href="/" className="my-auto">
+          <Image src="/logoWithText3x.png" width={150} height={35} alt="logo" />
         </Link>
         {showSidebar ? (
-          <Button variant="secondary" className="z-30 rounded-full text-lg font-bold drop-shadow-lg px-3" onClick={() => setShowSidebar(false)}>X</Button>
+          <Button variant="secondary" className="z-30 rounded-full text-lg font-bold drop-shadow-lg px-3 my-auto" onClick={() => setShowSidebar(false)}>X</Button>
         ) : (
           <>
-            <Button variant="link" className="p-2 md:hidden" onClick={() => setShowSidebar(true)}>
+            <Button variant="link" className="p-2 md:hidden my-auto" onClick={() => setShowSidebar(true)}>
               <IconHamburger />
             </Button>
-            <div className='hidden md:block w-50 h-[37px]'>
+            <div className='hidden md:block w-50 h-[37px] my-auto'>
               <LinkGroup key={pathname} handleNavigate={handleNavigate} />
             </div>
           </>
