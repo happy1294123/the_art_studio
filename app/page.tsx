@@ -4,7 +4,7 @@ export default async function Home() {
   return (
     <>
       <TheTitle>主頁</TheTitle>
-      {process.env.HOST}
+      {/* {process.env.HOST} */}
     </>
   )
 }

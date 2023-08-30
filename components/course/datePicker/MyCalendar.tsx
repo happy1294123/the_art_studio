@@ -10,6 +10,7 @@ import { zhCN } from "date-fns/locale"
 type Props = {
   selectedDate: Date,
   setSelectedDate: any
+  dateList: MyDate[]
 }
 
 const monthMap = {
@@ -27,19 +28,26 @@ const monthMap = {
   11: '十二月',
 }
 
-export default function MyCalander({ selectedDate, setSelectedDate }: Props) {
+export default function MyCalander({ selectedDate, setSelectedDate, dateList }: Props) {
   const ref = useRef(null)
   const month = useMemo(() => monthMap[selectedDate.getMonth() as keyof typeof monthMap], [selectedDate])
-
-  const handleClosePopover = () => {
-    if (ref.current) {
-      const currentRef = ref.current as HTMLElement
-      currentRef.click()
-    }
-  }
+  const disabledDays = useMemo(() => {
+    const hasNotCourse: Date[] = []
+    let after
+    dateList.forEach((d, i) => {
+      if (!d.hasCourse) {
+        const date = new Date(d.year, d.month, d.date)
+        hasNotCourse.push(date)
+      }
+      if (i === dateList.length - 1) {
+        after = new Date(d.year, d.month, d.date)
+      }
+    })
+    return [...hasNotCourse, { before: new Date(), after }]
+  }, [dateList])
 
   return (
-    <Popover>
+    < Popover>
       <PopoverTrigger className="text-gray-400 rounded-xl underline underline-offset-4 mb-3" ref={ref}>{month}</PopoverTrigger>
       <PopoverContent className="bg-white rounded-3xl ml-10 w-12/12">
         <Calendar
@@ -47,8 +55,8 @@ export default function MyCalander({ selectedDate, setSelectedDate }: Props) {
           selected={selectedDate}
           onSelect={setSelectedDate}
           required={true}
-          onDayClick={handleClosePopover}
           locale={zhCN}
+          disabled={disabledDays}
         />
       </PopoverContent>
     </Popover >

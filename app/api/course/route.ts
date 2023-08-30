@@ -9,7 +9,7 @@ export async function GET(request: Request) {
         "name": '地面瑜伽',
         "color": 'blue'
       },
-      "date": '2023/8/25',
+      "date": '2023/9/1',
       "time": '12:00 ~ 13:00',
       "teacher_image": "/anonymous.svg",
       "teacher": 'Lily老師',
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
         "name": '地面瑜伽',
         "color": 'blue'
       },
-      "date": '2023/8/25',
+      "date": '2023/9/1',
       "time": '14:00 ~ 15:00',
       "teacher_image": "/anonymous.svg",
       "teacher": 'Lisa老師',
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         "name": '空中瑜伽',
         "color": 'red'
       },
-      "date": '2023/8/26',
+      "date": '2023/9/5',
       "time": '13:00 ~ 14:00',
       "teacher_image": "/anonymous.svg",
       "teacher": 'Abby老師',
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
         "name": '空中瑜伽',
         "color": 'red'
       },
-      "date": '2023/8/31',
+      "date": '2023/9/10',
       "time": '13:00 ~ 14:00',
       "teacher_image": "/anonymous.svg",
       "teacher": 'Abby老師',

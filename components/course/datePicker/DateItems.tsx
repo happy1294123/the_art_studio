@@ -22,23 +22,23 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
   }
 
   const handleSelect = (e: MouseEvent): void => {
-    // set scroll 
     const target = e.target as Element
     target.scrollIntoView({ behavior: 'smooth', inline: 'center' })
 
-    // set selectDate
+    // // set selectDate
     const parentNode = target.parentNode as HTMLElement
     if (parentNode.hasAttribute('data-date')) {
       const selectDate = parentNode.dataset.date as string
       setSelectedDate(new Date(selectDate))
     }
+    document.querySelector('.my-popover-content')?.remove()
   }
 
   return (
     <>
       {dateList.map(d => (
         <div key={`${d.month}/${d.date}`}
-          className={`grid text-center snap-center 
+          className={`grid text-center snap-center date-div
                     ${d.hasCourse ? 'font-bold' : 'text-gray-300'}
                       cursor-pointer`}
           data-date={`${d.year}/${d.month + 1}/${d.date}`}

@@ -4,6 +4,6 @@ export default function TheTitle({
   children: React.ReactNode
 }) {
   return (
-    <div className="text-3xl text-headingColor font-bold my-6">{children}</div>
+    <div className="my-title text-3xl text-headingColor font-bold my-6">{children}</div>
   )
 }

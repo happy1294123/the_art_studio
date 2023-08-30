@@ -57,7 +57,7 @@ export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateS
   return (
     <div className="w-full h-50 p-2 grid gap-2">
       <div className="flex justify-between -mb-4 md:hidden">
-        <MyCalander selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <MyCalander dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         <span className="text-gray-400 pb-2 rounded-xl underline underline-offset-4 cursor-pointer" onClick={() => setSelectedDate(new Date())}>今天</span>
       </div>
       <div className="w-full h-14 relative overflow-hidden">

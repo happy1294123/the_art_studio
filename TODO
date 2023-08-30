@@ -1,3 +1,11 @@
+setup:
+  ☐ use prisma
+  ☐ use mailgun
+  ☐ use planetScale
+
+course:
+  ✘ 日曆增大 @cancelled(23-08-31 07:47)
+  ✔ 若沒有課程不能選擇 (配合one line datePicker) @done(23-08-31 07:47)
 
 layout:
   ☐ clear logo
@@ -15,4 +23,5 @@ layout:
 
 sidebar:
   ☐ login / register / logout
+    ☐ next-auth
   ☐ 個人頁面
