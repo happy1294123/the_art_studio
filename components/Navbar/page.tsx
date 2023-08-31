@@ -7,6 +7,7 @@ import Link from 'next/link';
 import IconHamburger from '@/components/icon/IconHamburger'
 import { Button } from '@/components/ui/button'
 import LinkGroup from './LinkGroup';
+import MdLinkGroup from './MdLinkGroup';
 
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -46,7 +47,7 @@ export default function Navbar() {
               <IconHamburger />
             </Button>
             <div className='hidden md:block w-50 h-[37px] my-auto'>
-              <LinkGroup key={pathname} handleNavigate={handleNavigate} />
+              <MdLinkGroup />
             </div>
           </>
         )}

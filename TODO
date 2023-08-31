@@ -19,8 +19,8 @@ layout:
     ☐ 當前位置標記
 
 預約課程:
-  ☐ 預約課程頁面
-    ☐ 點擊預約彈出 modal
+  ✔ 預約課程頁面 @done(23-08-31 20:51)
+    ✔ 點擊預約彈出 modal @done(23-08-31 20:51)
 
 sidebar:
   ☐ login / register / logout
