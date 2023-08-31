@@ -45,3 +45,8 @@ type Users = {
   "id": number | null,
   "name": string | null
 }
+
+type Option = {
+  label: string,
+  value: string
+}

@@ -57,7 +57,21 @@ export async function GET(request: Request) {
       "teacher": 'Abby老師',
       "reservations": 2,
       "total_reservations": 4
-    }
+    },
+    {
+      "id": 5,
+      "name": '中階瑜伽',
+      "type": {
+        "name": '地面瑜伽',
+        "color": 'blue'
+      },
+      "date": '2023/9/1',
+      "time": '12:00 ~ 13:00',
+      "teacher_image": "/anonymous.svg",
+      "teacher": 'Lily老師',
+      "reservations": 1,
+      "total_reservations": 4
+    },
   ]
 
   return NextResponse.json(data)
