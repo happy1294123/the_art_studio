@@ -19,10 +19,12 @@ export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, da
       if (!dateSet.includes(dateString)) {
         hasNotCourse.push(date)
       }
+      // console.log(hasNotCourse)
       date = new Date(date.setDate(date.getDate() + 1))
     }
     return [...hasNotCourse, { before: new Date(), after }]
   }, [dateSet])
+
   const [numberOfMonths, setNumberOfMonths] = useState(1)
   useEffect(() => {
     const checkNumberOfMonths = () => setNumberOfMonths(window.innerWidth > 1300 ? 2 : 1)

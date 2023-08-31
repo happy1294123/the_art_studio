@@ -4,6 +4,7 @@ setup:
   ☐ use planetScale
 
 course:
+  ☐ 篩選器
   ✘ 日曆增大 @cancelled(23-08-31 07:47)
   ✔ 若沒有課程不能選擇 (配合one line datePicker) @done(23-08-31 07:47)
 

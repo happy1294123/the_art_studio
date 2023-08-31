@@ -2,6 +2,7 @@ import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import Image from 'next/image'
 import { Button } from '../ui/button'
+import ReserveDialog from './ReserveDialog'
 
 type Props = {
   course: Course
@@ -30,7 +31,8 @@ export default function CourseItem({ course }: Props) {
           </div>
           {course.reservations === course.total_reservations
             ? <Button variant="secondary" disabled>額滿</Button>
-            : <Button >預約</Button >}
+            : <ReserveDialog course={course} />
+          }
         </div>
       </div>
     </div >
