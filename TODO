@@ -1,9 +1,14 @@
 setup:
-  ☐ use prisma
+  ✔ use prisma @done(23-09-04 10:50)
   ☐ use mailgun
   ☐ use planetScale
 
 course:
+  ✔ query has course date from db use prisma @done(23-09-04 11:49)
+  ✔ make date options @started(23-09-04 11:50) @done(23-09-04 19:01) @lasted(7h11m8s)
+  ✔ make course ssr fetch @done(23-09-04 19:01)
+  ☐ half calandar error
+  ☐ make Skeleton
   ☐ 篩選器
   ✘ 日曆增大 @cancelled(23-08-31 07:47)
   ✔ 若沒有課程不能選擇 (配合one line datePicker) @done(23-08-31 07:47)

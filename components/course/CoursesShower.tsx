@@ -2,10 +2,12 @@
 import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
 import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDatePicker'
 import CourseItem from '@/components/course/CourseItem'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { PrismaClient } from '@prisma/client'
+import dateFormatter from '@/lib/dateFormatter'
 
 type Props = {
-  courses: Course[]
+  dateOptions: string[]
 }
 
 const weekDayMap = {
@@ -18,27 +20,38 @@ const weekDayMap = {
   6: '六',
 }
 
-export default function CoursesShower({ courses }: Props) {
+export default function CoursesShower({ dateOptions }: Props) {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const selectedCourse = useMemo(() => courses.filter(c => c.date === `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1}/${selectedDate.getDate()}`), [selectedDate, courses])
-  const dateSet = useMemo(() => [...new Set(courses.map(c => c.date))], [courses])
+  const [courses, setCourses] = useState<Course[]>([])
+  // const selectedCourse = useMemo(() => courses.filter(c => c.date === `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1}/${selectedDate.getDate()}`), [selectedDate, courses])
+
+  useEffect(() => {
+    const fetchCourses = async (date: Date) => {
+      const dateString = dateFormatter(date)
+      const res = await fetch(`/api/course?date=${dateString}`)
+      const courses = await res.json()
+      setCourses(courses)
+    }
+    fetchCourses(selectedDate)
+    document.querySelector('.my-popover-content')?.remove()
+  }, [selectedDate])
   return (
     <>
       <div className="md:grid grid-cols-2 gap-8">
         <div className="hidden md:block mx-auto">
-          <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
+          {/* <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateOptions} /> */}
         </div>
         <div className="w-full">
-          <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} weekDayMap={weekDayMap} />
+          <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateOptions} weekDayMap={weekDayMap} />
           <div className="text-center text-lg p-1 bg-bgColorSecondary rounded-full mb-1 md:">
             {selectedDate.getFullYear()}/
             {selectedDate.getMonth() + 1}/
             {selectedDate.getDate()}
             ({weekDayMap[selectedDate.getDay() as keyof typeof weekDayMap]})
           </div>
-          {selectedCourse.length > 0
-            ? (<div>
-              {selectedCourse.map((course: Course) => (<CourseItem key={course.id} course={course} />))}
+          {courses.length > 0
+            ? (<div className="mt-2">
+              {courses.map(course => (<CourseItem key={course.id} course={course} />))}
             </div>)
             : <div className="text-center">當天沒有課程</div>
           }

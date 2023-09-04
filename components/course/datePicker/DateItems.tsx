@@ -1,4 +1,5 @@
-import { MouseEvent } from 'react'
+import { MouseEvent, useState, useEffect } from 'react'
+import styles from './style.module.css'
 
 type Props = {
   dateList: MyDate[],
@@ -21,9 +22,14 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
     return false
   }
 
+  const [smooth, setSmooth] = useState(false)
+  useEffect(() => {
+    setSmooth(true)
+  }, [])
+
   const handleSelect = (e: MouseEvent): void => {
     const target = e.target as Element
-    target.scrollIntoView({ behavior: 'smooth', inline: 'center' })
+    target.scrollIntoView({ inline: 'center' })
 
     // // set selectDate
     const parentNode = target.parentNode as HTMLElement
@@ -35,21 +41,24 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
   }
 
   return (
-    <>
-      {dateList.map(d => (
-        <div key={`${d.month}/${d.date}`}
-          className={`grid text-center snap-center date-div
+    <div className={`w-full h-14 relative overflow-hidden ${styles.myGradient}`}>
+      <div className={`flex w-full absolute overflow-x-scroll gap-8 px-[1000px] ${smooth && 'scroll-smooth'} ${styles.noScroll}`}>
+        {dateList.map(d => (
+          <div key={`${d.month}/${d.date}`}
+            className={`grid text-center snap-center date-div
                     ${d.hasCourse ? 'font-bold' : 'text-gray-300'}
-                      cursor-pointer`}
-          data-date={`${d.year}/${d.month + 1}/${d.date}`}
-          onClick={handleSelect}
-          ref={isSelectDate(d.month, d.date) ? (node: HTMLDivElement) => node?.click() : null}
-        >
-          <span>{weekDayMap[d.day as keyof typeof weekDayMap]}</span>
-          <span className={`${isSelectDate(d.month, d.date) ? 'bg-primary text-primary-foreground rounded-full' : null} ${d.date > 9 ? 'px-1' : 'px-2'} pt-[2px]`}>{d.date}</span>
-        </div >
-      ))
-      }
-    </>
+                      cursor-pointer `}
+            data-date={`${d.year}/${d.month + 1}/${d.date}`}
+            onClick={handleSelect}
+            ref={isSelectDate(d.month, d.date) ? (node: HTMLDivElement) => node?.scrollIntoView({ inline: 'center' }) : null}
+          >
+            <span>{weekDayMap[d.day as keyof typeof weekDayMap]}</span>
+            <span className={`${isSelectDate(d.month, d.date) ? 'bg-primary text-primary-foreground rounded-full' : null} ${d.date > 9 ? 'px-1' : 'px-2'} pt-[2px]`}>{d.date}</span>
+          </div >
+        ))
+        }
+      </div>
+    </div >
+
   )
 }

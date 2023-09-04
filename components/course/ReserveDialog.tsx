@@ -74,8 +74,7 @@ export default function ReserveDialog({ course }: Props) {
 
   const scheduleHref = useMemo(() => {
     const service = 'apple' // 依據個人資料獲取service
-    const [startTime, endTime] = course.time.split(' ~ ')
-    return `https://calndr.link/d/event/?service=${service}&start=${course.date} ${startTime}&end=${course.date} ${endTime}&title=[媞藝術空間] — ${course.name}&timezone=Asia/Taipei`
+    return `https://calndr.link/d/event/?service=${service}&start=${course.date} ${course.start_time}&end=${course.date} ${course.end_time}&title=[媞藝術空間] — ${course.name}&timezone=Asia/Taipei`
   }, [course])
 
   const [open, setOpen] = useState(false)
@@ -88,16 +87,16 @@ export default function ReserveDialog({ course }: Props) {
             <DialogHeader>
               <DialogTitle className='text-left'>
                 <span className="font-bold text-3xl">{course.name}</span>
-                <span className="ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type.name}</span>
+                <span className="ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
               </DialogTitle>
               <DialogDescription>
                 <div className="flex gap-2">
                   <BiTime className="my-auto text-xl" />
-                  <span>{dateString} {course.time}</span>
+                  <span>{dateString} {course.start_time} ~ {course.end_time}</span>
                 </div>
                 <div className="flex gap-2 my-2">
-                  <Image src={course.teacher_image} width={20} height={20} alt="teacher image" />
-                  <span className="my-auto">{course.teacher}</span>
+                  <Image src={course.teacher.image} width={20} height={20} alt="teacher image" />
+                  <span className="my-auto">{course.teacher.name}</span>
                 </div>
               </DialogDescription>
             </DialogHeader>

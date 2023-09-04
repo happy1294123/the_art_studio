@@ -27,18 +27,21 @@ type MyDate = {
 }
 
 type Course = {
-  "id": number,
-  "name": string,
-  "type": {
-    "name": string,
-    "color": string
-  },
-  "date": string,
-  "time": string,
-  "teacher": string,
-  "teacher_image": string,
-  "total_reservations": number
-  "reservations": number
+  id: number,
+  name: string,
+  type: string | null,
+  date: string,
+  start_time: string,
+  end_time: string,
+  teacherId: number,
+  current_rez: number
+  total_rez: number,
+  createdAt: Date,
+  updatedAt: Date,
+  teacher: {
+    name: string,
+    image: string
+  }
 }
 
 type Users = {
