@@ -2,6 +2,7 @@
 import { Calendar } from "@/components/ui/calendar"
 import { zhCN } from "date-fns/locale"
 import { useEffect, useState, useMemo } from "react"
+import dateFormatter from "@/lib/dateFormatter"
 
 type Props = {
   selectedDate: Date,
@@ -15,11 +16,10 @@ export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, da
     const hasNotCourse: Date[] = []
     let date = new Date()
     while (date < after) {
-      const dateString = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+      const dateString = dateFormatter(date)
       if (!dateSet.includes(dateString)) {
-        hasNotCourse.push(date)
+        hasNotCourse.push(new Date(date))
       }
-      // console.log(hasNotCourse)
       date = new Date(date.setDate(date.getDate() + 1))
     }
     return [...hasNotCourse, { before: new Date(), after }]
@@ -35,7 +35,6 @@ export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, da
 
   return (
     <div className="bg-white rounded-3xl border border-gray-300 flex-center relative">
-      <div className="text-gray-400 underline underline-offset-4 cursor-pointer absolute top-3 right-12" onClick={() => setSelectedDate(new Date())}>今天</div>
       <Calendar
         mode="single"
         selected={selectedDate}

@@ -30,10 +30,12 @@ const weekMap = {
 }
 
 type Props = {
-  course: Course
+  course: Course,
+  open: boolean,
+  setOpen: any
 }
 
-export default function ReserveDialog({ course }: Props) {
+export default function ReserveDialog({ course, open, setOpen }: Props) {
   const [isReservePage, setIsReservePage] = useState(true)
 
   const dateString = useMemo(() => {
@@ -77,7 +79,6 @@ export default function ReserveDialog({ course }: Props) {
     return `https://calndr.link/d/event/?service=${service}&start=${course.date} ${course.start_time}&end=${course.date} ${course.end_time}&title=[媞藝術空間] — ${course.name}&timezone=Asia/Taipei`
   }, [course])
 
-  const [open, setOpen] = useState(false)
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>

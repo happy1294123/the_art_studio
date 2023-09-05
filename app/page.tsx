@@ -1,4 +1,4 @@
-import TheTitle from '@/components/TheTitle'
+import TheTitle from '@/components/TheTitle'  
 
 export default async function Home() {
   return (

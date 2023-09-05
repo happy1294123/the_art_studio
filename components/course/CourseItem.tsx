@@ -1,7 +1,7 @@
+import { useState } from 'react'
 import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import Image from 'next/image'
-import { Button } from '../ui/button'
 import ReserveDialog from './ReserveDialog'
 
 type Props = {
@@ -9,10 +9,12 @@ type Props = {
 }
 
 export default function CourseItem({ course }: Props) {
+  const [openDialog, setOpenDialog] = useState(false)
+
   return (
-    <div className="p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md">
+    <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md ${course.current_rez === course.total_rez ? 'opacity-40' : 'cursor-pointer'}`} onClick={() => setOpenDialog(!openDialog)}>
       <div className="flex">
-        <span className="font-bold text-lg">{course.name}</span>
+        <span className="font-bold text-lg tracking-wider">{course.name}</span>
         <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
       </div>
       <div className="flex gap-2">
@@ -30,8 +32,8 @@ export default function CourseItem({ course }: Props) {
             <span className="text-xs">{course.current_rez}/{course.total_rez}</span>
           </div>
           {course.current_rez === course.total_rez
-            ? <Button variant="secondary" disabled>額滿</Button>
-            : <ReserveDialog course={course} />
+            ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
+            : <ReserveDialog course={course} open={openDialog} setOpen={setOpenDialog} />
           }
         </div>
       </div>

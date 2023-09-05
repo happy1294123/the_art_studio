@@ -8,11 +8,10 @@ import MyCalander from './MyCalendar'
 
 const createDateList = (coursesDateSet: string[]) => {
   const today = new Date()
-  const start = new Date(today.setDate(today.getDate() - 2))
   const lastDay = new Date(coursesDateSet.slice(-1)[0])
   const end = new Date(lastDay.setDate(lastDay.getDate() + 3))
   const tempDateList: MyDate[] = [];
-  for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+  for (let d = today; d <= end; d.setDate(d.getDate() + 1)) {
     const year = d.getFullYear()
     const month = d.getMonth()
     const date = d.getDate()
