@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/interaction": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
     "@planetscale/database": "^1.11.0",
     "@prisma/client": "^5.2.0",
     "@radix-ui/react-collapsible": "^1.0.3",

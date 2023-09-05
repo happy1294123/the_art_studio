@@ -1,4 +1,4 @@
-import { MouseEvent, useState, useEffect } from 'react'
+import { MouseEvent, useState, useEffect, useRef } from 'react'
 import styles from './style.module.css'
 
 type Props = {
@@ -22,9 +22,22 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
     return false
   }
 
+  const ref = useRef(null)
   const [smooth, setSmooth] = useState(false)
   useEffect(() => {
     setSmooth(true)
+
+    const scroller = ref.current as unknown as HTMLElement
+    if (scroller) {
+      scroller.addEventListener('wheel', (ev: WheelEvent) => {
+        ev.preventDefault();
+        scroller.scrollLeft += (ev.deltaY + ev.deltaX);
+      })
+    }
+    return scroller.removeEventListener('wheel', (ev: WheelEvent) => {
+      ev.preventDefault();
+      scroller.scrollLeft += (ev.deltaY + ev.deltaX);
+    })
   }, [])
 
   const handleSelect = (e: MouseEvent): void => {
@@ -42,7 +55,7 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
 
   return (
     <div className={`w-full h-14 relative overflow-hidden ${styles.myGradient}`}>
-      <div className={`flex w-full absolute overflow-x-scroll gap-8 px-[1000px] ${smooth && 'scroll-smooth'} ${styles.noScroll}`}>
+      <div className={`flex w-full absolute overflow-x-scroll gap-8 px-[1000px] ${smooth && 'scroll-smooth'} ${styles.noScroll}`} ref={ref}>
         {dateList.map(d => (
           <div key={`${d.month}/${d.date}`}
             className={`grid text-center snap-center date-div

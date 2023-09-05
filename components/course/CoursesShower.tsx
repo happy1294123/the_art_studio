@@ -43,12 +43,12 @@ export default function CoursesShower({ dateOptions }: Props) {
       setLoading(false)
       setCourses([])
     }
-  }, [selectedDate])
+  }, [dateOptions, selectedDate])
 
   return (
     <>
       <div className="md:grid grid-cols-2 gap-8">
-        <div className="hidden md:block mx-auto">
+        <div className="hidden h-full md:block mx-auto">
           <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
         </div>
         <div className="w-full">
@@ -63,11 +63,10 @@ export default function CoursesShower({ dateOptions }: Props) {
             ? [1, 2, 3].map(i => <CourseItemSkeleton key={i} />)
             : (courses.length > 0
               ? (<div className="mt-2">
-                {courses.map(course => (<CourseItem key={course.id} course={course} />))}
+                {courses.map(course => (<CourseItem key={course.id} course={course} weekDayMap={weekDayMap} />))}
               </div>
               )
               : <div className="text-center">當天沒有課程</div>)}
-
         </div>
       </div >
     </>

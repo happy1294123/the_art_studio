@@ -27,6 +27,7 @@ export default function Navbar() {
   }, [sidebarRef])
 
   useEffect(() => setLoaded(true), [])
+  useEffect(() => setShowSidebar(false), [pathname])
 
   const handleNavigate = (url: string) => {
     setShowSidebar(false)
@@ -57,7 +58,7 @@ export default function Navbar() {
       <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-bgColorSecondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
         <div className="mt-5">登入</div>
         <div className='mt-14 text-xl grid gap-2'>
-          <LinkGroup key={pathname} handleNavigate={handleNavigate} />
+          <LinkGroup key={pathname} />
         </div>
       </div >
     </>

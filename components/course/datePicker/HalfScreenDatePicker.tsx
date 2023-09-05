@@ -49,3 +49,71 @@ export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, da
   )
 }
 
+//  try fullcalendar
+
+// import FullCalendar from '@fullcalendar/react'
+// import dayGridPlugin from '@fullcalendar/daygrid'
+// import interactionPlugin from "@fullcalendar/interaction";
+
+// function renderEventContent(eventInfo: any) {
+//   return (
+//     <>
+//       <b>{eventInfo.timeText}</b>
+//       <i>{eventInfo.event.title}</i>
+//       <span>{eventInfo.extendedProps}</span>
+//     </>
+//   )
+// }
+
+// const handleDateSelect = (info: any) => {
+//   console.log(info)
+
+// }
+
+// const handleEventClick = (info: any) => {
+//   console.log(info)
+// }
+
+// const titleFormat = (date: any) => {
+//   console.log('titleFormat', date)
+//   // return '自定義月份名稱'
+// }
+
+// const datMap = {
+//   4: '天',
+//   5: '一',
+//   6: '二',
+//   7: '三',
+//   8: '四',
+//   9: '五',
+//   10: '六',
+// }
+
+// const events = [
+//   {
+//     title: 'Meeting',
+//     start: new Date(),
+//     end: '2023-09-05T16:00:00'
+//   }
+// ]
+
+// export default function DemoApp() {
+//   return (
+//     <div className='md:w-[400px] bg-white p-3 rounded-2xl'>
+//       <FullCalendar
+//         plugins={[dayGridPlugin, interactionPlugin]}
+//         initialView='dayGridMonth'
+//         weekends={true}
+//         events={events}
+//         eventContent={renderEventContent}
+//         // locale="zh-tw"
+//         selectable={true}
+//         select={handleDateSelect}
+//         eventClick={handleEventClick}
+//         titleFormat={titleFormat}
+//         dayHeaderFormat={(info) => datMap[info.date.day as keyof typeof datMap]}
+//         aspectRatio={0.8}
+//       />
+//     </div>
+//   )
+// }
