@@ -35,6 +35,18 @@ body {
   /* .my-list-item {
     @apply hover:bg-fontColor hover:text-white md:hover:bg-fontColor rounded-xl duration-300 cursor-pointer;
   } */
+  .animate-shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translated(0, 0, 0);
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0) }
+    25% { transform: translateX(5px) }
+    50% { transform: translateX(-5px) }
+    75% { transform: translateX(5px) }
+    100% { transform: translateX(0) }
+  }
 }
 
 .flex-center {
@@ -68,4 +80,23 @@ body {
   opacity: 1.0;
 
   transform: rotate(3deg) translate(0px, -4px);
+}
+
+/* animate */
+@keyframes dialog-content-show {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-content-hide {
+  from{
+    opacity: 1;
+  }
+  to{
+    opacity: 0;
+  }
 }

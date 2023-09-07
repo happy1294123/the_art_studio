@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar/page'
 import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
+import AuthProvider from '@/context/AuthProvider'
+
 const LXGWWenKai = localFont({
   src: [
     {
@@ -45,7 +47,11 @@ export default function RootLayout({
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <div className='container flex-1'>
-            <main className="my-6">{children}</main>
+            <main className="my-6">
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </main>
           </div>
           <Footer />
         </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 
+// 查找指定日期的課程
 export async function GET(req: Request) {
   const date = new URL(req.url).searchParams.get('date') as string
   const prisma = new PrismaClient()
@@ -18,6 +19,7 @@ export async function GET(req: Request) {
           image: true
         }
       },
+      Reservation: true
     }
   })
 

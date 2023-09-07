@@ -1,5 +1,6 @@
 const users = require('./seeds/users')
 const courses = require('./seeds/courses')
+const relations = require('./seeds/relations')
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
@@ -18,6 +19,12 @@ async function main() {
   for (let course of courses) {
     await prisma.course.create({
       data: course
+    })
+  }
+
+  for (let relation of relations) {
+    await prisma.reservation.create({
+      data: relation
     })
   }
 }

@@ -33,8 +33,13 @@ type Course = {
   date: string,
   start_time: string,
   end_time: string,
-  teacherId: number,
-  current_rez: number
+  teacher_id: number,
+  // current_rez: number
+  Reservation: {
+    course_id: number,
+    user_id: number,
+    created_at: string
+  }[],
   total_rez: number,
   createdAt: Date,
   updatedAt: Date,

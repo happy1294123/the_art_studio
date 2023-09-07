@@ -2,7 +2,7 @@ import CoursesShower from '@/components/course/CoursesShower'
 import TheTitle from '@/components/TheTitle'
 
 const fetchDateOptions = async () => {
-  const res = await fetch(process.env.HOST + '/api/course/date')
+  const res = await fetch(process.env.HOST + '/api/course/all')
   return res.json()
 }
 

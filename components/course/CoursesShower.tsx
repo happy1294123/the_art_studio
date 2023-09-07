@@ -32,6 +32,7 @@ export default function CoursesShower({ dateOptions }: Props) {
       const dateString = dateFormatter(date)
       const res = await fetch(`/api/course?date=${dateString}`)
       const courses = await res.json()
+      console.log(courses)
       setCourses(courses)
       setLoading(false)
     }

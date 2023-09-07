@@ -23,7 +23,7 @@ module.exports = {
         bgColorOther: "#EDDFCF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: "#B34744",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -41,7 +41,7 @@ module.exports = {
         muted: {
           // DEFAULT: "#D1C0AD",
           DEFAULT: "#BCB6B0",
-          foreground: "hsl(var(--muted-foreground))",
+          foreground: "#A89F96",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
@@ -69,7 +69,7 @@ module.exports = {
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
-        },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
