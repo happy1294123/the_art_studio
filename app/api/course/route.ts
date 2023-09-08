@@ -23,7 +23,7 @@ export async function GET(req: Request) {
       Reservation: true
     }
   })
-  console.log(courses)
+  console.log('courses', courses)
 
   return NextResponse.json(courses)
 }
