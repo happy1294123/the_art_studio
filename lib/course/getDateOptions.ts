@@ -1,8 +1,7 @@
-import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import dateFormatter from '@/lib/dateFormatter'
 
-export async function GET() {
+export default async function getDateOptions() {
   const prisma = new PrismaClient()
   const coursesDate = await prisma.course.findMany({
     where: {
@@ -18,6 +17,5 @@ export async function GET() {
     }
   })
 
-  return NextResponse.json([...new Set(coursesDate.map(c => c.date))])
+  return coursesDate.map(d => d.date)
 }
-

@@ -29,6 +29,8 @@ export default function CoursesShower({ dateOptions }: Props) {
 
   useEffect(() => {
     const fetchCourses = async (date: Date) => {
+      // const courses = await getCourseByDate(date)
+      // console.log(courses)
       const dateString = dateFormatter(date)
       const res = await fetch(`/api/course?date=${dateString}`)
       const courses = await res.json()
