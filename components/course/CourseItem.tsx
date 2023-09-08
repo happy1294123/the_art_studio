@@ -16,15 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from "next/image"
 
 type Props = {
   course: Course,
@@ -36,7 +32,6 @@ export default function CourseItem({ course, weekDayMap }: Props) {
   const [isReservePage, setIsReservePage] = useState(true)
   const [plan, setPlan] = useState('')
   const [planOpt, setPlanOpt] = useState<Option[]>([])
-  const { data: session } = useSession()
 
   const router = useRouter()
   const dateString = useMemo(() => {
@@ -72,11 +67,13 @@ export default function CourseItem({ course, weekDayMap }: Props) {
     setPlan(fetchOpt[0].value)
   }, [])
 
+  const { data: session } = useSession()
   const handleSubmitForm = async () => {
     if (!session) {
       router.push('/login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fcourse')
       return
     }
+    console.log(session.user)
     alert('reserve action')
     setIsReservePage(false)
   }
@@ -95,13 +92,9 @@ export default function CourseItem({ course, weekDayMap }: Props) {
         </div>
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <Avatar className="w-6 h-6 my-auto">
-              <AvatarImage src={course.teacher.image} alt="teacher" />
-              <AvatarFallback>{course.teacher.name.slice(0, 2)}</AvatarFallback>
-            </Avatar>
-            {/* <div className="w-full h-full rounded-full overflow-hidden bg-red-300">
-              <Image src={course.teacher.image} width={20} height={20} alt="teacher image" className="object-center my-auto" />
-            </div> */}
+            <div className="w-6 h-6 my-auto rounded-full overflow-hidden">
+              <Image src={course.teacher.image} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />
+            </div>
             <span className="my-auto">{course.teacher.name}</span>
           </div>
           <div className="flex gap-2">
@@ -133,10 +126,9 @@ export default function CourseItem({ course, weekDayMap }: Props) {
                     <span>{dateString} {course.start_time} ~ {course.end_time}</span>
                   </div>
                   <div className="flex gap-2 my-2">
-                    <Avatar className="w-6 h-6 my-auto">
-                      <AvatarImage src={course.teacher.image} alt="teacher" />
-                      <AvatarFallback>{course.teacher.name.slice(0, 2)}</AvatarFallback>
-                    </Avatar>
+                    <div className="w-6 h-6 my-auto rounded-full overflow-hidden">
+                      <Image src={course.teacher.image} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />
+                    </div>
                     <span className="my-auto">{course.teacher.name}</span>
                   </div>
                 </DialogDescription>

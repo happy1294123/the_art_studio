@@ -44,17 +44,17 @@ export default function RootLayout({
         <link rel='icon' href='/logo.svg' />
       </head>
       <body className={`${LXGWWenKai.variable} font-sans`}>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <div className='container flex-1'>
-            <main className="my-6">
-              <AuthProvider>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <div className='container flex-1'>
+              <main className="my-6">
                 {children}
-              </AuthProvider>
-            </main>
+              </main>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </AuthProvider>
       </body>
     </html >
   )

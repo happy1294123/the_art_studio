@@ -23,7 +23,7 @@ export default function TestReplace() {
   }
   return (
     <>
-      {'1' === '2' ? 'not ok '
+      {true ? 'not ok '
         :
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>

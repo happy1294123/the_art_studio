@@ -23,14 +23,7 @@ export const options: NextAuthOptions = {
             return null
           }
 
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: user.role,
-            email_varified: user.email_varified
-          } as any
+          return user as any
         } catch (error) {
           console.log(error)
 
@@ -40,6 +33,28 @@ export const options: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt'
+  },
+  callbacks: {
+    async jwt({ token, user, session }: any) {
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+          role: user.role
+        }
+      }
+      return token
+    },
+    async session({ session, token, user }: any) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          role: token.role
+        }
+      }
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
