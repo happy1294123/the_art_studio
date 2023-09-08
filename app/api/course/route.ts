@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client'
 export async function GET(req: Request) {
   const date = new URL(req.url).searchParams.get('date') as string
   const prisma = new PrismaClient()
+  console.log(prisma)
   const courses = await prisma.course.findMany({
     where: { date },
     orderBy: [{
