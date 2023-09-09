@@ -5,6 +5,7 @@ import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDateP
 import CourseItem from '@/components/course/CourseItem'
 import dateFormatter from '@/lib/dateFormatter'
 import { Skeleton } from "@/components/ui/skeleton"
+import useSWR from 'swr'
 
 type Props = {
   dateOptions: string[]
@@ -24,27 +25,15 @@ export default function CoursesShower({ dateOptions }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [courses, setCourses] = useState<Course[]>([])
-  const [loading, setLoading] = useState(false)
+  const { data: courses, error, isLoading } = useSWR(
+    `/api/course?date=${dateFormatter(selectedDate)}`,
+    fetcher
+  )
 
-  useEffect(() => {
-    const fetchCourses = async (date: Date) => {
-      const dateString = dateFormatter(date)
-      const res = await fetch(`/api/course?date=${dateString}`)
-      const courses = await res.json()
-      // console.log(courses)
-      setCourses(courses)
-      setLoading(false)
-    }
-    if (dateOptions.includes(dateFormatter(selectedDate))) {
-      setLoading(true)
-      fetchCourses(selectedDate)
-      document.querySelector('.my-popover-content')?.remove()
-    } else {
-      setLoading(false)
-      setCourses([])
-    }
-  }, [dateOptions, selectedDate])
+  async function fetcher(url: string): Promise<Course[]> {
+    const res = await fetch(url)
+    return await res.json()
+  }
 
   return (
     <>
@@ -60,9 +49,9 @@ export default function CoursesShower({ dateOptions }: Props) {
             {selectedDate.getDate()}
             ({weekDayMap[selectedDate.getDay() as keyof typeof weekDayMap]})
           </div>
-          {loading
+          {isLoading
             ? [1, 2, 3].map(i => <CourseItemSkeleton key={i} />)
-            : (courses.length > 0
+            : (courses && courses.length > 0
               ? (<div className="mt-2">
                 {courses.map(course => (<CourseItem key={course.id} course={course} weekDayMap={weekDayMap} />))}
               </div>
