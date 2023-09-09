@@ -43,7 +43,7 @@ export default function LoginForm() {
     <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
       <div className="bg-slate-400 max-w-fit rounded-full mx-auto">
         <Link href="/">
-          <Image src="/logoBW.png" width={65} height={65} alt='logo' className="-mt-14 drop-shadow-2xl" />
+          <Image src="/logoBW.png" width={65} height={65} alt='logo' className="-mt-14 drop-shadow-2xl" priority />
         </Link>
       </div>
       <form action={handleSubmitLogin}>
@@ -54,7 +54,7 @@ export default function LoginForm() {
         <div className="flex text-sm justify-between mr-2 text-gray-500  underline-offset-4 mt-5">
           {error && <span className="text-primary/80 animate-shake">{error}</span>}
           <div className='ml-auto'>
-            <Link href="/register" className="hover:underline underline-offset-4 mr-2">註冊帳號</Link>
+            <Link href="/register" className="hover:underline underline-offset-4 mr-2">註冊會員</Link>
             <span>忘記密碼</span>
           </div>
         </div>

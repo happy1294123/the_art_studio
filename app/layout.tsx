@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar/page'
 import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
 import AuthProvider from '@/context/AuthProvider'
+import { Toaster } from 'react-hot-toast'
 
 const LXGWWenKai = localFont({
   src: [
@@ -54,6 +55,7 @@ export default function RootLayout({
             </div>
             <Footer />
           </div>
+          <Toaster toastOptions={{ duration: 3000 }} />
         </AuthProvider>
       </body>
     </html >
