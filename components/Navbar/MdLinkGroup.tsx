@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { MdOutlineLogin } from 'react-icons/md'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { motion } from "framer-motion"
 import LinkWithAnim from './LinkWithAnim';
-
+import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
 
 export default function MdLinkGroup() {
   const [offsetClass, setOffsetClass] = useState('mr-5')
@@ -65,8 +64,8 @@ export default function MdLinkGroup() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <LinkWithAnim href='/login' showUnderLine={false} className="mt-1">
-              <div className="flex">
-                登入<MdOutlineLogin className="my-auto" />
+              <div className="flex -mt-1">
+                <LoginBtnOrUserProfile />
               </div>
             </LinkWithAnim>
           </NavigationMenuItem>

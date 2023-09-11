@@ -1,11 +1,10 @@
 const users = require('./seeds/users')
 const courses = require('./seeds/courses')
 const relations = require('./seeds/relations')
-const { PrismaClient } = require('@prisma/client')
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/initPrisma'
 
 async function main() {
+  // user seeds
   for (let user of users) {
     await prisma.user.upsert({
       where: {
@@ -16,12 +15,14 @@ async function main() {
     })
   }
 
+  // course seeds
   for (let course of courses) {
     await prisma.course.create({
       data: course
     })
   }
 
+  // reservation seeds
   for (let relation of relations) {
     await prisma.reservation.create({
       data: relation

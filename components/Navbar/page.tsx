@@ -3,12 +3,11 @@ import { useRef, useEffect, useState } from 'react';
 import { usePathname } from "next/navigation";
 import Image from 'next/image';
 import Link from 'next/link';
-import { MdOutlineLogin } from 'react-icons/md'
 import IconHamburger from '@/components/icon/IconHamburger'
 import { Button } from '@/components/ui/button'
 import LinkGroup from './LinkGroup';
 import MdLinkGroup from './MdLinkGroup';
-import LinkWithAnim from './LinkWithAnim'
+import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
 
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -54,11 +53,7 @@ export default function Navbar() {
 
       <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-bgColorSecondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
         <div className='mt-14 text-xl grid gap-2'>
-          <LinkWithAnim href="/login" className="text-md ml-6">
-            <div className="flex">
-              登入<MdOutlineLogin className="my-auto ml-1" />
-            </div>
-          </LinkWithAnim>
+          <LoginBtnOrUserProfile />
           <LinkGroup />
         </div>
       </div >

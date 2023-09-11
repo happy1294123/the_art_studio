@@ -3,22 +3,27 @@ import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
 import Image from "next/image"
+import { useSession } from 'next-auth/react'
+import { KeyedMutator } from 'swr'
 
 type Props = {
   course: Course,
-  weekDayMap: Record<number, string>
+  weekDay: string,
+  mutate: KeyedMutator<Course[]>
 }
 
 const ReserveDialog = lazy(() => import("./ReserveDialog"));
 
-export default function CourseItem({ course, weekDayMap }: Props) {
+export default function CourseItem({ course, weekDay, mutate }: Props) {
   const [open, setOpen] = useState(false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
+  const { data: session }: any = useSession()
+  const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])
 
   return (
     <>
-      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md ${current_rez === course.total_rez ? 'opacity-40' : 'cursor-pointer'}`}
-        onClick={() => setOpen(true)}>
+      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md ${current_rez === course.total_rez || hasReserve ? 'opacity-40' : 'cursor-pointer'}`}
+        onClick={() => !hasReserve && setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
@@ -41,14 +46,15 @@ export default function CourseItem({ course, weekDayMap }: Props) {
             </div>
             {current_rez === course.total_rez
               ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
-              // TODO 根據自身是否預約改變UI
-              : <Button>預約</Button>}
+              : hasReserve
+                ? <span className="px-2 text-sm mt-auto">已預約</span>
+                : <Button>預約</Button>}
           </div>
         </div>
       </div >
 
       {current_rez !== course.total_rez &&
-        <ReserveDialog open={open} setOpen={setOpen} course={course} weekDayMap={weekDayMap} />
+        <ReserveDialog open={open} setOpen={setOpen} course={course} weekDay={weekDay} mutate={mutate} />
       }
     </>
   )
