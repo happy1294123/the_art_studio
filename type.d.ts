@@ -1,29 +1,16 @@
-// type Post = {
-//   "id": number,
-//   "title": string,
-//   "price": number,
-//   "description": string,
-//   "category": string,
-//   "image": string,
-//   "rating": {
-//     "rate": number,
-//     "count": number
-//   }
-// }
-
 type Todo = {
-  "userId": number,
-  "id": number,
-  "title": string,
-  "completed": boolean
+  userId: number,
+  id: number,
+  title: string,
+  completed: boolean
 }
 
 type MyDate = {
-  "year": number,
-  "month": number, // start from 0
-  "date": number,
-  "day": number, // 星期一 == 1, 星期天 == 0
-  "hasCourse": boolean
+  year: number,
+  month: number, // start from 0
+  date: number,
+  day: number, // 星期一 == 1, 星期天 == 0
+  hasCourse: boolean
 }
 
 type Course = {
@@ -34,13 +21,14 @@ type Course = {
   start_time: string,
   end_time: string,
   teacher_id: number,
-  // current_rez: number
   Reservation: {
     course_id: number,
     user_id: number,
     created_at: string
   }[],
   total_rez: number,
+  point: number,
+  price: number,
   createdAt: Date,
   updatedAt: Date,
   teacher: {
@@ -49,12 +37,18 @@ type Course = {
   }
 }
 
-type Users = {
-  "id": number | null,
-  "name": string | null
-}
-
 type Option = {
   label: string,
   value: string
+}
+
+type Session = {
+  user: {
+    id: number,
+    name: string,
+    email: string,
+    image: string,
+    role: string,
+    point: number
+  }
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/lib/initPrisma'
 import bcrypt from 'bcryptjs'
 
 export async function POST(req: Request) {
@@ -22,7 +22,6 @@ export async function POST(req: Request) {
 
   // email duplicate
   try {
-    const prisma = new PrismaClient()
     const isEmailDup = await prisma.user.findFirst({
       where: {
         email: formData.get('email') as string

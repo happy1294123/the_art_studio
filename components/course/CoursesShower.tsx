@@ -1,11 +1,10 @@
 'use client'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo, Suspense } from 'react'
 import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
 import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDatePicker'
-import CourseItem from '@/components/course/CourseItem'
 import dateFormatter from '@/lib/dateFormatter'
 import { Skeleton } from "@/components/ui/skeleton"
-import useSWR from 'swr'
+import CourseItems from '@/components/course/CourseItems'
 
 type Props = {
   dateOptions: string[]
@@ -25,15 +24,7 @@ export default function CoursesShower({ dateOptions }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const { data: courses, error, isLoading } = useSWR(
-    `/api/course?date=${dateFormatter(selectedDate)}`,
-    fetcher
-  )
-
-  async function fetcher(url: string): Promise<Course[]> {
-    const res = await fetch(url)
-    return await res.json()
-  }
+  const weekDay = useMemo(() => weekDayMap[selectedDate.getDay() as keyof typeof weekDayMap], [selectedDate])
 
   return (
     <>
@@ -47,16 +38,11 @@ export default function CoursesShower({ dateOptions }: Props) {
             {selectedDate.getFullYear()}/
             {selectedDate.getMonth() + 1}/
             {selectedDate.getDate()}
-            ({weekDayMap[selectedDate.getDay() as keyof typeof weekDayMap]})
+            ({weekDay})
           </div>
-          {isLoading
-            ? [1, 2, 3].map(i => <CourseItemSkeleton key={i} />)
-            : (courses && courses.length > 0
-              ? (<div className="mt-2">
-                {courses.map(course => (<CourseItem key={course.id} course={course} weekDayMap={weekDayMap} />))}
-              </div>
-              )
-              : <div className="text-center">當天沒有課程</div>)}
+          <Suspense fallback={[1, 2, 3].map(i => <CourseItemSkeleton key={i} />)}>
+            <CourseItems selectedDate={selectedDate} weekDay={weekDay} />
+          </Suspense >
         </div>
       </div >
     </>

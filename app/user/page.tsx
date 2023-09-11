@@ -1,10 +1,7 @@
 'use client'
-import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 
 export default function UserPage() {
-  const { data: session } = useSession()
-  console.log(session)
 
   return (
     <div>個人頁面  若尚未驗證email則無法顯示頁面

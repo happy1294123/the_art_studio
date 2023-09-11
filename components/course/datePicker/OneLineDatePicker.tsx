@@ -39,7 +39,6 @@ export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateS
       <div className="flex justify-between -mb-4">
         <div className="flex md:hidden">
           <MyCalander dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-
         </div>
         <span className="text-gray-400 pb-2 rounded-xl underline underline-offset-4 cursor-pointer ml-auto" onClick={() => setSelectedDate(new Date())}>今天</span>
       </div>

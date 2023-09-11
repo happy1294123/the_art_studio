@@ -30,7 +30,8 @@ module.exports = [{
   email: 'allen@example.com',
   password,
   role: 'STUDENT',
-  image: 'https://i.pravatar.cc/300'
+  image: 'https://i.pravatar.cc/300',
+  point: 1000
 }
 
 ]

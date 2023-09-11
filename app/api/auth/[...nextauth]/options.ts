@@ -1,6 +1,6 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/lib/initPrisma'
 import bcrypt from 'bcryptjs'
 
 export const options: NextAuthOptions = {
@@ -12,7 +12,6 @@ export const options: NextAuthOptions = {
         const { email, password } = credentials as Record<string, string>
 
         try {
-          const prisma = new PrismaClient()
           const user = await prisma.user.findFirst({ where: { email } })
           if (!user) {
             return null
@@ -26,7 +25,6 @@ export const options: NextAuthOptions = {
           return user as any
         } catch (error) {
           console.log(error)
-
         }
       }
     })
@@ -35,23 +33,25 @@ export const options: NextAuthOptions = {
     strategy: 'jwt'
   },
   callbacks: {
-    async jwt({ token, user, session }: any) {
+    async jwt({ token, user }: any) {
       if (user) {
         return {
           ...token,
           id: user.id,
-          role: user.role
+          role: user.role,
+          point: user.point
         }
       }
       return token
     },
-    async session({ session, token, user }: any) {
+    async session({ session, token }: any) {
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
-          role: token.role
+          role: token.role,
+          point: token.point
         }
       }
     },

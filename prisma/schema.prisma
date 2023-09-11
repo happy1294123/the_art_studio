@@ -20,8 +20,9 @@ model Course {
   end_time    String
   teacher     User          @relation(fields: [teacher_id], references: [id])
   teacher_id  Int
-  // current_rez Int      @default(0) @db.UnsignedSmallInt
   total_rez   Int           @db.UnsignedSmallInt
+  point       Int           @default(10)
+  price       Int           @default(250)
   created_at  DateTime      @default(now())
   updated_at  DateTime      @updatedAt
   Reservation Reservation[]
@@ -35,6 +36,8 @@ model Reservation {
   course_id  Int
   user       User     @relation(fields: [user_id], references: [id])
   user_id    Int
+  plan_name  String
+  plan_value Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -50,6 +53,7 @@ model User {
   password       String
   image          String?
   role           Role          @default(STUDENT)
+  point          Int           @default(0)
   email_varified Boolean       @default(false)
   created_at     DateTime      @default(now())
   updated_at     DateTime      @updatedAt
