@@ -57,7 +57,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
           請選擇行事曆種類
         </DialogTitle>
         <DialogDescription className="text-2xl">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid md:grid-cols-3 gap-3">
             <Button onClick={() => handleSetService('apple')} className="flex gap-1 text-lg">
               {updateType === 'apple' && isPending ? <RingLoader speedMultiplier={1.5} size={20} color="#FFF" />
                 : (<><DiApple />Apple</>)}
