@@ -11,7 +11,7 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 import { BsArrowRightShort } from 'react-icons/bs'
 import { PiMicrosoftOutlookLogoFill, PiMicrosoftOutlookLogoLight } from 'react-icons/pi'
 import Image from 'next/image'
-import { Dispatch, useState, useTransition } from 'react'
+import { Dispatch, useState } from 'react'
 import RingLoader from 'react-spinners/RingLoader'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
@@ -26,26 +26,27 @@ type Props = {
 
 export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog, downloadSchedule }: Props) {
   const { update } = useSession()
-  const [isPending, startTransition] = useTransition()
+  const [isPending, setIsPending] = useState(false)
   const [updateType, setUpdateType] = useState('')
 
-  const handleSetService = (service: string) => {
+  const handleSetService = async (service: string) => {
+    setIsPending(true)
     setUpdateType(service)
-    startTransition(async () => {
-      const res = await fetch('/api/user/service', {
-        method: 'POST',
-        body: JSON.stringify(service)
-      })
-      if (res.ok) {
-        toast('行事曆設定成功', getToastOption('light', <AiFillCheckCircle className="my-auto text-xl" />))
-        update({ schedule_service: service })
-        downloadSchedule && downloadSchedule(service)
-        setOpenDialog(false)
-      } else {
-        const data = await res.json()
-        toast(data, getToastOption('light'))
-      }
+    const res = await fetch('/api/user/service', {
+      method: 'POST',
+      body: JSON.stringify(service)
     })
+    if (res.ok) {
+      toast('行事曆設定成功', getToastOption('light', <AiFillCheckCircle className="my-auto text-xl" />))
+      update({ schedule_service: service })
+      downloadSchedule && downloadSchedule(service)
+      setIsPending(false)
+      setOpenDialog(false)
+    } else {
+      const data = await res.json()
+      toast(data, getToastOption('light'))
+      setIsPending(false)
+    }
   }
 
   return (

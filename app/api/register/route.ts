@@ -3,9 +3,9 @@ import prisma from '@/lib/initPrisma'
 import bcrypt from 'bcryptjs'
 
 export async function POST(req: Request) {
-  const formData = await req.formData()
+  const { name, email, password, confirmPassword } = await req.json()
   // password not confired
-  if (formData.get('password') !== formData.get('confirmPassword')) {
+  if (password !== confirmPassword) {
     return NextResponse.json({
       name: 'confirmPassword',
       message: '密碼不一致'
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   }
 
   // password length > 6
-  if ((formData.get('password') as string).length < 6) {
+  if (password.length < 6) {
     return NextResponse.json({
       name: 'password',
       message: '密碼小於6個字元'
@@ -23,9 +23,7 @@ export async function POST(req: Request) {
   // email duplicate
   try {
     const isEmailDup = await prisma.user.findFirst({
-      where: {
-        email: formData.get('email') as string
-      }
+      where: { email }
     })
     if (isEmailDup) {
       return NextResponse.json({
@@ -35,12 +33,12 @@ export async function POST(req: Request) {
     }
 
     // create user
-    const password = await bcrypt.hash(formData.get('password') as string, 10)
+    const hashPassword = await bcrypt.hash(password as string, 10)
     const newUser = await prisma.user.create({
       data: {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        password
+        name,
+        email,
+        password: hashPassword
       }
     })
     if (newUser.id) {

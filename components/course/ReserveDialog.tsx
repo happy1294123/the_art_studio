@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, Dispatch, useTransition } from 'react'
+import { useState, useEffect, Dispatch } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import RingLoader from 'react-spinners/RingLoader'
@@ -64,31 +64,33 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
 
   const router = useRouter()
   const { data: session }: any = useSession()
-  const [isPending, startTransition] = useTransition()
-  const handleSubmitForm = () => {
+  const [isPending, setIsPending] = useState(false)
+  const handleSubmitForm = async () => {
+    setIsPending(true)
     if (!session) {
       toast('請先登入會員', getToastOption('dark'))
       router.push('/login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fcourse')
+      setIsPending(false)
       return
     }
 
-    startTransition(async () => {
-      const res = await fetch('/api/reservation', {
-        method: 'POST',
-        body: JSON.stringify({
-          course_id: course.id,
-          plan_name: plan.label,
-          plan_value: plan.value
-        })
+    const res = await fetch('/api/reservation', {
+      method: 'POST',
+      body: JSON.stringify({
+        course_id: course.id,
+        plan_name: plan.label,
+        plan_value: plan.value
       })
-      if (res.ok) {
-        setIsReservePage(false)
-        mutate && mutate()
-      } else {
-        const message = await res.json()
-        toast(message, getToastOption('light'))
-      }
     })
+    if (res.ok) {
+      setIsReservePage(false)
+      mutate && mutate()
+      setIsPending(false)
+    } else {
+      const message = await res.json()
+      toast(message, getToastOption('light'))
+      setIsPending(false)
+    }
   }
 
   return (
