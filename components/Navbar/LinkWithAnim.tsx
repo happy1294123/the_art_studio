@@ -25,7 +25,7 @@ export default function LinkWithAnim({
     >
       <Link href={href}>{children}</Link>
       {showUnderLine && pathname === href
-        && <div className={`bg-headingColor h-1 rounded-full -mt-0.5 ${shortUnderline ? 'w-16' : 'w-20'}`} />}
+        && <div className={`bg-headingColor h-0.5 rounded-full -mt-0.5 ${shortUnderline ? 'w-16' : 'w-20'}`} />}
     </motion.div>
   )
 }

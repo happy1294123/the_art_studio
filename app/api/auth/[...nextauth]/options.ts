@@ -33,13 +33,21 @@ export const options: NextAuthOptions = {
     strategy: 'jwt'
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
+      if (trigger === 'update') {
+        // console.log(token, user, trigger, session)
+        return {
+          ...token,
+          ...session
+        }
+      }
       if (user) {
         return {
           ...token,
           id: user.id,
           role: user.role,
-          point: user.point
+          point: user.point,
+          schedule_service: user.schedule_service
         }
       }
       return token
@@ -51,7 +59,8 @@ export const options: NextAuthOptions = {
           ...session.user,
           id: token.id,
           role: token.role,
-          point: token.point
+          point: token.point,
+          schedule_service: token.schedule_service
         }
       }
     },

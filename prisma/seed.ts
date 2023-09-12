@@ -1,12 +1,15 @@
 const users = require('./seeds/users')
 const courses = require('./seeds/courses')
 const relations = require('./seeds/relations')
-import prisma from '@/lib/initPrisma'
+const { PrismaClient } = require('@prisma/client')
+
+const prisma = new PrismaClient()
 
 async function main() {
   // user seeds
   for (let user of users) {
     await prisma.user.upsert({
+      
       where: {
         email: user.email
       },

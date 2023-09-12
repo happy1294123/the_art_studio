@@ -12,20 +12,21 @@ datasource db {
 }
 
 model Course {
-  id          Int           @id @default(autoincrement())
-  name        String
-  type        String?
-  date        String
-  start_time  String
-  end_time    String
-  teacher     User          @relation(fields: [teacher_id], references: [id])
-  teacher_id  Int
-  total_rez   Int           @db.UnsignedSmallInt
-  point       Int           @default(10)
-  price       Int           @default(250)
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @updatedAt
-  Reservation Reservation[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  type         String?
+  date         String
+  start_time   String
+  end_time     String
+  teacher      User          @relation(fields: [teacher_id], references: [id])
+  teacher_id   Int
+  total_rez    Int           @db.UnsignedSmallInt
+  baseline_rez Int           @default(2)
+  point        Int           @default(10)
+  price        Int           @default(250)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+  Reservation  Reservation[]
 
   @@index([teacher_id])
   @@map("courses")
@@ -47,18 +48,19 @@ model Reservation {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  name           String
-  email          String
-  password       String
-  image          String?
-  role           Role          @default(STUDENT)
-  point          Int           @default(0)
-  email_varified Boolean       @default(false)
-  created_at     DateTime      @default(now())
-  updated_at     DateTime      @updatedAt
-  Course         Course[]
-  Reservation    Reservation[]
+  id               Int           @id @default(autoincrement())
+  name             String
+  email            String
+  password         String
+  image            String?
+  role             Role          @default(STUDENT)
+  point            Int           @default(0)
+  schedule_service String?       @default("")
+  email_varified   Boolean       @default(false)
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+  Course           Course[]
+  Reservation      Reservation[]
 
   @@unique([email])
   @@map("users")

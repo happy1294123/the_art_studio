@@ -7,7 +7,7 @@ async function fetcher(url: string): Promise<Course[]> {
   return await res.json()
 }
 
-export default function CourseItems({ selectedDate, weekDay }: { selectedDate: Date, weekDay: string }) {
+export default function CourseItems({ selectedDate }: { selectedDate: Date }) {
   const { data: courses, mutate } = useSWR(
     `/api/course?date=${dateFormatter(selectedDate)}`,
     fetcher
@@ -16,7 +16,7 @@ export default function CourseItems({ selectedDate, weekDay }: { selectedDate: D
   return (
     <div className="mt-2">
       {courses && courses.length > 0
-        ? courses.map(course => (<CourseItem key={course.id} course={course} weekDay={weekDay} mutate={mutate} />))
+        ? courses.map(course => (<CourseItem key={course.id} course={course} mutate={mutate} />))
         : <div className="text-center">當天沒有課程</div>
       }
     </div>

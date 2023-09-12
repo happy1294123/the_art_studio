@@ -28,10 +28,9 @@ type Props = {
   selectedDate: Date,
   setSelectedDate: Function,
   dateSet: string[],
-  weekDayMap: any
 }
 
-export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateSet, weekDayMap }: Props) {
+export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateSet }: Props) {
   const dateList = useMemo(() => createDateList(dateSet), [dateSet])
 
   return (
@@ -42,7 +41,7 @@ export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateS
         </div>
         <span className="text-gray-400 pb-2 rounded-xl underline underline-offset-4 cursor-pointer ml-auto" onClick={() => setSelectedDate(new Date())}>今天</span>
       </div>
-      <DateItems dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} weekDayMap={weekDayMap} />
+      <DateItems dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
     </div >
   )
 }
