@@ -27,6 +27,7 @@ type Course = {
     created_at: string
   }[],
   total_rez: number,
+  baseline_rez: number,
   point: number,
   price: number,
   createdAt: Date,
@@ -49,6 +50,17 @@ type Session = {
     email: string,
     image: string,
     role: string,
-    point: number
+    point: number,
+    schedule_service: string
   }
+}
+
+type Reservation = {
+  course_id: number,
+  user_id: number,
+  plan_name: string,
+  plan_value: number,
+  created_at: Date,
+  updated_at: Date,
+  course: Course
 }

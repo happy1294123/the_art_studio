@@ -5,26 +5,16 @@ import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDateP
 import dateFormatter from '@/lib/dateFormatter'
 import { Skeleton } from "@/components/ui/skeleton"
 import CourseItems from '@/components/course/CourseItems'
+import DateHeading from './DateHeading'
 
 type Props = {
   dateOptions: string[]
-}
-
-const weekDayMap = {
-  0: '日',
-  1: '一',
-  2: '二',
-  3: '三',
-  4: '四',
-  5: '五',
-  6: '六',
 }
 
 export default function CoursesShower({ dateOptions }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const weekDay = useMemo(() => weekDayMap[selectedDate.getDay() as keyof typeof weekDayMap], [selectedDate])
 
   return (
     <>
@@ -33,15 +23,10 @@ export default function CoursesShower({ dateOptions }: Props) {
           <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
         </div>
         <div className="w-full">
-          <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} weekDayMap={weekDayMap} />
-          <div className="text-center text-lg p-1 bg-bgColorSecondary rounded-full mb-1 md:">
-            {selectedDate.getFullYear()}/
-            {selectedDate.getMonth() + 1}/
-            {selectedDate.getDate()}
-            ({weekDay})
-          </div>
+          <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
+          <DateHeading date={selectedDate} />
           <Suspense fallback={[1, 2, 3].map(i => <CourseItemSkeleton key={i} />)}>
-            <CourseItems selectedDate={selectedDate} weekDay={weekDay} />
+            <CourseItems selectedDate={selectedDate} />
           </Suspense >
         </div>
       </div >

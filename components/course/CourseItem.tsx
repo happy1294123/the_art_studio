@@ -8,13 +8,14 @@ import { KeyedMutator } from 'swr'
 
 type Props = {
   course: Course,
-  weekDay: string,
-  mutate: KeyedMutator<Course[]>
+  mutate?: KeyedMutator<Course[]>,
+  isInUserPage?: boolean
 }
 
 const ReserveDialog = lazy(() => import("./ReserveDialog"));
+const UserCourseDialog = lazy(() => import("../user/UserCourseDialog"));
 
-export default function CourseItem({ course, weekDay, mutate }: Props) {
+export default function CourseItem({ course, mutate, isInUserPage = false }: Props) {
   const [open, setOpen] = useState(false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
   const { data: session }: any = useSession()
@@ -22,8 +23,9 @@ export default function CourseItem({ course, weekDay, mutate }: Props) {
 
   return (
     <>
-      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md ${current_rez === course.total_rez || hasReserve ? 'opacity-40' : 'cursor-pointer'}`}
-        onClick={() => !hasReserve && setOpen(true)}>
+      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md 
+      ${(current_rez === course.total_rez || hasReserve) && !isInUserPage ? 'opacity-40' : 'cursor-pointer'}`}
+        onClick={() => (!hasReserve || isInUserPage) && setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
@@ -44,18 +46,23 @@ export default function CourseItem({ course, weekDay, mutate }: Props) {
               <GoPerson className="text-xs mr-[2px] mt-[1px]" />
               <span className="text-xs">{current_rez}/{course.total_rez}</span>
             </div>
-            {current_rez === course.total_rez
+            {!isInUserPage ? (current_rez === course.total_rez
               ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
               : hasReserve
-                ? <span className="px-2 text-sm mt-auto">已預約</span>
-                : <Button>預約</Button>}
+                ? <span className="px-2.5 text-sm mt-auto">已預約</span>
+                : <Button>預約</Button>)
+              : (current_rez >= course.baseline_rez
+                ? <Button>已開課</Button>
+                : <Button variant="secondary">待確認</Button>
+              )}
           </div>
         </div>
       </div >
 
-      {current_rez !== course.total_rez &&
-        <ReserveDialog open={open} setOpen={setOpen} course={course} weekDay={weekDay} mutate={mutate} />
-      }
+      {!isInUserPage ? (current_rez !== course.total_rez &&
+        <ReserveDialog open={open} setOpen={setOpen} course={course} mutate={mutate} />
+      ) :
+        <UserCourseDialog open={open} setOpen={setOpen} course={course} current_rez={current_rez} />}
     </>
   )
 }

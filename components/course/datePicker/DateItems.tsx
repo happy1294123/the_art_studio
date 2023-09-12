@@ -1,14 +1,14 @@
 import { MouseEvent, useState, useEffect, useRef } from 'react'
 import styles from './style.module.css'
+import { getWeekDayByWeekIndex } from '../DateHeading'
 
 type Props = {
   dateList: MyDate[],
   selectedDate: Date,
-  weekDayMap: Record<number, string>,
   setSelectedDate: Function
 }
 
-export default function DateItems({ dateList, selectedDate, setSelectedDate, weekDayMap }: Props) {
+export default function DateItems({ dateList, selectedDate, setSelectedDate }: Props) {
   const isSelectDate = (month: number, date: number): boolean => {
     if (selectedDate.getMonth() === month && selectedDate.getDate() === date) return true
     return false
@@ -57,7 +57,8 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate, wee
             onClick={handleSelect}
             ref={isSelectDate(d.month, d.date) ? (node: HTMLDivElement) => node?.scrollIntoView({ inline: 'center' }) : null}
           >
-            <span>{weekDayMap[d.day as keyof typeof weekDayMap]}</span>
+            {/* <span>{weekDayMap[d.day as keyof typeof weekDayMap]}</span> */}
+            <span>{getWeekDayByWeekIndex(d.day)}</span>
             <span className={`${isSelectDate(d.month, d.date) ? 'bg-primary text-primary-foreground rounded-full' : null} ${d.date > 9 ? 'px-1' : 'px-2'} pt-[2px]`}>{d.date}</span>
           </div >
         ))
