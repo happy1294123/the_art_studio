@@ -60,7 +60,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
     ]
     setPlanOpt(fetchOpt)
     setPlan(fetchOpt[0])
-  }, [])
+  }, [course])
 
   const router = useRouter()
   const { data: session }: any = useSession()
@@ -101,7 +101,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
         <div className={`${isReservePage ? 'block' : 'hidden'}`}>
           <ReserveDialogUpper course={course} />
           <hr />
-          <form action={handleSubmitForm}>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div>
               <span className="flex text-xl m-3">選擇方案</span>
               <Select onValueChange={(val) => {
@@ -118,7 +118,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                 </SelectContent>
               </Select>
             </div>
-            <Button className="w-full mt-5 h-10 text-xl">
+            <Button className="w-full mt-5 h-10 text-xl" onClick={handleSubmitForm}>
               <span className={`${isPending && 'hidden'}`}>立即預約</span>
               <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={isPending} />
             </Button>
