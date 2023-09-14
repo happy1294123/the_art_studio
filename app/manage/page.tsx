@@ -5,7 +5,7 @@ import NewCourseForm from '@/components/manage/NewCourseForm'
 
 export default function ManagePage() {
   return (
-    <>
+    <div className="max-w-screen-md mx-auto">
       <TheTitle>後台管理</TheTitle>
       <Tabs defaultValue="course">
         <TabsList className="grid w-full grid-cols-2">
@@ -20,6 +20,6 @@ export default function ManagePage() {
           會員名單管理
         </TabsContent>
       </Tabs >
-    </>
+    </div>
   )
 }
