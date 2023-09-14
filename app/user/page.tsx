@@ -4,17 +4,19 @@ import CourseItem from '@/components/course/CourseItem'
 import TheTitle from '@/components/TheTitle'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardFooter,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card"
+// import { Input } from "@/components/ui/input"
 import UserDropDownMenu from '@/components/user/UserDropDownMenu'
-import { Input } from "@/components/ui/input"
 import useSWR from 'swr'
+import { CourseItemSkeleton } from '@/components/course/CoursesShower'
+import Link from 'next/link'
 
 async function fetcher(url: string): Promise<Record<string, Reservation[]>> {
   const res = await fetch(url)
@@ -22,12 +24,13 @@ async function fetcher(url: string): Promise<Record<string, Reservation[]>> {
 }
 
 export default function UserPage() {
-  const { data: reservations } = useSWR(
-    '/api/user/courses',
+  const { data: reservations, mutate: mutateReservation } = useSWR(
+    '/api/user/course',
     fetcher
   )
 
   const handleTabsValueChange = (value: string) => {
+    // TODO 根據tabs 使用swr獲取資料
     console.log(value)
   }
 
@@ -51,12 +54,23 @@ export default function UserPage() {
             <>
               <DateHeading date={new Date(date)} />
               {reservations[date as keyof typeof reservations].map((reservation, i) => (
-                <CourseItem course={reservation['course']} isInUserPage={true} key={i} />
+                <CourseItem course={reservation['course']} isInUserPage={true} mutateReservation={mutateReservation} key={i} />
               ))}
             </>
           ))}
+          {!reservations && [1, 2, 3].map(i => (
+            <CourseItemSkeleton key={i} />
+          ))}
 
-        </TabsContent>
+          {(reservations && Object.keys(reservations).length === 0)
+            && (<><div className="flex-center">目前沒有預約課程</div>
+              <div className='flex-center mt-2'>
+                <Button className="mx-auto"><Link href="/course">前往預約</Link></Button>
+              </div>
+            </>)
+          }
+
+        </TabsContent >
         <TabsContent value="point">
           點數
           {/* <Card>
@@ -105,8 +119,8 @@ export default function UserPage() {
             </CardFooter>
           </Card> */}
         </TabsContent>
-      </Tabs>
+      </Tabs >
       {/* <div onClick={() => signOut()} className="bg-red-400 text-center p-3 mt-3 text-white cursor-pointer">Log Out</div> */}
-    </div>
+    </div >
   )
 }

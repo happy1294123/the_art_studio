@@ -34,7 +34,7 @@ export default function CoursesShower({ dateOptions }: Props) {
   )
 }
 
-const CourseItemSkeleton = () => {
+export const CourseItemSkeleton = () => {
   return (
     <div className=" mt-3 p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md h-[120xpx] space-y-3">
       <div className="flex gap-4">

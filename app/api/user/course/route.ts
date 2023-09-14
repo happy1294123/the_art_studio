@@ -32,3 +32,23 @@ export async function GET(req: any) {
   }, {})
   return NextResponse.json(groupData)
 }
+
+
+// 刪除指定預約
+export async function DELETE(req: any) {
+  const token = await getToken({ req })
+  if (!token) return NextResponse.json('請先登入會員', { status: 401 })
+
+  // TODO 判斷取消標準是否符合
+  const { course_id } = await req.json()
+  const res = await prisma.reservation.deleteMany({
+    where: {
+      AND: [
+        { course_id },
+        { user_id: token.id as number }
+      ]
+    }
+  })
+  return NextResponse.json('')
+}
+

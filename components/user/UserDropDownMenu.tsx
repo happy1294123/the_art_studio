@@ -22,7 +22,7 @@ export default function UserDropDownMenu() {
       {session &&
         <DropdownMenu>
           <DropdownMenuTrigger className="text-gray-400 h-7 p-1 flex">歡迎回來，{session?.user?.name}<IoMdArrowDropdownCircle className="mt-1 ml-1" /></DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-bgColorSecondary text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
+          <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
                     data-[state=closed]:animate-[dialog-content-hide_300ms]">
             <DropdownMenuLabel>
               <div className="cursor-pointer flex"

@@ -96,7 +96,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
           <ReserveDialogUpper course={course} />
           <form onSubmit={(e) => e.preventDefault()}>
             <div>
-              <span className="flex ml-3 mb-3">選擇方案</span>
+              <span className="flex-center mb-1 mt-3">選擇方案</span>
               <div className="w-11/12 mx-auto grid md:grid-cols-2 gap-2">
                 {planOpt.map(opt => (
                   <Badge
@@ -106,13 +106,13 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                     onClick={() => setPlan({ label: opt.label, value: opt.value })}
                   >
                     <span className="mx-auto text-lg py-2">
-                      {opt.label}
+                      {opt.label} 
                     </span>
                   </Badge>
                 ))}
               </div>
             </div>
-            <Button className="w-full mt-5 h-12 text-xl" onClick={handleSubmitForm}>
+            <Button className="w-full mt-2 h-12 text-xl" onClick={handleSubmitForm}>
               <span className={`${isPending && 'hidden'} text-2xl`}>立即預約</span>
               <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={isPending} />
             </Button>

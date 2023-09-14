@@ -12,10 +12,11 @@ const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 type Props = {
   course: Course,
   mutate?: KeyedMutator<Course[]>,
+  mutateReservation?: KeyedMutator<Record<string, Reservation[]>>,
   isInUserPage?: boolean
 }
 
-export default function CourseItem({ course, mutate, isInUserPage = false }: Props) {
+export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
   const [open, setOpen] = useState(false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
   const { data: session }: any = useSession()
@@ -62,7 +63,7 @@ export default function CourseItem({ course, mutate, isInUserPage = false }: Pro
       {!isInUserPage ? (current_rez !== course.total_rez &&
         <ReserveDialog open={open} setOpen={setOpen} course={course} mutate={mutate} />
       ) :
-        <UserCourseDialog open={open} setOpen={setOpen} course={course} current_rez={current_rez} />}
+        <UserCourseDialog open={open} setOpen={setOpen} course={course} current_rez={current_rez} mutateReservation={mutateReservation} />}
     </>
   )
 }

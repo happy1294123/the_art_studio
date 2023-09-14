@@ -1,13 +1,9 @@
-import makeSleep from '@/lib/makeSleep'
-
-// try async fetch
-export default async function CourseIntro() {
-  const re: Promise<Todo> = makeSleep()
-  const data = await re
+import TheTitle from '@/components/TheTitle'
+export default function CourseIntroPage() {
 
   return (
-    <>
-      <div>CourseIntro {JSON.stringify(data)}</div>
+    <>  
+      <TheTitle>課程介紹</TheTitle>
     </>
   )
-}
+} 
