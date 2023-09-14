@@ -37,11 +37,13 @@ export default function LinkGroup() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="ml-5"
+                className="ml-5 space-y-2"
               >
                 <LinkWithAnim href="/course">預約課程</LinkWithAnim>
-                <LinkWithAnim href="/course-intro" delay={0.1}>課程介紹</LinkWithAnim>
-                <div className='mb-1'><LinkWithAnim href="/teacher" delay={0.2}>師資介紹</LinkWithAnim></div>
+                <LinkWithAnim href="/course/introduction" delay={0.1}>課程介紹</LinkWithAnim>
+                <LinkWithAnim href="/course/teacher" delay={0.2}>師資介紹</LinkWithAnim>
+                <LinkWithAnim href="/course/note" delay={0.3}>上課須知</LinkWithAnim>
+                <div className='mb-1'><LinkWithAnim href="/course/cancel-spec" delay={0.4}>取消規範</LinkWithAnim></div>
               </motion.div>
             )}
           </ AnimatePresence>
@@ -70,7 +72,7 @@ export default function LinkGroup() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="ml-5"
+                className="ml-5 space-y-2"
               >
                 <div><LinkWithAnim href="/classroom">教室環境</LinkWithAnim></div>
                 <div><LinkWithAnim href="/idea" delay={0.1}>空間理念</LinkWithAnim></div>

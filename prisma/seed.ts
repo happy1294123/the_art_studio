@@ -9,7 +9,6 @@ async function main() {
   // user seeds
   for (let user of users) {
     await prisma.user.upsert({
-      
       where: {
         email: user.email
       },

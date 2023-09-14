@@ -3,8 +3,10 @@ const nextConfig = {
     experimental:{
         serverActions: true
     },
+    experimental:{
+      forceSwcTransforms: true
+    },
     images: {
-        // https://i.pravatar.cc/300
     remotePatterns: [
       {
         protocol: 'https',

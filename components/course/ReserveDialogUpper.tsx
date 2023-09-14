@@ -6,6 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { getWeekDayByDate } from '@/components/course/DateHeading'
 
 type Props = {
@@ -38,16 +44,21 @@ export default function ReserveDialogUpper({ course }: Props) {
           </div>
         </DialogDescription>
       </DialogHeader>
-
-      <div className="flex text-left mt-4 leading-6">
-        課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
-        課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
-        課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
-        課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
-      </div>
-      <div className="flex-center mx-5 p-5 bg-secondary text-secondary-foreground rounded-3xl my-3">
-        預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容
-      </div>
+      <Accordion type="single" collapsible className="px-3">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>內容介紹</AccordionTrigger>
+          <AccordionContent>
+            課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
+            課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
+            課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
+            課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
+            <div className="flex gap-2 float-right my-2 underline underline-offset-4">
+              <a href='/course/note' target='_blank'>上課須知</a>
+              <a href='/course/cancel-spec' target='_blank'>取消規範</a>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   )
 }

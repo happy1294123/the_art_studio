@@ -1,18 +1,27 @@
 'use client'
 import { useRouter } from "next/navigation"
 import { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog"
+// import { Button } from "@/components/ui/button"
+// import { Input } from "@/components/ui/input"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+//   SelectGroup,
+//   SelectLabel
+// } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
 
 
 export default function TestReplace() {
@@ -23,7 +32,31 @@ export default function TestReplace() {
   }
   return (
     <>
-      {true ? 'not ok '
+      <div className="flex gap-2">
+        <Badge variant="secondary">點數 10 點</Badge>
+        <Badge variant="secondary" >
+          點數優惠 8 點
+        </Badge>
+        <Badge variant="outline">單次購買 250元</Badge>
+        <Badge variant="secondary">免費體驗</Badge>
+      </div>
+
+      {/* <Select>
+        <SelectTrigger className="w-[180px] bg-white border-0.5">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            <SelectItem value="apple">Apple</SelectItem>
+            <SelectItem value="banana">Banana</SelectItem>
+            <SelectItem value="blueberry">Blueberry</SelectItem>
+            <SelectItem value="grapes">Grapes</SelectItem>
+            <SelectItem value="pineapple">Pineapple</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select> */}
+      {/* {true ? 'not ok '
         :
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -50,7 +83,7 @@ export default function TestReplace() {
           </DialogContent>
         </Dialog>
       }
-      <div onClick={goFn}>TestReplace</div>
+      <div onClick={goFn}>TestReplace</div> */}
     </>
   )
 }

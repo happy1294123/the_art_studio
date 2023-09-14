@@ -1,13 +1,9 @@
 import CoursesShower from '@/components/course/CoursesShower'
 import TheTitle from '@/components/TheTitle'
-
-const fetchDateOptions = async () => {
-  const res = await fetch(process.env.HOST + '/api/course/all')
-  return res.json()
-}
+import getDateOptions from '@/lib/course/getDateOptions'
 
 export default async function Course() {
-  const dateOptions = await fetchDateOptions()
+  const dateOptions = await getDateOptions()
 
   return (
     <>
