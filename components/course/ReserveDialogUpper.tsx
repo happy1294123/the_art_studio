@@ -53,16 +53,10 @@ export default function ReserveDialogUpper({ course }: Props) {
             課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
             課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
             課程內容介紹課程內容介紹課程內容介紹課程內容介紹課程內容介紹
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <Accordion type="single" collapsible className="rounded-3xl px-3">
-        {/* bg-secondary text-secondary-foreground  */}
-        <AccordionItem value="item-1">
-          <AccordionTrigger>預約須知</AccordionTrigger>
-          <AccordionContent >
-            預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容預約須知內容
+            <div className="flex gap-2 float-right my-2 underline underline-offset-4">
+              <a href='/course/note' target='_blank'>上課須知</a>
+              <a href='/course/cancel-spec' target='_blank'>取消規範</a>
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

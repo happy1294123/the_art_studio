@@ -1,19 +1,19 @@
-import { useState, useMemo, lazy } from 'react'
+import { useState, useMemo } from 'react'
 import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
 import Image from "next/image"
 import { useSession } from 'next-auth/react'
 import { KeyedMutator } from 'swr'
+import dynamic from 'next/dynamic'
+const ReserveDialog = dynamic(() => import("./ReserveDialog"))
+const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 
 type Props = {
   course: Course,
   mutate?: KeyedMutator<Course[]>,
   isInUserPage?: boolean
 }
-
-const ReserveDialog = lazy(() => import("./ReserveDialog"));
-const UserCourseDialog = lazy(() => import("../user/UserCourseDialog"));
 
 export default function CourseItem({ course, mutate, isInUserPage = false }: Props) {
   const [open, setOpen] = useState(false)
