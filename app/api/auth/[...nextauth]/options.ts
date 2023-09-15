@@ -33,7 +33,7 @@ export const options: NextAuthOptions = {
     strategy: 'jwt'
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user, trigger, session }) {
       if (trigger === 'update') {
         // console.log(token, user, trigger, session)
         return {
@@ -52,7 +52,7 @@ export const options: NextAuthOptions = {
       }
       return token
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       return {
         ...session,
         user: {

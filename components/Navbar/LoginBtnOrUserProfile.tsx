@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { MdOutlineLogin } from 'react-icons/md'
 
 export default function LoginBtnOrUserProfile() {
-  const { data: session }: any = useSession()
+  const { data: session } = useSession()
   const href = session ? session.user.role === 'ADMIN'
     ? '/manage' : '/user'
     : '/login'
