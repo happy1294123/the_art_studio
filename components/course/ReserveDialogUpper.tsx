@@ -59,7 +59,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
           <PiShareFatLight />
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger >
+          <DropdownMenuTrigger autoFocus={false}>
             <CiCircleMore />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
