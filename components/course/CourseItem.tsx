@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, MouseEvent } from 'react'
 import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
@@ -6,6 +6,8 @@ import Image from "next/image"
 import { useSession } from 'next-auth/react'
 import { KeyedMutator } from 'swr'
 import dynamic from 'next/dynamic'
+import { toast } from 'react-hot-toast'
+import getToastOption from '@/lib/getToastOption'
 const ReserveDialog = dynamic(() => import("./ReserveDialog"))
 const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 
@@ -16,11 +18,29 @@ type Props = {
   isInUserPage?: boolean
 }
 
+
 export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
   const [open, setOpen] = useState(false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
-  const { data: session }: any = useSession()
+  const { data: session } = useSession()
   const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])
+
+  const handleDeleteCourse = async (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
+    e.stopPropagation()
+    const isConfirm = confirm('確定要刪除該課程嗎？')
+    if (!isConfirm) return
+    const res = await fetch('/api/manage/course', {
+      method: 'DELETE',
+      body: JSON.stringify(course.id)
+    })
+    if (res.ok) {
+      toast('刪除成功', getToastOption('light'))
+      mutate && mutate()
+      return
+    } else {
+      toast('刪除失敗', getToastOption('light'))
+    }
+  }
 
   return (
     <>
@@ -30,8 +50,12 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
+          {session && ['ADMIN', 'EDITOR'].includes(session?.user.role) && (
+            <div className='ml-auto -mt-2 mr-1 text-gray-400'
+              onClick={handleDeleteCourse}>x</div >
+          )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2.5 ml-1">
           <BiTime className="my-auto" />
           <span>{course.start_time} ~ {course.end_time}</span>
         </div>

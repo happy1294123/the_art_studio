@@ -105,8 +105,8 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                     className="cursor-pointer"
                     onClick={() => setPlan({ label: opt.label, value: opt.value })}
                   >
-                    <span className="mx-auto text-lg py-2">
-                      {opt.label} 
+                    <span className="mx-auto text-base py-1">
+                      {opt.label}
                     </span>
                   </Badge>
                 ))}

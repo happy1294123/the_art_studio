@@ -3,7 +3,9 @@ import * as z from "zod"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 const formSchema = z.object({
-  name: z.string().max(10, {
+  name: z.string().min(1, {
+    message: '不得小於1個字元'
+  }).max(10, {
     message: '不得大於10個字元'
   }),
   type: z.string(),
@@ -14,11 +16,11 @@ const formSchema = z.object({
   end_time: z.string().length(5, {
     message: '24進制，ex. 23:59'
   }),
-  teacher_id: z.string(),
-  baseline_rez: z.number(),
-  total_rez: z.number(),
-  point: z.number(),
-  price: z.number(),
+  teacher_id: z.coerce.number(),
+  baseline_rez: z.coerce.number(),
+  total_rez: z.coerce.number(),
+  point: z.coerce.number(),
+  price: z.coerce.number(),
 })
 import {
   Form,
@@ -47,6 +49,9 @@ import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import getToastOption from "@/lib/getToastOption"
+import RingLoader from 'react-spinners/RingLoader'
 
 export default function NewCourseForm() {
   const [teacherOpt, setTeacherOpt] = useState([])
@@ -68,15 +73,18 @@ export default function NewCourseForm() {
     }
   })
 
+  const [loading, setLoading] = useState(false)
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // TODO loading when post
-    console.log(values)
+    setLoading(true)
     const res = await fetch('/api/manage/course', {
       method: 'POST',
       body: JSON.stringify(values)
     })
-    const data = await res.json()
-    console.log(data)
+    if (res.ok) {
+      toast('新增成功', getToastOption('light'))
+    }
+    setLoading(false)
   }
 
   return (
@@ -218,7 +226,7 @@ export default function NewCourseForm() {
               <FormItem>
                 <FormLabel>最低開課人數</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="請輸入最低開課人數" {...field} />
+                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入最低開課人數" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -231,7 +239,7 @@ export default function NewCourseForm() {
               <FormItem>
                 <FormLabel>總人數</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="請輸入總人數" {...field} />
+                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入總人數" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -244,7 +252,7 @@ export default function NewCourseForm() {
               <FormItem>
                 <FormLabel>點數</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="請輸入點數" {...field} />
+                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入點數" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -257,13 +265,16 @@ export default function NewCourseForm() {
               <FormItem>
                 <FormLabel>單次價格</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="請輸入單次價格" {...field} />
+                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入單次價格" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">新增課程</Button>
+          <Button className="w-full text-xl h-10" type="submit">
+            {loading ? <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={loading} />
+              : '新增課程'}
+          </Button>
         </form>
       </Form>
     </div>

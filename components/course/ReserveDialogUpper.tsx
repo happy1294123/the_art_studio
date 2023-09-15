@@ -99,11 +99,11 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
           <span className="ml-3 px-2 py-0.5 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
         </DialogTitle>
         <DialogDescription className="text-gray-500">
-          <div className="flex gap-2">
-            <BiTime className="-ml-0.5 my-auto text-3xl" />
+          <div className="flex gap-2.5">
+            <BiTime className="ml-2 my-auto" />
             <span className="my-auto ml-1">{dateString} {course.start_time} ~ {course.end_time}</span>
           </div>
-          <div className="flex gap-2 my-2">
+          <div className="flex gap-1 my-2">
             <div className="w-7 h-7 my-auto rounded-full overflow-hidden">
               <Image src={course.teacher.image} className="aspect-square h-full w-full" width={20} height={20} alt="teacher" />
             </div>
