@@ -8,6 +8,9 @@ export async function POST(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
   const data = await req.json()
+
+  return NextResponse.json(dateFormatter(new Date(data.date)))
+
   data.date = dateFormatter(new Date(data.date))
   await prisma.course.create({
     data

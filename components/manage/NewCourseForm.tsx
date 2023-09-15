@@ -76,6 +76,7 @@ export default function NewCourseForm() {
   const [loading, setLoading] = useState(false)
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // TODO loading when post
+    console.log(values)
     setLoading(true)
     const res = await fetch('/api/manage/course', {
       method: 'POST',
@@ -84,6 +85,8 @@ export default function NewCourseForm() {
     if (res.ok) {
       toast('新增成功', getToastOption('light'))
     }
+    const data = await res.json()
+    console.log('response', data)
     setLoading(false)
   }
 
