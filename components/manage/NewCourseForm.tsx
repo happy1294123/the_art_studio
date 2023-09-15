@@ -2,26 +2,7 @@
 import * as z from "zod"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: '不得小於1個字元'
-  }).max(10, {
-    message: '不得大於10個字元'
-  }),
-  type: z.string(),
-  date: z.date(),
-  start_time: z.string().length(5, {
-    message: '24進制，ex. 23:59'
-  }),
-  end_time: z.string().length(5, {
-    message: '24進制，ex. 23:59'
-  }),
-  teacher_id: z.coerce.number(),
-  baseline_rez: z.coerce.number(),
-  total_rez: z.coerce.number(),
-  point: z.coerce.number(),
-  price: z.coerce.number(),
-})
+import dateFormatter from '@/lib/dateFormatter'
 import {
   Form,
   FormControl,
@@ -52,6 +33,27 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import getToastOption from "@/lib/getToastOption"
 import RingLoader from 'react-spinners/RingLoader'
+
+const formSchema = z.object({
+  name: z.string().min(1, {
+    message: '不得小於1個字元'
+  }).max(10, {
+    message: '不得大於10個字元'
+  }),
+  type: z.string(),
+  date: z.date().transform(a => dateFormatter(a)),
+  start_time: z.string().length(5, {
+    message: '24進制，ex. 23:59'
+  }),
+  end_time: z.string().length(5, {
+    message: '24進制，ex. 23:59'
+  }),
+  teacher_id: z.coerce.number(),
+  baseline_rez: z.coerce.number(),
+  total_rez: z.coerce.number(),
+  point: z.coerce.number(),
+  price: z.coerce.number(),
+})
 
 export default function NewCourseForm() {
   const [teacherOpt, setTeacherOpt] = useState([])

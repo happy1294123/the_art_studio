@@ -43,10 +43,10 @@ export default function LoginForm() {
 
   return (
     <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
-      <div className="bg-slate-400 max-w-fit rounded-full mx-auto">
-        <Link href="/">
-          <Image src="/logoBW.png" width={65} height={65} alt='logo' className="-mt-14" priority />
-        </Link>
+      <div className="max-w-fit rounded-full mx-auto -mt-14 relative"
+        onClick={() => router.push('/')}
+      >
+        <Image src="/logoBW.png" width={65} height={65} alt='logo' />
       </div>
       <form onSubmit={e => e.preventDefault()}>
         <div className="flex flex-col">
