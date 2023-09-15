@@ -151,7 +151,7 @@ export default function NewCourseForm() {
                         )}
                       >
                         {field.value ? (
-                          format(field.value, 'yyyy-MM-dd')
+                          format(new Date(field.value), 'yyyy-MM-dd')
                         ) : (
                           <span>請選擇</span>
                         )}
@@ -162,11 +162,9 @@ export default function NewCourseForm() {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      selected={field.value}
+                      selected={new Date(field.value)}
                       onSelect={field.onChange}
-                      disabled={(date) =>
-                        date < new Date() || date < new Date("1900-01-01")
-                      }
+                      disabled={(date) => date < new Date()}
                       className="z-30 bg-white"
                       initialFocus
                     />
