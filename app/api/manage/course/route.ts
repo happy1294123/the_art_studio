@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import prisma from "@/lib/initPrisma";
 import dateFormatter from '@/lib/dateFormatter'
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: any) {
   const token = await getToken({ req })
@@ -11,7 +12,7 @@ export async function POST(req: any) {
   await prisma.course.create({
     data
   })
-
+  revalidatePath('/course')
   return NextResponse.json('OK')
 }
 
@@ -24,5 +25,6 @@ export async function DELETE(req: any) {
       id
     }
   })
+  revalidatePath('/course')
   return NextResponse.json('OK')
 }

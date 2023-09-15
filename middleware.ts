@@ -3,13 +3,19 @@ import { NextResponse } from 'next/server'
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
-    if (request.nextUrl.pathname.startsWith('/manage')) {
-      const role = request.nextauth.token?.role as string
-      if (!['ADMIN', 'EDITOR'].includes(role)) {
-        return NextResponse.rewrite(
-          new URL('/user', request.url)
-        )
-      }
+    const role = request.nextauth.token?.role as string
+    if (['ADMIN', 'EDITOR'].includes(role)
+      && request.nextUrl.password.startsWith('/user')) {
+      return NextResponse.rewrite(
+        new URL('/manage', request.url)
+      )
+    }
+
+    if (!['ADMIN', 'EDITOR'].includes(role)
+      && request.nextUrl.pathname.startsWith('/manage')) {
+      return NextResponse.rewrite(
+        new URL('/user', request.url)
+      )
     }
   }, {
   callbacks: {
