@@ -34,11 +34,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: '媞藝術空間',
     description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹',
-    images: {
+    images: [{
       url: 'https://the-art-studio.vercel.app/logoBW.png',
       width: 168,
       height: 168
-    },
+    }],
     type: 'website',
     url: 'https://the-art-studio.vercel.app/course'
   }
