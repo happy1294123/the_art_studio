@@ -15,8 +15,8 @@ type Props = {
 export default function CoursesShower({ dateOptions }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
-  const date = useSearchParams().get('date')
-  const [selectedDate, setSelectedDate] = useState(date ? new Date(date) : new Date())
+  const id_date = useSearchParams().get('id_date')
+  const [selectedDate, setSelectedDate] = useState(id_date ? new Date(id_date.split('_')[1]) : new Date())
 
   return (
     <>

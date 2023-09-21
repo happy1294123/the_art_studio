@@ -20,8 +20,8 @@ type Props = {
 }
 
 export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
-  const queryCourseId = useSearchParams().get('id')
-  const [open, setOpen] = useState(queryCourseId ? true : false)
+  const id_date = useSearchParams().get('id_date')
+  const [open, setOpen] = useState(id_date?.split('_')[0] === String(course.id) ? true : false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
   const { data: session } = useSession()
   const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])
