@@ -37,7 +37,8 @@ export const metadata: Metadata = {
     images: [{
       url: 'https://the-art-studio.vercel.app/logoBW.png',
       width: 168,
-      height: 168
+      height: 168,
+      type: 'image/png'
     }],
     type: 'website',
     url: 'https://the-art-studio.vercel.app/course'

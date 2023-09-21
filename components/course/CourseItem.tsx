@@ -8,6 +8,7 @@ import { KeyedMutator } from 'swr'
 import dynamic from 'next/dynamic'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
+import { useSearchParams } from 'next/navigation'
 const ReserveDialog = dynamic(() => import("./ReserveDialog"))
 const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 
@@ -18,9 +19,9 @@ type Props = {
   isInUserPage?: boolean
 }
 
-
 export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
-  const [open, setOpen] = useState(false)
+  const queryCourseId = useSearchParams().get('id')
+  const [open, setOpen] = useState(queryCourseId ? true : false)
   const current_rez = useMemo(() => course.Reservation.length, [course])
   const { data: session } = useSession()
   const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])

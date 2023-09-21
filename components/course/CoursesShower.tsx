@@ -6,6 +6,7 @@ import dateFormatter from '@/lib/dateFormatter'
 import { Skeleton } from "@/components/ui/skeleton"
 import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
   dateOptions: string[]
@@ -14,7 +15,8 @@ type Props = {
 export default function CoursesShower({ dateOptions }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const date = useSearchParams().get('date')
+  const [selectedDate, setSelectedDate] = useState(date ? new Date(date) : new Date())
 
   return (
     <>
