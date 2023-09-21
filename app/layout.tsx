@@ -31,8 +31,16 @@ const LXGWWenKai = localFont({
 export const metadata: Metadata = {
   title: '媞藝術空間',
   description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹',
+  openGraph: {
+    title: 'OG標題',
+    description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹',
+    images: {
+      url: 'https://the-art-studio.vercel.app/logoBW.png',
+      width: 300,
+      height: 200
+    }
+  }
 }
-
 
 export default function RootLayout({
   children,

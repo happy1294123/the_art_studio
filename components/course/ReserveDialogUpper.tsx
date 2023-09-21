@@ -18,6 +18,7 @@ import { TbYoga } from 'react-icons/tb'
 import { BiNote } from 'react-icons/bi'
 import { MdOutlineCancel } from 'react-icons/md'
 import { TbCalendarCancel } from 'react-icons/tb'
+import { FaLine } from 'react-icons/fa'
 import { getWeekDayByDate } from '@/components/course/DateHeading'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
@@ -55,38 +56,59 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
   return (
     <>
       <div className="absolute top-3 right-9 flex">
-        <div className="p-1 cursor-pointer" onClick={() => alert('share')}>
-          <PiShareFatLight />
-        </div>
         <DropdownMenu>
-          <DropdownMenuTrigger autoFocus={false}>
+          <DropdownMenuTrigger onFocus={e => e.target.blur()}>
+            <div className="p-1 cursor-pointer">
+              <PiShareFatLight />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
+                    data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[10px]">
+            <DropdownMenuLabel >
+              <div>
+                <a href="https://social-plugins.line.me/lineit/share?url=https://the-art-studio.vercel.app"
+                  className='flex gap-1'>
+                  <FaLine size={21} />分享Line
+                </a>
+              </div>
+              {/* <div className="cursor-pointer pl-2">
+                <a href="/course/note" target='_blank' className='flex gap-1'>
+                  <TbYoga className="my-auto" />Line
+                </a>
+              </div > */}
+            </DropdownMenuLabel>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger onFocus={e => e.target.blur()}>
             <CiCircleMore />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
-                    data-[state=closed]:animate-[dialog-content-hide_300ms]">
+                    data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[5rem]">
             <DropdownMenuLabel >
-              <div className="cursor-pointer pl-2">
+              <div className="cursor-pointer">
                 <a href="/course/note" target='_blank' className='flex gap-1'>
                   <TbYoga className="my-auto" />課程內容
                 </a>
               </div >
             </DropdownMenuLabel>
             <DropdownMenuLabel >
-              <div className="cursor-pointer pl-2">
+              <div className="cursor-pointer">
                 <a href="/course/note" target='_blank' className='flex gap-1'>
                   <BiNote className="my-auto" />上課須知
                 </a>
               </div >
             </DropdownMenuLabel>
             <DropdownMenuLabel >
-              <div className="cursor-pointer pl-2">
+              <div className="cursor-pointer">
                 <a href="/course/cancel-spec" target='_blank' className='flex gap-1'>
                   <MdOutlineCancel className="my-auto" />取消規範
                 </a>
               </div >
             </DropdownMenuLabel>
             {isUser && <DropdownMenuLabel >
-              <div className="cursor-pointer flex gap-1 pl-2" onClick={handleCancelCourse}>
+              <div className="cursor-pointer flex gap-1" onClick={handleCancelCourse}>
                 <TbCalendarCancel className="my-auto" />取消預約
               </div >
             </DropdownMenuLabel>}
