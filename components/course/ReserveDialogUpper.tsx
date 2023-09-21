@@ -67,7 +67,8 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
                     data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[10px]">
             <DropdownMenuLabel >
               <div>
-                <a href={`https://social-plugins.line.me/lineit/share?url=https://the-art-studio.vercel.app?id=${course.id}&date=${dateFormatter(new Date(course.date))}`}
+                <a href={`https://social-plugins.line.me/lineit/share?url=https://the-art-studio.vercel.app/course?id=${course.id}&date=${dateFormatter(new Date(course.date))}`}
+                  target='_blank'
                   className='flex gap-1'>
                   <FaLine size={21} />分享Line
                 </a>
