@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch } from 'react'
+import { useState, useEffect, Dispatch, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import RingLoader from 'react-spinners/RingLoader'
@@ -16,6 +16,7 @@ import { KeyedMutator } from 'swr'
 import ReserveDialogUpper from '@/components/course/ReserveDialogUpper'
 import getToastOption from '@/lib/getToastOption'
 import ScheduleHref from '@/components/ScheduleHref'
+import { Input } from '@/components/ui/input'
 
 type Props = {
   open: boolean,
@@ -26,34 +27,21 @@ type Props = {
 
 export default function ReserveDialog({ open, setOpen, course, mutate }: Props) {
   const [isReservePage, setIsReservePage] = useState(true)
-  const [planOpt, setPlanOpt] = useState<Option[]>([])
-  const [plan, setPlan] = useState({ label: '', value: '' })
-
-  useEffect(() => {
-    // TODO chose coupon first
-
-    const fetchOpt = [
+  const [showDiscoutCode, setShowDiscoutCode] = useState(false)
+  const [needWatchOpen, setNeedWatchOpen] = useState(false)
+  const planOpt = useMemo(() => {
+    return [
       {
         label: `點數 ${course.point} 點`,
         value: `${course.point}`
       },
       {
-        // TODO fetch certain user
-        label: '點數優惠 8 點',
-        value: '8'
-      },
-      {
         label: `單次 ${course.price}元`,
         value: `${course.price}`
-      },
-      {
-        label: '免費體驗',
-        value: '0'
       }
     ]
-    setPlanOpt(fetchOpt)
-    setPlan(fetchOpt[0])
-  }, [])
+  }, [course])
+  const [plan, setPlan] = useState(planOpt[0])
 
   const router = useRouter()
   const { data: session }: any = useSession()
@@ -78,7 +66,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
     })
     if (res.ok) {
       setIsReservePage(false)
-      mutate && mutate()
+      setNeedWatchOpen(true)
       setIsPending(false)
     } else {
       const message = await res.json()
@@ -86,6 +74,12 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
       setIsPending(false)
     }
   }
+
+  useEffect(() => {
+    if (needWatchOpen && open === false && mutate) {
+      mutate()
+    }
+  }, [needWatchOpen, open, mutate])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -96,7 +90,9 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
           <ReserveDialogUpper course={course} />
           <form onSubmit={(e) => e.preventDefault()}>
             <div>
-              <span className="flex-center mb-1 mt-3">選擇方案</span>
+              <span className='flex-center mx-auto -mb-5 text-sm w-fit'>選擇方案</span>
+              <div className='text-gray-500 float-right mr-5 text-sm  mb-1 cursor-pointer'
+                onClick={() => setShowDiscoutCode(!showDiscoutCode)}>折扣碼?</div>
               <div className="w-11/12 mx-auto grid md:grid-cols-2 gap-2">
                 {planOpt.map(opt => (
                   <Badge
@@ -105,21 +101,31 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                     className="cursor-pointer"
                     onClick={() => setPlan({ label: opt.label, value: opt.value })}
                   >
-                    <span className="mx-auto text-base py-1">
+                    <span className="mx-auto text-base py-1 text-sm">
                       {opt.label}
                     </span>
                   </Badge>
                 ))}
               </div>
             </div>
+            {showDiscoutCode &&
+              <div className='mt-2'>
+                <Input id="discountCode" placeholder='請輸入折扣碼' className='rounded-full w-11/12 mx-auto h-9 border-color pl-4' />
+              </div>}
+
             <Button className="w-full mt-2 h-12 text-xl" onClick={handleSubmitForm}>
               <span className={`${isPending && 'hidden'} text-2xl`}>立即預約</span>
               <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={isPending} />
             </Button>
           </form>
+          <div className="flex text-gray-500 gap-2 mt-1 -mb-2 mr-3 justify-end text-sm">
+            <a target='_blank' href="/course/introduction">課程介紹</a>
+            <a target='_blank' href="/course/note">上課須知</a>
+          </div>
         </div>
 
-        {!isReservePage &&
+        {
+          !isReservePage &&
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -132,7 +138,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                 {plan.label.startsWith('點數') && <div className="text-center text-gray-400">剩餘點數{`${session?.user?.point - Number(plan.value)}`}點</div>}
               </div>
               <div className="w-full mt-auto">
-                <div className="underline text-center max-w-fit mx-auto text-gray-400 cursor-pointer" onClick={() => setOpen(false)}>繼續選課</div>
+                <div className="text-center max-w-fit mx-auto text-gray-400 cursor-pointer" onClick={() => setOpen(false)}>繼續選課</div>
                 <Link href="/user"><Button variant="secondary" className="w-full h-10 my-3 text-xl">查看個人課表</Button></Link>
                 <ScheduleHref course={course}>
                   <Button className="w-full text-xl h-10">加入行事曆 </Button>
@@ -141,7 +147,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
             </div>
           </motion.div>
         }
-      </DialogContent>
-    </Dialog>
+      </DialogContent >
+    </Dialog >
   )
 }

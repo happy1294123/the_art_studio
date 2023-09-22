@@ -21,7 +21,9 @@ export default function CourseItems({ selectedDate }: { selectedDate: Date }) {
           <ClipLoader size={20} color="#D1C0AD" />
         </div>)
         : courses && courses.length > 0
-          ? courses.map(course => (<CourseItem key={course.id} course={course} mutate={mutate} />))
+          ? courses.map(course => (<>
+            <CourseItem key={course.id} course={course} mutate={mutate} />
+          </>))
           : <div className="text-center">當天沒有課程</div>}
     </div >
   )

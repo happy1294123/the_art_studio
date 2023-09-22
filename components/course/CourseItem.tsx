@@ -45,9 +45,10 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
 
   return (
     <>
-      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md 
-      ${(current_rez === course.total_rez || hasReserve) && !isInUserPage ? 'opacity-40' : 'cursor-pointer'}`}
-        onClick={() => (!hasReserve || isInUserPage) && setOpen(true)}>
+      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md cursor-pointer
+      ${(current_rez === course.total_rez || hasReserve) && !isInUserPage && 'opacity-40'}`}
+        // (!hasReserve || isInUserPage) && 
+        onClick={() => setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
@@ -85,10 +86,10 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
         </div>
       </div >
 
-      {!isInUserPage ? (current_rez !== course.total_rez &&
-        <ReserveDialog open={open} setOpen={setOpen} course={course} mutate={mutate} />
-      ) :
-        <UserCourseDialog open={open} setOpen={setOpen} course={course} current_rez={current_rez} mutateReservation={mutateReservation} />}
+      {hasReserve ?
+        <UserCourseDialog open={open} setOpen={setOpen} course={course} current_rez={current_rez} mutateReservation={mutateReservation} mutate={mutate} />
+        :
+        <ReserveDialog open={open} setOpen={setOpen} course={course} mutate={mutate} />}
     </>
   )
 }

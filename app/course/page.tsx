@@ -7,8 +7,10 @@ export default async function Course() {
 
   return (
     <>
-      <TheTitle>預約課程</TheTitle>
-      <CoursesShower dateOptions={dateOptions} />
+      <div className='max-w-[780px] mx-auto'>
+        <TheTitle>預約課程</TheTitle>
+        <CoursesShower dateOptions={dateOptions} />
+      </div>
     </>
   )
 }

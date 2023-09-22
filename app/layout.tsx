@@ -1,10 +1,15 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import Navbar from '@/components/Navbar/page'
 import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
 import AuthProvider from '@/context/AuthProvider'
 import { Toaster } from 'react-hot-toast'
+import dynamic from 'next/dynamic'
+
+const Navbar = dynamic(
+  () => import('@/components/Navbar/page'),
+  { ssr: false }
+)
 
 const LXGWWenKai = localFont({
   src: [

@@ -14,11 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { CiCircleMore } from 'react-icons/ci'
 import { PiShareFatLight } from 'react-icons/pi'
-import { TbYoga } from 'react-icons/tb'
-import { BiNote } from 'react-icons/bi'
-import { MdOutlineCancel } from 'react-icons/md'
 import { TbCalendarCancel } from 'react-icons/tb'
-import { FaLine } from 'react-icons/fa'
+import { FaLine, FaFacebookSquare, FaLink } from 'react-icons/fa'
 import { getWeekDayByDate } from '@/components/course/DateHeading'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
@@ -28,11 +25,12 @@ import dateFormatter from '@/lib/dateFormatter'
 type Props = {
   course: Course,
   setOpen?: Dispatch<boolean>,
+  mutate?: KeyedMutator<Course[]>,
   mutateReservation?: KeyedMutator<Record<string, Reservation[]>>,
   isUser?: Boolean,
 }
 
-export default function ReserveDialogUpper({ course, setOpen, mutateReservation, isUser = false }: Props) {
+export default function ReserveDialogUpper({ course, setOpen, mutate, mutateReservation, isUser = false }: Props) {
   const dateString = useMemo(() => {
     const date = new Date(course.date)
     return `${date.getMonth() + 1}/${date.getDate()}(${getWeekDayByDate(date)})`
@@ -48,10 +46,20 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
     if (res.ok) {
       toast('取消課程成功', getToastOption('light'))
       setOpen && setOpen(false)
+      mutate && mutate()
       mutateReservation && mutateReservation()
     }
     const data = await res.json()
     console.log(data)
+  }
+
+  const currentCourseUrl = useMemo(() => {
+    return `${process.env.NEXT_PUBLIC_HOST}/course?id_date=${course.id}_${dateFormatter(new Date(course.date))}`
+  }, [course])
+
+  const handleCopyUrl = async () => {
+    await navigator.clipboard.writeText(currentCourseUrl)
+    toast('已複製此課程網址', getToastOption('light'))
   }
 
   return (
@@ -67,55 +75,49 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
                     data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[10px]">
             <DropdownMenuLabel >
               <div>
-                <a href={`https://social-plugins.line.me/lineit/share?url=https://the-art-studio.vercel.app/course?id_date=${course.id}_${dateFormatter(new Date(course.date))}`}
+                <a href={`https://social-plugins.line.me/lineit/share?url=${currentCourseUrl}`}
                   target='_blank'
-                  className='flex gap-1'>
-                  <FaLine size={21} />分享Line
+                  className='flex gap-1 align-middle'>
+                  <FaLine size={21} />
+                  <span className='my-auto'>分享至Line</span>
+
                 </a>
               </div>
-              {/* <div className="cursor-pointer pl-2">
-                <a href="/course/note" target='_blank' className='flex gap-1'>
-                  <TbYoga className="my-auto" />Line
+            </DropdownMenuLabel>
+            <DropdownMenuLabel >
+              <div>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${currentCourseUrl}`}
+                  target='_blank'
+                  className='flex gap-1'>
+                  <FaFacebookSquare size={21} />
+                  <span className='my-auto'>分享至facebook</span>
                 </a>
-              </div > */}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuLabel >
+              <div className='flex gap-1 ml-1 cursor-pointer'
+                onClick={handleCopyUrl}>
+                <FaLink size={17} />
+                <span className='my-auto ml-0.5'>複製連結</span>
+              </div>
             </DropdownMenuLabel>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger onFocus={e => e.target.blur()}>
-            <CiCircleMore />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
+        {isUser &&
+          <DropdownMenu>
+            <DropdownMenuTrigger onFocus={e => e.target.blur()}>
+              <CiCircleMore />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
                     data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[5rem]">
-            <DropdownMenuLabel >
-              <div className="cursor-pointer">
-                <a href="/course/note" target='_blank' className='flex gap-1'>
-                  <TbYoga className="my-auto" />課程內容
-                </a>
-              </div >
-            </DropdownMenuLabel>
-            <DropdownMenuLabel >
-              <div className="cursor-pointer">
-                <a href="/course/note" target='_blank' className='flex gap-1'>
-                  <BiNote className="my-auto" />上課須知
-                </a>
-              </div >
-            </DropdownMenuLabel>
-            <DropdownMenuLabel >
-              <div className="cursor-pointer">
-                <a href="/course/cancel-spec" target='_blank' className='flex gap-1'>
-                  <MdOutlineCancel className="my-auto" />取消規範
-                </a>
-              </div >
-            </DropdownMenuLabel>
-            {isUser && <DropdownMenuLabel >
-              <div className="cursor-pointer flex gap-1" onClick={handleCancelCourse}>
-                <TbCalendarCancel className="my-auto" />取消預約
-              </div >
-            </DropdownMenuLabel>}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <DropdownMenuLabel >
+                <div className="cursor-pointer flex gap-1" onClick={handleCancelCourse}>
+                  <TbCalendarCancel className="my-auto" />取消預約
+                </div >
+              </DropdownMenuLabel>
+            </DropdownMenuContent>
+          </DropdownMenu>}
       </div >
       <DialogHeader>
         <DialogTitle className='text-left'>
@@ -127,7 +129,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutateReservation,
             <BiTime className="ml-2 my-auto" />
             <span className="my-auto ml-1">{dateString} {course.start_time} ~ {course.end_time}</span>
           </div>
-          <div className="flex gap-1 my-2">
+          <div className="flex gap-1 mt-2">
             <div className="w-7 h-7 my-auto rounded-full overflow-hidden">
               <Image src={course.teacher.image} className="aspect-square h-full w-full" width={20} height={20} alt="teacher" />
             </div>

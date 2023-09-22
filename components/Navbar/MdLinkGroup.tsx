@@ -36,7 +36,6 @@ export default function MdLinkGroup() {
                   <LinkWithAnim href='/course/introduction' shortUnderline={true}>課程介紹</LinkWithAnim>
                   <LinkWithAnim href='/course/teacher' shortUnderline={true}>師資介紹</LinkWithAnim>
                   <LinkWithAnim href='/course/note' shortUnderline={true}>上課須知</LinkWithAnim>
-                  <LinkWithAnim href='/course/cancel-spec' shortUnderline={true}>取消規範</LinkWithAnim>
                 </ul>
               </motion.div>
             </NavigationMenuContent>

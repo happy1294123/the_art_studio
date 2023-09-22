@@ -7,6 +7,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
 import { useSearchParams } from 'next/navigation'
+import dynamic from 'next/dynamic'
+const Zmage = dynamic(
+  () => import('react-zmage'),
+  { ssr: false }
+)
 
 type Props = {
   dateOptions: string[]
@@ -32,6 +37,9 @@ export default function CoursesShower({ dateOptions }: Props) {
           </Suspense >
         </div>
       </div >
+      <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
+        <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} />
+      </div>
     </>
   )
 }

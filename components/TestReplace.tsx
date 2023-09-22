@@ -21,8 +21,14 @@ import { useState } from 'react'
 //   SelectGroup,
 //   SelectLabel
 // } from "@/components/ui/select"
+// import Zmage from 'react-zmage'
+import dynamic from "next/dynamic"
 import { Badge } from "@/components/ui/badge"
 
+const Zmage = dynamic(
+  () => import('react-zmage'),
+  { ssr: false }
+)
 
 export default function TestReplace() {
   const [open, setOpen] = useState(false)
@@ -32,6 +38,7 @@ export default function TestReplace() {
   }
   return (
     <>
+      <Zmage src={`http://zmage.caldis.me/imgSet/childsDream/demo.jpg`} alt="course schedule" />
       <div className="flex gap-2">
         <Badge variant="secondary">點數 10 點</Badge>
         <Badge variant="secondary" >

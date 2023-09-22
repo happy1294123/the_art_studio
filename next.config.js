@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental:{
-        serverActions: true
-    },
-    experimental:{
-      forceSwcTransforms: true
+        serverActions: true,
+        forceSwcTransforms: true
     },
     images: {
     remotePatterns: [
