@@ -1,0 +1,28 @@
+.myCalendar  {
+    --fc-button-hover-bg-color: #947964;
+    --fc-button-hover-border-color: #947964;
+    --fc-button-active-bg-color: #947964;
+    --fc-button-active-border-color: #947964;
+    --fc-border-color: #D1C0AD;
+
+    :global(.fc-col-header-cell) {
+        background-color: #D1C0AD;
+        border-color: #D1C0AD;
+    }
+   :global(.fc-theme-standard td) {
+       border-color: #D1C0AD;
+    }
+   :global(.fc-theme-standard th) {
+       border-color: #D1C0AD;
+   }
+   :global(.fc-button-primary) {
+       background-color: #D1C0AD;
+       border-color: #D1C0AD;
+       color: #947964;
+   }
+   :global(.fc-button-primary:disabled) {
+       background-color: #D1C0AD;
+       border-color: #D1C0AD;
+       color: #947964;
+   }   
+}

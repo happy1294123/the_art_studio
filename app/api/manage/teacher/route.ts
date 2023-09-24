@@ -8,7 +8,8 @@ export async function GET(req: any) {
     },
     select: {
       id: true,
-      name: true
+      name: true,
+      image: true
     }
   })
 

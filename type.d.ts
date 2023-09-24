@@ -13,6 +13,12 @@ type MyDate = {
   hasCourse: boolean
 }
 
+type Teacher = {
+  id: number,
+  name: string,
+  image: string
+}
+
 type Course = {
   id: number,
   name: string,
@@ -30,12 +36,9 @@ type Course = {
   baseline_rez: number,
   point: number,
   price: number,
-  createdAt: Date,
-  updatedAt: Date,
-  teacher: {
-    name: string,
-    image: string
-  }
+  createdAt?: Date,
+  updatedAt?: Date,
+  teacher: Teacher
 }
 
 type Option = {
@@ -63,4 +66,27 @@ type Reservation = {
   created_at: Date,
   updated_at: Date,
   course: Course
+}
+
+type CourseEvent = {
+  title: string,
+  courseId: number,
+  date: string,
+  start: string,
+  end: string,
+  color: string,
+  textColor: string
+}
+
+type CreateCourse = {
+  name: string,
+  type: string,
+  date: string,
+  start_time: string,
+  end_time: string,
+  teacher_id: number,
+  total_rez: number,
+  baseline_rez: number,
+  point: number,
+  price: number,
 }

@@ -12,15 +12,15 @@ import { useState } from 'react'
 // } from "@/components/ui/dialog"
 // import { Button } from "@/components/ui/button"
 // import { Input } from "@/components/ui/input"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-//   SelectGroup,
-//   SelectLabel
-// } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectLabel
+} from "@/components/ui/select"
 // import Zmage from 'react-zmage'
 import dynamic from "next/dynamic"
 import { Badge } from "@/components/ui/badge"
@@ -38,7 +38,7 @@ export default function TestReplace() {
   }
   return (
     <>
-      <Zmage src={`http://zmage.caldis.me/imgSet/childsDream/demo.jpg`} alt="course schedule" />
+      {/* <Zmage src={`http://zmage.caldis.me/imgSet/childsDream/demo.jpg`} alt="course schedule" />
       <div className="flex gap-2">
         <Badge variant="secondary">點數 10 點</Badge>
         <Badge variant="secondary" >
@@ -46,9 +46,9 @@ export default function TestReplace() {
         </Badge>
         <Badge variant="outline">單次購買 250元</Badge>
         <Badge variant="secondary">免費體驗</Badge>
-      </div>
+      </div> */}
 
-      {/* <Select>
+      <Select>
         <SelectTrigger className="w-[180px] bg-white border-0.5">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
@@ -62,7 +62,7 @@ export default function TestReplace() {
             <SelectItem value="pineapple">Pineapple</SelectItem>
           </SelectGroup>
         </SelectContent>
-      </Select> */}
+      </Select>
       {/* {true ? 'not ok '
         :
         <Dialog open={open} onOpenChange={setOpen}>

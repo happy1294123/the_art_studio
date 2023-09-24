@@ -43,7 +43,7 @@ export default function LoginForm() {
 
   return (
     <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
-      <div className="max-w-fit rounded-full mx-auto -mt-14 relative"
+      <div className="max-w-fit rounded-full mx-auto -mt-14 relative cursor-pointer"
         onClick={() => router.push('/')}
       >
         <Image src="/logoBW.png" width={65} height={65} alt='logo' />

@@ -16,7 +16,7 @@ type Props = {
   setOpen: Dispatch<boolean>,
   course: Course,
   current_rez: number,
-  mutateReservation: KeyedMutator<Record<string, Reservation[]>>,
+  mutateReservation: KeyedMutator<Record<string, Reservation[]>> | undefined,
   mutate?: KeyedMutator<Course[]>,
 }
 

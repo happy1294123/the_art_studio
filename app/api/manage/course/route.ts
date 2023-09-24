@@ -7,6 +7,7 @@ export async function POST(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
   const data = await req.json()
+  delete data.id
   await prisma.course.create({ data })
   revalidatePath('/course')
   return NextResponse.json('OK')
@@ -23,4 +24,28 @@ export async function DELETE(req: any) {
   })
   revalidatePath('/course')
   return NextResponse.json('OK')
+}
+
+export async function GET(req: any) {
+  const token = await getToken({ req })
+  if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  const allCourses = await prisma.course.findMany({
+    include: {
+      teacher: true
+    }
+  })
+  return NextResponse.json(allCourses)
+}
+
+export async function PUT(req: any) {
+  const token = await getToken({ req })
+  if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  const data = await req.json()
+  const res = await prisma.course.update({
+    where: { id: data.id },
+    data
+  })
+  revalidatePath('/course')
+
+  return NextResponse.json(res)
 }

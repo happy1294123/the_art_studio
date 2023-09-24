@@ -19,6 +19,7 @@ module.exports = {
       colors: {
         fontColor: "#403931",
         headingColor: "#947964",
+        bgColor: "#FFF5ED",
         bgColorSecondary: "#D1C0AD",
         bgColorOther: "#EDDFCF",
         border: "hsl(var(--border))",

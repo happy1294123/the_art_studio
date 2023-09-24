@@ -1,284 +1,233 @@
 "use client"
-import * as z from "zod"
-import { cn } from "@/lib/utils"
-import { zodResolver } from "@hookform/resolvers/zod"
+import FullCalendar from '@fullcalendar/react'
+import interactionPlugin from '@fullcalendar/interaction'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import zhCn from '@fullcalendar/core/locales/zh-cn';
+import style from './style.module.scss'
+import useSWR from 'swr';
+import { useState, useRef } from 'react';
+import getColorByCourseType from '@/lib/course/getColorByCourseType'
+import EditCourseItem from '@/components/manage/EditCourseItem'
 import dateFormatter from '@/lib/dateFormatter'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { useEffect, useState } from "react"
-import toast from "react-hot-toast"
-import getToastOption from "@/lib/getToastOption"
-import RingLoader from 'react-spinners/RingLoader'
+import toast from 'react-hot-toast'
+import getToastOption from '@/lib/getToastOption'
 
-const formSchema = z.object({
-  name: z.string().min(1, {
-    message: '不得小於1個字元'
-  }).max(10, {
-    message: '不得大於10個字元'
-  }),
-  type: z.string(),
-  date: z.date().transform(a => dateFormatter(a)),
-  start_time: z.string().length(5, {
-    message: '24進制，ex. 23:59'
-  }),
-  end_time: z.string().length(5, {
-    message: '24進制，ex. 23:59'
-  }),
-  teacher_id: z.coerce.number(),
-  baseline_rez: z.coerce.number(),
-  total_rez: z.coerce.number(),
-  point: z.coerce.number(),
-  price: z.coerce.number(),
-})
+async function courseFetcher(url: string): Promise<Course[]> {
+  const res = await fetch(url, { next: { tags: ['course'] } })
+  return await res.json()
+}
+
+async function teacherFetcher(url: string): Promise<Teacher[]> {
+  const res = await fetch(url)
+  return await res.json()
+}
 
 export default function NewCourseForm() {
-  const [teacherOpt, setTeacherOpt] = useState([])
-  useEffect(() => {
-    async function getTeachersAndSet() {
-      const res = await fetch('/api/manage/teacher')
-      const teachers = await res.json()
-      setTeacherOpt(teachers)
+  const [events, setEvents] = useState<CourseEvent[]>()
+  const { data: courses, mutate, isLoading } = useSWR(
+    `/api/manage/course`,
+    courseFetcher,
+    {
+      onSuccess: (data) => {
+        const events = data.map(course => ({
+          title: course.name,
+          courseId: course.id,
+          date: course.date,
+          start: `${course.date.replaceAll('/', '-')} ${course.start_time}`,
+          end: `${course.date.replaceAll('/', '-')} ${course.end_time}`,
+          color: getColorByCourseType(course.type),
+          textColor: '#000'
+        }))
+        setEvents(events)
+      }
     }
-    getTeachersAndSet()
-  }, [])
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      baseline_rez: 2,
-      total_rez: 4,
-      point: 10,
-      price: 250
-    }
-  })
+  )
+  const { data: teacherOpt } = useSWR(
+    'api/manage/teacher',
+    teacherFetcher
+  )
 
-  const [loading, setLoading] = useState(false)
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // TODO loading when post
-    setLoading(true)
-    const res = await fetch('/api/manage/course', {
-      method: 'POST',
-      body: JSON.stringify(values)
-    })
-    if (res.ok) {
-      toast('新增成功', getToastOption('light'))
+  const calendarRef = useRef(null)
+  const handleDateClick = (dateInfo: any) => {
+    const clickDate = new Date(dateInfo.date)
+    const delta = {
+      start: clickDate.getDay() === 0 ? -5 : +2,
+      end: clickDate.getDay() === 0 ? +6 : +8,
     }
-    const data = await res.json()
-    console.log('response', data)
-    setLoading(false)
+
+    // switch to week
+    if (dateInfo.view.type === 'dayGridMonth' && calendarRef.current) {
+      const calendar = calendarRef?.current as FullCalendar
+      const start = new Date(clickDate.setDate(clickDate.getDate() - clickDate.getDay() + delta.start)).toISOString().slice(0, 10)
+      const end = new Date(clickDate.setDate(clickDate.getDate() - clickDate.getDay() + delta.end)).toISOString().slice(0, 10)
+      // setWeekRange({ start, end })
+      calendar.getApi().changeView('timeGrid', { start, end });
+      calendar.getApi().changeView('dayGridWeek')
+    }
+
+    // add course
+    if (dateInfo.view.type === 'dayGridWeek') {
+      const date = dateFormatter(clickDate)
+      setCourseForm({
+        name: '',
+        type: '空中課程',
+        date,
+        start_time: '',
+        end_time: '',
+        teacher_id: teacherOpt && teacherOpt[0].id || 0,
+        total_rez: 4,
+        baseline_rez: 2,
+        point: 10,
+        price: 250,
+      })
+    }
   }
 
-  return (
-    <div className="bg-bgColorOther rounded-3xl p-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>課程名稱</FormLabel>
-                <FormControl>
-                  <Input placeholder="請輸入課程名稱" {...field} />
-                </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>課程種類</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="rounded-2xl">
-                      <SelectValue placeholder="請選擇" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-bgColorSecondary rounded-2xl">
-                      <SelectItem value="空中課程">空中課程</SelectItem>
-                      <SelectItem value="地面課程">地面課程</SelectItem>
-                      <SelectItem value="兒童課程">兒童課程</SelectItem>
-                      <SelectItem value="新開課程">新開課程</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>開課日期</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal h-10"
-                        )}
-                      >
-                        {field.value ? (
-                          format(new Date(field.value), 'yyyy-MM-dd')
-                        ) : (
-                          <span>請選擇</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={new Date(field.value)}
-                      onSelect={field.onChange}
-                      disabled={(date) => date < new Date()}
-                      className="z-30 bg-white"
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="start_time"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>開始時間</FormLabel>
-                <FormControl>
-                  <Input placeholder="ex. 00:00" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="end_time"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>結束時間</FormLabel>
-                <FormControl>
-                  <Input placeholder="ex. 23:59" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="teacher_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>上課老師</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="rounded-2xl">
-                      <SelectValue placeholder="請選擇" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-bgColorSecondary rounded-2xl">
-                      {teacherOpt && teacherOpt.map((opt: { id: number, name: string }) => (
-                        <SelectItem key={opt.id} value={String(opt.id)}>{opt.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="baseline_rez"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>最低開課人數</FormLabel>
-                <FormControl>
-                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入最低開課人數" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="total_rez"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>總人數</FormLabel>
-                <FormControl>
-                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入總人數" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="point"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>點數</FormLabel>
-                <FormControl>
-                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入點數" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>單次價格</FormLabel>
-                <FormControl>
-                  <Input type="number" pattern="\d+" step="1" placeholder="請輸入單次價格" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button className="w-full text-xl h-10" type="submit">
-            {loading ? <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={loading} />
-              : '新增課程'}
-          </Button>
-        </form>
-      </Form>
-    </div>
-  )
+  const [courseForm, setCourseForm] = useState<Partial<Course> | null>()
+  const handleClickEvent = (eventInfo: any) => {
+    const clickedCourse = courses?.find(c => c.id === eventInfo.event.extendedProps.courseId)
+    if (!clickedCourse) {
+      alert('有錯誤')
+      return
+    }
+    // console.log(clickedCourse)
+    setCourseForm(clickedCourse)
+  }
+
+  const handleDrag = async (info: any) => {
+    const courseId = info.event._def.extendedProps.courseId
+    const date = dateFormatter(info.event._instance.range.start)
+    await fetch('/api/manage/course', {
+      method: 'PUT',
+      body: JSON.stringify({
+        id: courseId,
+        date
+      })
+    })
+    const clickedCourse = courses?.find(c => c.id === courseId) as Course
+    clickedCourse.date = date
+    await mutate(clickedCourse)
+    setCourseForm(clickedCourse)
+  }
+
+  const handleCopyWeekToNextWeek = async () => {
+    if (!confirm('是否將當週課表視為下週課表？')) return
+    if (calendarRef.current) {
+      const calendar = calendarRef?.current as FullCalendar
+      const activeRange = { ...calendar.calendar.currentData.dateProfile.activeRange }
+      const weekStartDate = new Date(activeRange.start).toISOString().slice(0, 10).replaceAll('-', '/')
+      const end = new Date(activeRange.end)
+      const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
+      const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
+      // console.log(filtedEvents)
+      const res = await fetch('/api/manage/course/copy', {
+        method: 'POST',
+        body: JSON.stringify({
+          to: 'next_week',
+          events: filtedEvents
+        })
+      })
+      if (res.ok) {
+        mutate()
+        toast('當週 -> 下週，複製成功', getToastOption())
+      }
+    }
+  }
+
+  const handleCopyWeekToNext3Week = async () => {
+    if (!confirm('是否將當週課表視為下3週課表？')) return
+    if (calendarRef.current) {
+      const calendar = calendarRef?.current as FullCalendar
+      const activeRange = { ...calendar.calendar.currentData.dateProfile.activeRange }
+      const weekStartDate = new Date(activeRange.start).toISOString().slice(0, 10).replaceAll('-', '/')
+      const end = new Date(activeRange.end)
+      const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
+      const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
+      // console.log(filtedEvents)
+      const res = await fetch('/api/manage/course/copy', {
+        method: 'POST',
+        body: JSON.stringify({
+          to: 'next_3week',
+          events: filtedEvents
+        })
+      })
+      if (res.ok) {
+        mutate()
+        toast('當週 -> 下3週，複製成功', getToastOption())
+      }
+    }
+  }
+
+  const handleChangeView = (datainfo: any) => {
+    if (datainfo.view.type === 'dayGridWeek' && calendarRef.current) {
+      const calendar = calendarRef?.current as FullCalendar
+      calendar.getApi().setOption('headerToolbar', {
+        left: 'prev,next',
+        center: 'title',
+        right: 'copyWeekToNextWeek copyWeekToNext3Week dayGridMonth,dayGridWeek'
+      })
+    } else if (datainfo.view.type === 'dayGridMonth' && calendarRef.current) {
+      const calendar = calendarRef?.current as FullCalendar
+      calendar.getApi().setOption('headerToolbar', {
+        left: 'prev,next',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek'
+      })
+    }
+  }
+
+  return (<>
+    {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={mutate} />}
+
+    {/* Calendar:: getEvents */}
+    {events && events?.length > 0 &&
+      <div className={`bg-bgColorOther p-3 rounded-3xl ${style.myCalendar}`}>
+        <FullCalendar
+          initialView="dayGridMonth"
+          height='auto'
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          locale={zhCn}
+          customButtons={{
+            copyWeekToNextWeek: {
+              text: '下週照舊',
+              click: handleCopyWeekToNextWeek,
+            },
+            copyWeekToNext3Week: {
+              text: '下3週照舊',
+              click: handleCopyWeekToNext3Week
+            }
+          }}
+          headerToolbar={{
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek'
+          }}
+          selectable={true}
+          datesSet={handleChangeView}
+          // viewDidMount={handleChangeView}
+          dateClick={handleDateClick}
+          eventDrop={handleDrag}
+          droppable={false}
+          editable={true}
+          eventClick={handleClickEvent}
+          events={events}
+          eventContent={renderEventContent}
+          eventDisplay='block'
+          eventTimeFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: 'short'
+          }}
+          ref={calendarRef}
+        />
+      </div>}
+  </>)
+}
+
+function renderEventContent(eventInfo: any) {
+  return (<div className='px-2'>
+    <div className='grid'>{eventInfo.timeText}</div>
+    <div className='grid'>{eventInfo.event.title}</div>
+  </div>)
 }

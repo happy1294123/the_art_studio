@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,9 +10,15 @@ import {
 import { motion } from "framer-motion"
 import LinkWithAnim from './LinkWithAnim';
 import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
+import { useSession } from "next-auth/react"
+import ManageLink from './ManageLink';
 
 export default function MdLinkGroup() {
   const [offsetClass, setOffsetClass] = useState('')
+  const { data: session } = useSession()
+  const isManager = useMemo(() => {
+    return session && ['ADMIN', 'EDITOR'].includes(session.user.role)
+  }, [session])
 
   return (
     <>
@@ -22,7 +28,7 @@ export default function MdLinkGroup() {
             <LinkWithAnim href="/news" className="text-xl ml-1 md:ml-0">最新消息</LinkWithAnim>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl pr-0" onMouseEnter={() => setOffsetClass('mr-[100px]')}>
+            <NavigationMenuTrigger className="text-xl pr-0" onMouseEnter={() => setOffsetClass(isManager ? 'mr-[150px]' : 'mr-[100px]')}>
               <span>關於課程</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent className="bg-bgColorSecondary text-secondary-foreground mx-auto" asChild>
@@ -41,7 +47,7 @@ export default function MdLinkGroup() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl p-0 ml-4 md:ml-0 md:pl-1" onMouseEnter={() => setOffsetClass('ml-[20px]')}>
+            <NavigationMenuTrigger className="text-xl p-0 ml-4 md:ml-0 md:pl-1" onMouseEnter={() => setOffsetClass(isManager ? 'mr-[30px]' : 'ml-[20px]')}>
               關於我們
             </NavigationMenuTrigger>
             < NavigationMenuContent className="bg-bgColorSecondary text-secondary-foreground" asChild>
@@ -64,13 +70,13 @@ export default function MdLinkGroup() {
             </LinkWithAnim>
           </NavigationMenuItem>
           <NavigationMenuItem>
-
-            <LinkWithAnim href='/login' showUnderLine={false} className="mt-1">
-              <div className="flex -mt-1">
-                <LoginBtnOrUserProfile />
-              </div>
-            </LinkWithAnim>
+            <LoginBtnOrUserProfile isLogin={!!session} />
           </NavigationMenuItem>
+          {isManager && (
+            <NavigationMenuItem>
+              <ManageLink />
+            </NavigationMenuItem>
+          )}
         </NavigationMenuList>
         <NavigationMenuViewport className={`mx-auto mt-1 ${offsetClass} rounded-xl`} />
       </NavigationMenu >

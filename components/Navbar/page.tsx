@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { usePathname } from "next/navigation";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,12 +8,19 @@ import { Button } from '@/components/ui/button'
 import LinkGroup from './LinkGroup';
 import MdLinkGroup from './MdLinkGroup';
 import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
+import { useSession } from "next-auth/react"
+import LinkWithAnim from './LinkWithAnim';
+import ManageLink from './ManageLink';
 
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const isManager = useMemo(() => {
+    return session && ['ADMIN', 'EDITOR'].includes(session.user.role)
+  }, [session])
 
   useEffect(() => {
     const handleHideSidebar = (event: MouseEvent) => {
@@ -53,7 +60,8 @@ export default function Navbar() {
 
       <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-bgColorSecondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
         <div className='mt-14 text-xl grid gap-2'>
-          <LoginBtnOrUserProfile />
+          {isManager && <ManageLink />}
+          <LoginBtnOrUserProfile isLogin={!!session} />
           <LinkGroup />
         </div>
       </div >

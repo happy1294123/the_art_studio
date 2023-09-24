@@ -1,6 +1,6 @@
 import { AiFillInfoCircle } from 'react-icons/ai'
 
-export default function getToastOption(mode: 'dark' | 'light', icon = <AiFillInfoCircle className="my-auto text-xl" />) {
+export default function getToastOption(mode = 'light', icon = <AiFillInfoCircle className="my-auto text-xl" />) {
   if (mode === 'dark') {
     return {
       icon,

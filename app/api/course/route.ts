@@ -14,6 +14,7 @@ export async function GET(req: Request) {
     include: {
       teacher: {
         select: {
+          id: true,
           name: true,
           image: true
         }
