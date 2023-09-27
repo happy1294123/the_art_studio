@@ -5,7 +5,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Table,
   TableBody,
@@ -31,6 +38,10 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [openDialog, setOpenDialog] = useState(false)
   const [discount, setDiscount] = useState<Discount>()
+  const [discountUsers, setDiscountUsers] = useState<{
+    name: string,
+    email: string
+  }[]>()
   const table = useReactTable({
     data,
     columns,
@@ -43,6 +54,14 @@ export function DataTable<TData, TValue>({
         if (discount) {
           setOpenDialog(true)
           setDiscount(discount)
+        }
+      },
+      openUsedList: async (discount_id: string) => {
+        if (discount_id) {
+          setOpenDialog(true)
+          const res = await fetch(`/api/manage/discount/users?discount_id=${discount_id}`)
+          const users = await res.json()
+          setDiscountUsers(users)
         }
       }
     },
@@ -100,5 +119,30 @@ export function DataTable<TData, TValue>({
         discount={discount}
         discountMutate={mutate}
       />}
+    {openDialog && discountUsers &&
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle>使用名單</DialogTitle>
+            <DialogDescription>
+              {discountUsers.length
+                ? (<>
+                  <div className="grid grid-cols-2 text-center -ml-10">
+                    <span>姓名</span>
+                    <span>email</span>
+                  </div>
+                  {discountUsers.map(user => (
+                    <div key={user.email} className="grid grid-cols-2 text-center -ml-10">
+                      <span>{user.name}</span>
+                      <span>{user.email}</span>
+                    </div>
+                  ))}
+                </>)
+                : <div className="flex-center">無使用者</div>}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog >
+    }
   </>)
 }

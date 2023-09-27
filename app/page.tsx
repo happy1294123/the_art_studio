@@ -7,9 +7,9 @@ export default async function Home() {
 
   return (
     <>
-      <TheTitle>主頁</TheTitle>
-      <TestReplace />
-      {code}
+      {/* <TheTitle>主頁</TheTitle> */}
+      {/* <TestReplace />
+      {code} */}
       {/* <TestMotion /> */}
       {/* {process.env.HOST} */}
     </>

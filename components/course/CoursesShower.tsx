@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, Suspense } from 'react'
+import { useState, useMemo, Suspense, useEffect } from 'react'
 import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
 import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDatePicker'
 import dateFormatter from '@/lib/dateFormatter'
@@ -22,6 +22,8 @@ export default function CoursesShower({ dateOptions }: Props) {
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const id_date = useSearchParams().get('id_date')
   const [selectedDate, setSelectedDate] = useState(id_date ? new Date(id_date.split('_')[1]) : new Date())
+  const [showZmage, setShowZmage] = useState(false)
+  useEffect(() => setShowZmage(true), [])
 
   return (
     <>
@@ -37,9 +39,10 @@ export default function CoursesShower({ dateOptions }: Props) {
           </Suspense >
         </div>
       </div >
-      <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
-        <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} />
-      </div>
+      {showZmage &&
+        <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
+          <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} />
+        </div>}
     </>
   )
 }

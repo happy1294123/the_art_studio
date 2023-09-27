@@ -59,7 +59,10 @@ export const columns: ColumnDef<Discount>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger onFocus={e => e.target.blur()}><FiMoreHorizontal /></DropdownMenuTrigger>
           <DropdownMenuContent >
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => table.options.meta?.openUsedList(row.original.id)}
+            >
               <AiOutlineUsergroupDelete className="mr-2" />
               使用名單
             </DropdownMenuItem>
