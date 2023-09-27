@@ -90,3 +90,12 @@ type CreateCourse = {
   point: number,
   price: number,
 }
+
+type Discount = {
+  id: number,
+  code: string,
+  description: string,
+  point_discount: string,
+  price_discount: string,
+  active: boolean,
+}

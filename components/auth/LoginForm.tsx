@@ -1,12 +1,11 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import FloatLabelInput from '@/components/FloatLabelInput'
 import { signIn } from 'next-auth/react'
-import RingLoader from 'react-spinners/RingLoader'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import LoadingButton from '../LoadingButton'
 
 export default function LoginForm() {
   const [error, setError] = useState('')
@@ -24,7 +23,7 @@ export default function LoginForm() {
         redirect: false
       })
       if (res?.error) {
-        console.log(res)
+        // console.log(res)
         setError('電子郵件或密碼有誤')
         setIsLoading(false)
         return
@@ -62,10 +61,7 @@ export default function LoginForm() {
             <span>忘記密碼</span>
           </div>
         </div>
-        <Button className="w-full my-1 h-9 text-xl" onClick={handleSubmitLogin}>
-          <span className={`${isLoading && 'hidden'}`}>登入</span>
-          <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={isLoading} />
-        </Button>
+        <LoadingButton className="w-full my-1 h-9 text-xl" onClick={handleSubmitLogin} isLoading={isLoading}>登入</LoadingButton>
       </form>
     </div>
   )

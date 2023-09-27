@@ -22,8 +22,7 @@ export default function UserDropDownMenu() {
       {session &&
         <DropdownMenu>
           <DropdownMenuTrigger className="h-7 p-1 flex">歡迎回來，{session?.user?.name}<IoMdArrowDropdownCircle className="mt-1 ml-1" /></DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
-                    data-[state=closed]:animate-[dialog-content-hide_300ms]">
+          <DropdownMenuContent >
             <DropdownMenuLabel>
               <div className="cursor-pointer flex"
                 onClick={() => setOpenSetSkdDialog(true)}>
@@ -35,12 +34,6 @@ export default function UserDropDownMenu() {
             <DropdownMenuLabel>
               <div className="cursor-pointer flex" onClick={() => signOut()}><LuLogOut className="my-auto mr-1" />登出</div >
             </DropdownMenuLabel>
-            {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       }

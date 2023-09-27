@@ -5,48 +5,32 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import zhCn from '@fullcalendar/core/locales/zh-cn';
 import style from './style.module.scss'
-import useSWR from 'swr';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import getColorByCourseType from '@/lib/course/getColorByCourseType'
-import EditCourseItem from '@/components/manage/EditCourseItem'
+import EditCourseItem from '@/components/manage/Course/EditCourseItem'
 import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
+import { KeyedMutator } from 'swr'
 
-async function courseFetcher(url: string): Promise<Course[]> {
-  const res = await fetch(url, { next: { tags: ['course'] } })
-  return await res.json()
+type Props = {
+  courses?: Course[],
+  coursesMutate: KeyedMutator<Course[]>,
+  teacherOpt?: Teacher[]
 }
 
-async function teacherFetcher(url: string): Promise<Teacher[]> {
-  const res = await fetch(url)
-  return await res.json()
-}
-
-export default function NewCourseForm() {
-  const [events, setEvents] = useState<CourseEvent[]>()
-  const { data: courses, mutate, isLoading } = useSWR(
-    `/api/manage/course`,
-    courseFetcher,
-    {
-      onSuccess: (data) => {
-        const events = data.map(course => ({
-          title: course.name,
-          courseId: course.id,
-          date: course.date,
-          start: `${course.date.replaceAll('/', '-')} ${course.start_time}`,
-          end: `${course.date.replaceAll('/', '-')} ${course.end_time}`,
-          color: getColorByCourseType(course.type),
-          textColor: '#000'
-        }))
-        setEvents(events)
-      }
-    }
-  )
-  const { data: teacherOpt } = useSWR(
-    'api/manage/teacher',
-    teacherFetcher
-  )
+export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Props) {
+  const events = useMemo(() => {
+    return courses?.map(course => ({
+      title: course.name,
+      courseId: course.id,
+      date: course.date,
+      start: `${course.date.replaceAll('/', '-')} ${course.start_time}`,
+      end: `${course.date.replaceAll('/', '-')} ${course.end_time}`,
+      color: getColorByCourseType(course.type),
+      textColor: '#000'
+    }))
+  }, [courses])
 
   const calendarRef = useRef(null)
   const handleDateClick = (dateInfo: any) => {
@@ -107,7 +91,7 @@ export default function NewCourseForm() {
     })
     const clickedCourse = courses?.find(c => c.id === courseId) as Course
     clickedCourse.date = date
-    await mutate(clickedCourse)
+    await coursesMutate(clickedCourse)
     setCourseForm(clickedCourse)
   }
 
@@ -129,7 +113,7 @@ export default function NewCourseForm() {
         })
       })
       if (res.ok) {
-        mutate()
+        coursesMutate()
         toast('當週 -> 下週，複製成功', getToastOption())
       }
     }
@@ -153,7 +137,7 @@ export default function NewCourseForm() {
         })
       })
       if (res.ok) {
-        mutate()
+        coursesMutate()
         toast('當週 -> 下3週，複製成功', getToastOption())
       }
     }
@@ -178,9 +162,7 @@ export default function NewCourseForm() {
   }
 
   return (<>
-    {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={mutate} />}
-
-    {/* Calendar:: getEvents */}
+    {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={coursesMutate} />}
     {events && events?.length > 0 &&
       <div className={`bg-bgColorOther p-3 rounded-3xl ${style.myCalendar}`}>
         <FullCalendar

@@ -32,9 +32,7 @@ export default function UserCourseDialog({ open, setOpen, course, current_rez, m
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-white p-8 drop-shadow-2xl 
-                    data-[state=open]:animate-[dialog-content-show_300ms]
-                    data-[state=closed]:animate-[dialog-content-hide_300ms]">
+      <DialogContent className="bg-white p-8 drop-shadow-2xl">
         <div>
           <ReserveDialogUpper course={course} isUser={true} setOpen={setOpen} mutate={mutate} mutateReservation={mutateReservation} />
           {current_rez >= course.baseline_rez

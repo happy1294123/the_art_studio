@@ -83,9 +83,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-white p-8 drop-shadow-2xl 
-                    data-[state=open]:animate-[dialog-content-show_300ms]
-                    data-[state=closed]:animate-[dialog-content-hide_300ms]">
+      <DialogContent className="bg-white p-8 drop-shadow-2xl">
         <div className={`${isReservePage ? 'block' : 'hidden'}`}>
           <ReserveDialogUpper course={course} />
           <form onSubmit={(e) => e.preventDefault()}>

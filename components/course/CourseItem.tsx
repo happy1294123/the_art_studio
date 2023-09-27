@@ -26,36 +26,14 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
   const { data: session } = useSession()
   const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])
 
-  // const handleDeleteCourse = async (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => {
-  //   e.stopPropagation()
-  //   const isConfirm = confirm('確定要刪除該課程嗎？')
-  //   if (!isConfirm) return
-  //   const res = await fetch('/api/manage/course', {
-  //     method: 'DELETE',
-  //     body: JSON.stringify(course.id)
-  //   })
-  //   if (res.ok) {
-  //     toast('刪除成功', getToastOption('light'))
-  //     mutate && mutate()
-  //     return
-  //   } else {
-  //     toast('刪除失敗', getToastOption('light'))
-  //   }
-  // }
-
   return (
     <>
       <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md cursor-pointer
       ${(current_rez === course.total_rez || hasReserve) && !isInUserPage && 'opacity-40'}`}
-        // (!hasReserve || isInUserPage) && 
         onClick={() => setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           <span className="my-auto ml-3 px-2 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
-          {/* {session && ['ADMIN', 'EDITOR'].includes(session?.user.role) && (
-            <div className='ml-auto -mt-2 mr-1 text-gray-400'
-              onClick={handleDeleteCourse}>x</div >
-          )} */}
         </div>
         <div className="flex gap-2.5 ml-1">
           <BiTime className="my-auto" />
