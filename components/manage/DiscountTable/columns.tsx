@@ -1,5 +1,5 @@
 "use client"
-import { ColumnDef, Row, TableMeta } from "@tanstack/react-table"
+import { ColumnDef, Row } from "@tanstack/react-table"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,12 +11,15 @@ import { AiFillEdit, AiOutlineUsergroupDelete, AiFillDelete } from 'react-icons/
 import toast from "react-hot-toast"
 import getToastOption from "@/lib/getToastOption"
 
+const handleShowUsers = (discount_id: number, tableMeta: any) => {
+  tableMeta && tableMeta.openUsedList(discount_id)
+}
 
-const handleEditDiscount = (row: Row<Discount>, tableMeta: TableMeta<Discount> | undefined) => {
+const handleEditDiscount = (row: Row<Discount>, tableMeta: any) => {
   tableMeta && tableMeta.openEditDialog(row.original)
 }
 
-const handleDeleteDiscount = async (id: number, tableMeta: TableMeta<Discount> | undefined) => {
+const handleDeleteDiscount = async (id: number, tableMeta: any) => {
   const res = await fetch(`/api/manage/discount?id=${id}`, {
     method: 'DELETE'
   })
@@ -61,7 +64,7 @@ export const columns: ColumnDef<Discount>[] = [
           <DropdownMenuContent >
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => table.options.meta?.openUsedList(row.original.id)}
+              onClick={() => handleShowUsers(row.original.id, table.options.meta)}
             >
               <AiOutlineUsergroupDelete className="mr-2" />
               使用名單
