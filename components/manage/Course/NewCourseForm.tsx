@@ -99,9 +99,9 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     if (!confirm('是否將當週課表視為下週課表？')) return
     if (calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      const activeRange = { ...calendar.calendar.currentData.dateProfile.activeRange }
-      const weekStartDate = new Date(activeRange.start).toISOString().slice(0, 10).replaceAll('-', '/')
-      const end = new Date(activeRange.end)
+      const weekStartDate = new Date(calendar.getApi().view.currentStart).toISOString().slice(0, 10).replaceAll('-', '/')
+      const end = new Date(calendar.getApi().view.currentEnd)
+      end.setDate(end.getHours() + 8)
       const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
       const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
       // console.log(filtedEvents)
@@ -123,9 +123,9 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     if (!confirm('是否將當週課表視為下3週課表？')) return
     if (calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      const activeRange = { ...calendar.calendar.currentData.dateProfile.activeRange }
-      const weekStartDate = new Date(activeRange.start).toISOString().slice(0, 10).replaceAll('-', '/')
-      const end = new Date(activeRange.end)
+      const weekStartDate = new Date(calendar.getApi().view.currentStart).toISOString().slice(0, 10).replaceAll('-', '/')
+      const end = new Date(calendar.getApi().view.currentEnd)
+      end.setDate(end.getHours() + 8)
       const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
       const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
       // console.log(filtedEvents)

@@ -47,7 +47,7 @@ export default function ManagePage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="discount">
+      <Tabs defaultValue="user">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="user">會員名單</TabsTrigger>
           <TabsTrigger value="course">課表</TabsTrigger>
