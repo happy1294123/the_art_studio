@@ -17,7 +17,7 @@ export default function DateHeading({ date }: Props) {
     <div className="text-center text-lg p-1 bg-bgColorSecondary rounded-full mb-1 md:">
       {date.getFullYear()}/
       {date.getMonth() + 1}/
-      {date.getDate()}
+      {String(date.getDate()).padStart(2, '0')}
       ({getWeekDayByDate(date)})
     </div>
   )

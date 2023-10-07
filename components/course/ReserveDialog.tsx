@@ -15,9 +15,8 @@ import Link from 'next/link'
 import { KeyedMutator } from 'swr'
 import ReserveDialogUpper from '@/components/course/ReserveDialogUpper'
 import ScheduleHref from '@/components/ScheduleHref'
-import dynamic from 'next/dynamic'
 import LoadingButton from '../LoadingButton'
-const DiscountInput = dynamic(() => import('@/components/course/DiscountInput'))
+import DiscountInput from '@/components/course/DiscountInput'
 
 type Props = {
   open: boolean,
@@ -35,7 +34,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
       value: `${course.point}`
     },
     {
-      label: `單次 ${course.price}元`,
+      label: `單次 ${course.price} 元`,
       value: `${course.price}`
     }
   ])
@@ -90,7 +89,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
       mutate()
     }
   }, [needWatchOpen, open, mutate])
-  const [showDiscountCode, setShowDiscountCode] = useState(false)
+  // const [showDiscountCode, setShowDiscountCode] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -99,12 +98,12 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
           <ReserveDialogUpper course={course} />
           <form onSubmit={(e) => e.preventDefault()}>
             <div>
-              <span className='flex-center mx-auto -mb-5 text-sm w-fit'>選擇方案</span>
-              <div className='text-gray-500 float-right mr-5 text-sm  mb-1 cursor-pointer'
+              <span className='flex-center mx-auto mt-2 text-sm w-fit'>選擇方案</span>
+              {/* <div className='text-gray-500 float-right mr-5 text-sm  mb-1 cursor-pointer'
                 onClick={() => {
                   checkLogin()
                   setShowDiscountCode(!showDiscountCode)
-                }}>折扣碼?</div>
+                }}>折扣碼?</div> */}
               <div className={`w-11/12 mx-auto grid gap-2 ${planOpt.length > 1 && 'md:grid-cols-2'}`}>
                 {planOpt.map(opt => (
                   <Badge
@@ -120,7 +119,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                 ))}
               </div>
             </div>
-            {showDiscountCode && <DiscountInput planOpt={planOpt} setPlanOpt={setPlanOpt} setDiscountId={setDiscountId} />}
+            <DiscountInput planOpt={planOpt} setPlanOpt={setPlanOpt} setDiscountId={setDiscountId} />
 
             <LoadingButton className="w-full mt-2 h-12 text-xl" onClick={handleSubmitForm} isLoading={isPending}>
               <span className='text-2xl'>立即預約</span>

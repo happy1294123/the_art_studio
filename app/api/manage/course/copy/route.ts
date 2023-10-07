@@ -23,7 +23,7 @@ export async function POST(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
   const data = await req.json()
-  // console.log(data)
+
   const sampleCourses = await prisma.course.findMany({
     where: {
       id: { in: data.events.map((event: CourseEvent) => event.courseId) }
@@ -37,19 +37,6 @@ export async function POST(req: any) {
     if (data.to === 'next_week') {
       const nextWeek = new Date(date.setDate(date.getDate() + 7))
       mutipleData.push(copyCourse(sampleCourse, nextWeek))
-      // const dateMonth = date.getMonth()
-      // const lastWeek = new Date(date.setDate(date.getDate() - 7))
-      // while (lastWeek.getMonth() === dateMonth) {
-      //   mutipleData.push(copyCourse(sampleCourse, lastWeek))
-      //   lastWeek.setDate(lastWeek.getDate() - 7)
-      // }
-
-      // const newDate = new Date(event.date)
-      // const nextWeek = new Date(newDate.setDate(newDate.getDate() + 7))
-      // while (nextWeek.getMonth() === dateMonth) {
-      //   mutipleData.push(copyCourse(sampleCourse, nextWeek))
-      //   nextWeek.setDate(nextWeek.getDate() + 7)
-      // }
     } else if (data.to === 'next_3week') {
       const nextWeek = new Date(date.setDate(date.getDate() + 7))
       mutipleData.push(copyCourse(sampleCourse, nextWeek))

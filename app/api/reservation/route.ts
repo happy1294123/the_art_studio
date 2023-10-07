@@ -5,7 +5,6 @@ import { revalidateTag } from "next/cache"
 
 export async function POST(req: any) {
   try {
-
     const body = await req.json()
     const token = await getToken({ req })
     if (!token) {

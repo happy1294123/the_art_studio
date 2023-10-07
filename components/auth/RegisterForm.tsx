@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useRef, useState, UIEvent } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -21,9 +21,28 @@ export default function RegisterForm() {
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    if (!formData.name) {
+      (ref.current?.querySelector(`input[name="name"]`) as HTMLInputElement)?.select()
+      setError({ name: 'name', message: '名稱是必填欄位' })
+      setIsLoading(false)
+      return
+    }
+    if (!formData.email) {
+      (ref.current?.querySelector(`input[name="email"]`) as HTMLInputElement)?.select()
+      setError({ name: 'email', message: '電子郵件是必填欄位' })
+      setIsLoading(false)
+      return
+    }
+
     if (formData.password !== formData.confirmPassword) {
       (ref.current?.querySelector(`input[name="confirmPassword"]`) as HTMLInputElement)?.select()
       setError({ name: 'confirmPassword', message: '密碼不一致' })
+      setIsLoading(false)
+      return
+    }
+    if (!finishRead) {
+      setError({ name: 'database', message: '請閱讀會員條款' })
+      console.log('請閱讀會員條款')
       setIsLoading(false)
       return
     }
@@ -48,6 +67,15 @@ export default function RegisterForm() {
     return ''
   }
 
+  const [finishRead, setFinishRead] = useState(false)
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement
+    const { scrollHeight, clientHeight, scrollTop } = target;
+    if (scrollHeight - clientHeight <= scrollTop + 1) {
+      setFinishRead(true)
+    }
+  }
+
   return (
     <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
       <div className="bg-slate-400 max-w-fit rounded-full mx-auto">
@@ -57,6 +85,7 @@ export default function RegisterForm() {
       </div>
       <form className="flex flex-col" onSubmit={(e) => e.preventDefault()} ref={ref}>
         <FloatLabelInput
+          error={checkError('name')}
           autoFocus
           required
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -109,6 +138,12 @@ export default function RegisterForm() {
           type='password'
           className='mt-8
           bg-bgColorSecondary' />
+
+        <div className='overflow-y-auto mt-3  w-[300px] h-[150px]' onScroll={handleScroll}>
+          <div className='text-2xl mb-1'>會員條款</div>
+          會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款
+        </div>
+
         <div className="flex gap-2 text-sm justify-end mr-2 text-gray-500  underline-offset-4 mt-5">
           <Link href="/login" className="hover:underline underline-offset-4">已經是會員？</Link>
         </div>

@@ -4,15 +4,6 @@ import CourseItem from '@/components/course/CourseItem'
 import TheTitle from '@/components/TheTitle'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
 import UserDropDownMenu from '@/components/user/UserDropDownMenu'
 import useSWR from 'swr'
 import { CourseItemSkeleton } from '@/components/course/CoursesShower'

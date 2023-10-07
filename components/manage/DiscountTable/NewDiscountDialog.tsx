@@ -42,9 +42,8 @@ export default function NewDiscountDialog({ openProp, setOpenProp, discount, dis
   const method = useMemo(() => discount ? 'PUT' : 'POST', [discount])
   const actionText = useMemo(() => discount ? '編輯' : '新增', [discount])
   const handleAddCode = async () => {
-    if (!formData.code) {
+    if (!formData.code || formData.code.length !== 8) {
       setError('請輸入8位元折扣碼')
-      // TODO 驗證是否為8位元
       return
     }
     if (!formData.description) {

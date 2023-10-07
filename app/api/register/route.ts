@@ -1,9 +1,26 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/initPrisma'
 import bcrypt from 'bcryptjs'
+import sendVarifyMail from '@/lib/sendVarifyMail'
 
 export async function POST(req: Request) {
   const { name, email, password, confirmPassword } = await req.json()
+  // name require
+  if (!name) {
+    return NextResponse.json({
+      name: 'name',
+      message: '名稱是必填欄位'
+    }, { status: 422 })
+  }
+
+  // email require
+  if (!email) {
+    return NextResponse.json({
+      name: 'email',
+      message: '電子郵件是必填欄位'
+    }, { status: 422 })
+  }
+
   // password not confired
   if (password !== confirmPassword) {
     return NextResponse.json({
@@ -42,7 +59,7 @@ export async function POST(req: Request) {
       }
     })
     if (newUser.id) {
-      // TODO send email
+      await sendVarifyMail(newUser.email)
       return NextResponse.json({}, { status: 201 })
     } else {
       return NextResponse.json({

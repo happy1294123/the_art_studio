@@ -47,7 +47,8 @@ export const options: NextAuthOptions = {
           id: user.id,
           role: user.role,
           point: user.point,
-          schedule_service: user.schedule_service
+          schedule_service: user.schedule_service,
+          email_varified: user.email_varified
         }
       }
       return token
@@ -60,7 +61,8 @@ export const options: NextAuthOptions = {
           id: token.id,
           role: token.role,
           point: token.point,
-          schedule_service: token.schedule_service
+          schedule_service: token.schedule_service,
+          email_varified: token.email_varified
         }
       }
     },

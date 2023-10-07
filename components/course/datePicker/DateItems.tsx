@@ -34,6 +34,7 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate }: P
 
   const handleSelect = (e: MouseEvent): void => {
     const target = e.target as Element
+
     target.scrollIntoView({ inline: 'center' })
 
     // // set selectDate

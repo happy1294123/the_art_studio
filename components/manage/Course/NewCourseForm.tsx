@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import zhCn from '@fullcalendar/core/locales/zh-cn';
 import style from './style.module.scss'
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import getColorByCourseType from '@/lib/course/getColorByCourseType'
 import EditCourseItem from '@/components/manage/Course/EditCourseItem'
 import dateFormatter from '@/lib/dateFormatter'
@@ -99,12 +99,9 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     if (!confirm('是否將當週課表視為下週課表？')) return
     if (calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      const weekStartDate = new Date(calendar.getApi().view.currentStart).toISOString().slice(0, 10).replaceAll('-', '/')
-      const end = new Date(calendar.getApi().view.currentEnd)
-      end.setDate(end.getHours() + 8)
-      const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
+      const weekStartDate = dateFormatter(calendar.getApi().view.currentStart)
+      const weekEndDate = dateFormatter(calendar.getApi().view.currentEnd)
       const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
-      // console.log(filtedEvents)
       const res = await fetch('/api/manage/course/copy', {
         method: 'POST',
         body: JSON.stringify({
@@ -123,10 +120,8 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     if (!confirm('是否將當週課表視為下3週課表？')) return
     if (calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      const weekStartDate = new Date(calendar.getApi().view.currentStart).toISOString().slice(0, 10).replaceAll('-', '/')
-      const end = new Date(calendar.getApi().view.currentEnd)
-      end.setDate(end.getHours() + 8)
-      const weekEndDate = new Date(end.setDate(end.getDate() - 1)).toISOString().slice(0, 10).replaceAll('-', '/')
+      const weekStartDate = dateFormatter(calendar.getApi().view.currentStart)
+      const weekEndDate = dateFormatter(calendar.getApi().view.currentEnd)
       const filtedEvents = events?.filter(event => weekStartDate <= event.date && event.date <= weekEndDate)
       // console.log(filtedEvents)
       const res = await fetch('/api/manage/course/copy', {
@@ -146,18 +141,12 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
   const handleChangeView = (datainfo: any) => {
     if (datainfo.view.type === 'dayGridWeek' && calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      calendar.getApi().setOption('headerToolbar', {
-        left: 'prev,next',
-        center: 'title',
-        right: 'copyWeekToNextWeek copyWeekToNext3Week dayGridMonth,dayGridWeek'
+      calendar.getApi().setOption('footerToolbar', {
+        end: 'copyWeekToNextWeek copyWeekToNext3Week'
       })
     } else if (datainfo.view.type === 'dayGridMonth' && calendarRef.current) {
       const calendar = calendarRef?.current as FullCalendar
-      calendar.getApi().setOption('headerToolbar', {
-        left: 'prev,next',
-        center: 'title',
-        right: 'dayGridMonth,dayGridWeek'
-      })
+      calendar.getApi().setOption('footerToolbar', { end: '' })
     }
   }
 

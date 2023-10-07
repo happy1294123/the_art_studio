@@ -23,16 +23,22 @@ export default function LoginForm() {
         redirect: false
       })
       if (res?.error) {
-        // console.log(res)
+        console.log(res)
         setError('電子郵件或密碼有誤')
         setIsLoading(false)
         return
       }
       const callbackUrl = searchParams.get('callbackUrl')
       if (callbackUrl) {
+        console.log(callbackUrl)
         router.replace(callbackUrl)
         return
       }
+      if (formData.email.startsWith('admin@')) {
+        router.replace('/manage')
+        return
+      }
+
       router.replace('/user')
     } catch (error) {
       console.log(error)
