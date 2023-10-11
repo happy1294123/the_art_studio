@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import FloatLabelInput from '@/components/FloatLabelInput'
 import RingLoader from 'react-spinners/RingLoader'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import getToastOption from '@/lib/getToastOption'
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -52,7 +54,10 @@ export default function RegisterForm() {
     })
     if (res.ok) {
       router.replace('/user')
+      toast('註冊帳號成功', getToastOption())
+      toast('請至Email完成信箱驗證', getToastOption())
     } else {
+      console.log("not ok")
       const error = await res.json();
       setError(error);
       setIsLoading(false);

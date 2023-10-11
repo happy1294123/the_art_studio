@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import dynamic from 'next/dynamic'
-const SelectScheduleServiceDialog = dynamic(() => import('@/components/SelectScheduleServiceDialog'))
+const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
 
 export default function ScheduleHref({
   children, course

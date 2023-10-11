@@ -71,7 +71,7 @@ export default function RootLayout({
             </div>
             <Footer />
           </div>
-          <Toaster toastOptions={{ duration: 3000 }} />
+          <Toaster toastOptions={{ duration: 5000 }} />
         </AuthProvider>
       </body>
     </html >
