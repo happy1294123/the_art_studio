@@ -8,11 +8,11 @@ import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
-const Zmage = dynamic(
-  () => import('react-zmage'),
-  { ssr: false }
-)
+// import dynamic from 'next/dynamic'
+// const Zmage = dynamic(
+//   () => import('react-zmage'),
+//   { ssr: false }
+// )
 
 type Props = {
   dateOptions: string[]
@@ -43,9 +43,8 @@ export default function CoursesShower({ dateOptions }: Props) {
         </div>
       </div >
       <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
-        {showZmage ?
-          <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} />
-          : <Image src="/course_schedule.jpg" width={800} height={800} alt="course schedule" />}
+        {/* <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} /> */}
+        <Image src="/course_schedule.jpg" width={800} height={800} alt="course schedule" />
       </div>
     </>
   )
