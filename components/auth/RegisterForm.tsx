@@ -53,9 +53,7 @@ export default function RegisterForm() {
       body: JSON.stringify(formData)
     })
     if (res.ok) {
-      router.replace('/user')
-      toast('註冊帳號成功', getToastOption())
-      toast('請至Email完成信箱驗證', getToastOption())
+      router.replace('/login?register=success')
     } else {
       console.log("not ok")
       const error = await res.json();

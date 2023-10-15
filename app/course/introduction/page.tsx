@@ -111,7 +111,7 @@ export default function CourseIntroPage() {
       <br />
       <Card>
         <CardHeader>
-          <CardTitle>地面課程</CardTitle>
+          <CardTitle>p=地面課程</CardTitle>
         </CardHeader>
         <CardContent>
           <ul>

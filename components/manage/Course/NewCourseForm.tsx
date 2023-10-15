@@ -5,13 +5,16 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import zhCn from '@fullcalendar/core/locales/zh-cn';
 import style from './style.module.scss'
-import { useState, useRef, useMemo, useEffect } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import getColorByCourseType from '@/lib/course/getColorByCourseType'
 import EditCourseItem from '@/components/manage/Course/EditCourseItem'
 import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { KeyedMutator } from 'swr'
+import { Button } from '@/components/ui/button'
+import dynamic from 'next/dynamic'
+const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 
 type Props = {
   courses?: Course[],
@@ -150,6 +153,7 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     }
   }
 
+  const [openDialog, setOpenDialog] = useState(false)
   return (<>
     {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={coursesMutate} />}
     {events && events?.length > 0 &&
@@ -193,6 +197,8 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
           ref={calendarRef}
         />
       </div>}
+    <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenDialog(true)} >更新靜態課表</Button>
+    {openDialog && <UploadStaticScheduleDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />}
   </>)
 }
 

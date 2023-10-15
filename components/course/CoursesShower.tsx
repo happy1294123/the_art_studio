@@ -8,25 +8,17 @@ import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
-// import dynamic from 'next/dynamic'
-// const Zmage = dynamic(
-//   () => import('react-zmage'),
-//   { ssr: false }
-// )
 
 type Props = {
-  dateOptions: string[]
+  dateOptions: string[],
+  staticSchedulePath: string
 }
 
-export default function CoursesShower({ dateOptions }: Props) {
+export default function CoursesShower({ dateOptions, staticSchedulePath }: Props) {
   const today = dateFormatter()
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const id_date = useSearchParams().get('id_date')
   const [selectedDate, setSelectedDate] = useState(id_date ? new Date(id_date.split('_')[1]) : new Date())
-  const [showZmage, setShowZmage] = useState(false)
-  useEffect(() => {
-    setShowZmage(window.innerWidth > 768)
-  }, [])
 
   return (
     <>
@@ -44,7 +36,7 @@ export default function CoursesShower({ dateOptions }: Props) {
       </div >
       <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
         {/* <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} /> */}
-        <Image src="/course_schedule.jpg" width={800} height={800} alt="course schedule" />
+        <Image src={staticSchedulePath} width={800} height={800} alt="course schedule" />
       </div>
     </>
   )
