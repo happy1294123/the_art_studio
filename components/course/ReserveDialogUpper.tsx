@@ -19,8 +19,10 @@ import { FaLine, FaFacebookSquare, FaLink } from 'react-icons/fa'
 import { getWeekDayByDate } from '@/components/course/DateHeading'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
+import { BiSolidError } from 'react-icons/bi'
 import { KeyedMutator } from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   course: Course,
@@ -35,22 +37,44 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
     const date = new Date(course.date)
     return `${date.getMonth() + 1}/${date.getDate()}(${getWeekDayByDate(date)})`
   }, [course.date])
+  const { update: updateSession } = useSession()
 
   const handleCancelCourse = async () => {
-    // TODO 根據取消規則做判斷
-    // TODO 再次確認是否要刪除
+    const checkRes = await fetch(`/api/user/course/checkCancel?course_id=${course.id}`)
+    if (!checkRes.ok) {
+      console.log('檢查錯誤');
+      return
+    }
+    const checkResData = await checkRes.json()
+    if (checkResData.type === 'alert') {
+      toast(checkResData.message, getToastOption('light', <BiSolidError className="my-auto text-xl" />))
+      return
+    }
+    const isConfirm = confirm(checkResData.message)
+    if (!isConfirm) return
+    // TODO 討論更改課程流程
+    // TODO 取消免費體驗的流程(折扣碼)
+    if (checkResData.stateTo === 'PENDING') return
+
     const res = await fetch('/api/user/course', {
       method: 'DELETE',
-      body: JSON.stringify({ course_id: course.id })
+      body: JSON.stringify({ course_id: course.id, stateTo: checkResData.stateTo, returnPoint: checkResData.returnPoint })
     })
     if (res.ok) {
       toast('取消課程成功', getToastOption('light'))
       setOpen && setOpen(false)
       mutate && mutate()
       mutateReservation && mutateReservation()
+      const currentPoint = await res.json()
+      updateSession({
+        point: currentPoint
+      })
+      if (checkResData.returnPoint) {
+        toast(`退還${checkResData.returnPoint}點點數`, getToastOption())
+      }
     }
-    const data = await res.json()
-    console.log(data)
+    // const data = await res.json()
+    // console.log(data)
   }
 
   const currentCourseUrl = useMemo(() => {

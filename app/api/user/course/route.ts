@@ -8,11 +8,18 @@ export async function GET(req: any) {
   const user_id = token.id as number
   const reservations = await prisma.reservation.findMany({
     where: {
-      user_id
+      AND: [
+        { user_id },
+        {
+          state: {
+            not: 'CANCEL'
+          }
+        }
+      ]
     },
     orderBy: {
       course: {
-        date: 'desc'
+        date: 'asc'
       }
     },
     include: {
@@ -33,22 +40,56 @@ export async function GET(req: any) {
   return NextResponse.json(groupData)
 }
 
-
 // 刪除指定預約
 export async function DELETE(req: any) {
   const token = await getToken({ req })
   if (!token) return NextResponse.json('請先登入會員', { status: 401 })
 
-  // TODO 判斷取消標準是否符合
-  const { course_id } = await req.json()
-  const res = await prisma.reservation.deleteMany({
-    where: {
-      AND: [
-        { course_id },
-        { user_id: token.id as number }
-      ]
+  const { course_id, stateTo, returnPoint } = await req.json()
+
+  if (stateTo === 'delete row') {
+    await prisma.reservation.delete({
+      where: {
+        course_id_user_id: {
+          course_id,
+          user_id: token.id
+        }
+      }
+    })
+  } else if (stateTo === 'CANCEL') {
+    await prisma.reservation.update({
+      where: {
+        course_id_user_id: {
+          course_id,
+          user_id: token.id
+        }
+      },
+      data: {
+        state: 'CANCEL'
+      }
+    })
+  }
+
+  const point = token.point + returnPoint
+  if (returnPoint > 0) {
+    await prisma.user.update({
+      where: {
+        id: token.id
+      },
+      data: {
+        point
+      }
+    })
+  }
+
+  await prisma.cancelLog.create({
+    data: {
+      course_id,
+      user_id: token.id as number,
+      stateTo,
+      returnPoint
     }
   })
-  return NextResponse.json('')
+  return NextResponse.json(point)
 }
 

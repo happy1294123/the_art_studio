@@ -27,24 +27,32 @@ model Course {
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
   Reservation  Reservation[]
+  CancelLog    CancelLog[]
 
   @@index([teacher_id])
   @@map("courses")
 }
 
 model Reservation {
-  course     Course   @relation(fields: [course_id], references: [id])
+  course     Course           @relation(fields: [course_id], references: [id])
   course_id  Int
-  user       User     @relation(fields: [user_id], references: [id])
+  user       User             @relation(fields: [user_id], references: [id])
   user_id    Int
   plan_name  String
   plan_value Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  state      ReservationState @default(SUCCESS)
+  created_at DateTime         @default(now())
+  updated_at DateTime         @updatedAt
 
   @@unique([course_id, user_id])
   @@index([user_id])
   @@map("reservations")
+}
+
+enum ReservationState {
+  SUCCESS
+  PENDING
+  CANCEL
 }
 
 model User {
@@ -62,6 +70,7 @@ model User {
   Course           Course[]
   Reservation      Reservation[]
   UserDiscount     UserDiscount[]
+  CancelLog        CancelLog[]
 
   @@unique([email])
   @@map("users")
@@ -100,4 +109,20 @@ model UserDiscount {
   @@index([user_id])
   @@index([discount_id])
   @@map("user_discounts")
+}
+
+model CancelLog {
+  id          Int      @id @default(autoincrement())
+  course      Course   @relation(fields: [course_id], references: [id])
+  course_id   Int
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     Int
+  stateTo     String
+  returnPoint Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([course_id])
+  @@index([user_id])
+  @@map("cancel_log")
 }

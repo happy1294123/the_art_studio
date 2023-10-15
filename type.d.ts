@@ -28,6 +28,7 @@ type Course = {
   end_time: string,
   teacher_id: number,
   Reservation: {
+    state: string
     course_id: number,
     user_id: number,
     created_at: string
@@ -61,6 +62,7 @@ type Session = {
 type Reservation = {
   course_id: number,
   user_id: number,
+  state: 'SUCCESS' | 'PENDING' | 'CANCEL',
   plan_name: string,
   plan_value: number,
   created_at: Date,

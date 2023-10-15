@@ -1,4 +1,4 @@
-import { useState, useMemo, MouseEvent } from 'react'
+import { useState } from 'react'
 import { BiTime } from 'react-icons/bi'
 import { GoPerson } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
@@ -22,9 +22,10 @@ type Props = {
 export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
   const id_date = useSearchParams().get('id_date')
   const [open, setOpen] = useState(id_date?.split('_')[0] === String(course.id) ? true : false)
-  const current_rez = useMemo(() => course.Reservation.length, [course])
+  const current_rez = course.Reservation.length
   const { data: session } = useSession()
-  const hasReserve = useMemo(() => Boolean(course.Reservation.find(r => r.user_id === session?.user.id)), [course, session])
+  const hasReserve = Boolean(course.Reservation.find(r => r.user_id === session?.user.id))
+  const hasCancel = Boolean(course.Reservation.find(r => r.user_id === session?.user.id && r.state === 'CANCEL'))
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
             {!isInUserPage ? (current_rez === course.total_rez
               ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
               : hasReserve
-                ? <span className="px-2.5 text-sm mt-auto">已預約</span>
+                ? <span className="px-2.5 text-sm mt-auto">{hasCancel ? '已取消' : '已預約'}</span>
                 : <Button>預約</Button>)
               : (current_rez >= course.baseline_rez
                 ? <Button>已開課</Button>

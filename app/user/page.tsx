@@ -8,6 +8,8 @@ import UserDropDownMenu from '@/components/user/UserDropDownMenu'
 import useSWR from 'swr'
 import { CourseItemSkeleton } from '@/components/course/CoursesShower'
 import Link from 'next/link'
+import UserPointTabContent from '@/components/user/UserPointTabContent'
+
 
 async function fetcher(url: string): Promise<Record<string, Reservation[]>> {
   const res = await fetch(url)
@@ -27,7 +29,6 @@ export default function UserPage() {
 
   return (
     <div className="max-w-screen-md mx-auto">
-      {/* 個人頁面  若尚未驗證email則無法顯示頁面 */}
       <div className="flex justify-between -mt-5">
         <TheTitle>個人頁面</TheTitle>
         <div className="flex mt-8">
@@ -60,31 +61,9 @@ export default function UserPage() {
               </div>
             </>)
           }
-
         </TabsContent >
         <TabsContent value="point">
-          點數
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, youll be logged out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <span>Current password</span>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <span >New password</span>
-                <Input id="new" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
-          </Card> */}
+          <UserPointTabContent />
         </TabsContent>
         <TabsContent value="record">
           購買記錄
