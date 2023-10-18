@@ -14,20 +14,28 @@ export async function GET(req: any) {
       ]
     },
     include: {
-      course: true
+      course: {
+        include: {
+          Payment: true
+        }
+      }
     }
   })
-  // console.log(res);
+  // console.log(res.plan_name.startsWith('單次') && res.course.Payment.find((p: { user_id: number }) => p.user_id === token.id).state === 'CHECKING');
 
   if (res.state === 'CANCEL') {
     return NextResponse.json({ type: 'alert', message: '此預約已經取消' })
   }
 
   // 單次
-  if (res.plan_name.startsWith('單次') && res.state === 'SUCCESS') {
-    return NextResponse.json({ type: 'alert', message: '無法處理已匯款預約，請主動聯絡官方' })
-  } else if (res.plan_name.startsWith('單次') && res.state === 'PENDING') {
-    return NextResponse.json({ stateTo: 'delete row', returnPoint: 0, message: '是否要取消預約？' })
+  if (res.plan_name.startsWith('單次')) {
+    if (res.state === 'SUCCESS') {
+      return NextResponse.json({ type: 'alert', message: '無法處理已匯款預約，請主動聯絡官方' })
+    } else if (res.course.Payment.find((p: { user_id: number }) => p.user_id === token.id)?.state === 'CHECKING') {
+      return NextResponse.json({ type: 'alert', message: '無法處理已匯款預約，請主動聯絡官方' })
+    } else if (res.state === 'PENDING') {
+      return NextResponse.json({ stateTo: 'delete row', returnPoint: 0, message: '是否要取消預約？' })
+    }
   }
 
   // 點數

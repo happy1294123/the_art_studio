@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { headers } from 'next/headers';
 
 const aerialCourseTypeList = [
   {
@@ -95,8 +94,8 @@ export default function CourseIntroPage() {
         <CardContent>
           <ul>
             {aerialCourseTypeList.map(course => (
-              <li key={course.title} className='mb-2 rounded-2xl p-2'>
-                <div className="flex" id={course.title}>
+              <li key={course.title} className='mb-2 rounded-2xl p-2' id={course.title}>
+                <div className="flex">
                   <div className='w-2 h-2 bg-primary/50 rounded-full my-auto mr-2'></div>
                   <span className='text-primary' >
                     {course.title}
@@ -111,12 +110,12 @@ export default function CourseIntroPage() {
       <br />
       <Card>
         <CardHeader>
-          <CardTitle>p=地面課程</CardTitle>
+          <CardTitle>地面課程</CardTitle>
         </CardHeader>
         <CardContent>
           <ul>
             {groundCourseTypeList.map(course => (
-              <li key={course.title} className='mb-2 rounded-2xl p-2'>
+              <li key={course.title} className='mb-2 rounded-2xl p-2' id={`${course.title.split('（')[0]}`}>
                 <div className="flex">
                   <div className='w-2 h-2 bg-primary/50 rounded-full my-auto mr-2'></div>
                   <span className='text-primary'>{course.title}</span>

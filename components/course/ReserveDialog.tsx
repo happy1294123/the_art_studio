@@ -17,6 +17,7 @@ import ReserveDialogUpper from '@/components/course/ReserveDialogUpper'
 import ScheduleHref from '@/components/ScheduleHref'
 import LoadingButton from '../LoadingButton'
 import DiscountInput from '@/components/course/DiscountInput'
+import { Course } from '@/type'
 
 type Props = {
   open: boolean,
@@ -48,9 +49,30 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
   const { data: session, update: updateSession }: any = useSession()
   const [isPending, setIsPending] = useState(false)
   const [discountId, setDiscountId] = useState(0)
+  const [paymentId, setPaymentId] = useState(0)
   const handleSubmitForm = async () => {
     checkLogin()
     setIsPending(true)
+    if (plan.label.startsWith('點數') && session.user.point < plan.value) {
+
+      toast(<div className='space-y-1'>
+        <div className='text-center'>
+          <span>點數不足</span>
+        </div>
+        <div>
+          <Button> <Link href="/user?tab=point">前往儲值</Link ></Button >
+        </div>
+      </div>, {
+        style: {
+          borderRadius: '30px',
+          backgroundColor: '#FFF5ED',
+          color: '#6C370D',
+          border: '2px solid #D1C0AD'
+        }
+      })
+      setIsPending(false)
+      return
+    }
 
     const res = await fetch('/api/reservation', {
       method: 'POST',
@@ -65,8 +87,9 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
       setIsReservePage(false)
       setNeedWatchOpen(true)
       setIsPending(false)
-      const { point } = await res.json()
+      const { point, paymentId } = await res.json()
       updateSession({ point })
+      setPaymentId(paymentId)
     } else {
       const message = await res.json()
       toast(message, getToastOption('light'))
@@ -99,11 +122,6 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
           <form onSubmit={(e) => e.preventDefault()}>
             <div>
               <span className='flex-center mx-auto mt-2 text-sm w-fit'>選擇方案</span>
-              {/* <div className='text-gray-500 float-right mr-5 text-sm  mb-1 cursor-pointer'
-                onClick={() => {
-                  checkLogin()
-                  setShowDiscountCode(!showDiscountCode)
-                }}>折扣碼?</div> */}
               <div className={`w-11/12 mx-auto grid gap-2 ${planOpt.length > 1 && 'md:grid-cols-2'}`}>
                 {planOpt.map(opt => (
                   <Badge
@@ -126,7 +144,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
             </LoadingButton>
           </form>
           <div className="flex text-gray-500 gap-2 mt-1 -mb-2 mr-3 justify-end text-sm">
-            <a target='_blank' href="/course/introduction">課程介紹</a>
+            <a target='_blank' href={`/course/introduction#${course.name}`}>課程介紹</a>
             <a target='_blank' href="/course/note">上課須知</a>
           </div>
         </div>
@@ -143,6 +161,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                 <span className="flex text-[50px] gap-3">預約成功</span>
                 <div className="text-center text-gray-400">{plan.label}</div>
                 {plan.label.startsWith('點數') && <div className="text-center text-gray-400">剩餘點數{`${session?.user?.point}`}點</div>}
+                {plan.label.startsWith('單次') && paymentId && <div className='flex-center mt-1'><Button className='' onClick={() => router.push(`/user?tab=payment&id=${paymentId}`)}>前往匯款</Button></div>}
               </div>
               <div className="w-full mt-auto">
                 <div className="text-center max-w-fit mx-auto text-gray-400 cursor-pointer" onClick={() => setOpen(false)}>繼續選課</div>

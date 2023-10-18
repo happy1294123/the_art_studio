@@ -9,7 +9,6 @@ import LinkGroup from './LinkGroup';
 import MdLinkGroup from './MdLinkGroup';
 import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
 import { useSession } from "next-auth/react"
-import LinkWithAnim from './LinkWithAnim';
 import ManageLink from './ManageLink';
 
 export default function Navbar() {

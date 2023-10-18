@@ -2,6 +2,7 @@ import CourseItem from '@/components/course/CourseItem'
 import useSWR from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { Course } from '@/type'
 
 async function fetcher(url: string): Promise<Course[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
@@ -13,6 +14,9 @@ export default function CourseItems({ selectedDate }: { selectedDate: Date }) {
     `/api/course?date=${dateFormatter(selectedDate)}`,
     fetcher
   )
+
+  // console.log('courses', courses);
+
 
   return (
     <div className="mt-2">

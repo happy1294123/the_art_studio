@@ -43,8 +43,19 @@ export default function DiscountInput({ planOpt, setPlanOpt, setDiscountId }: Pr
     if (res.ok) {
       toast('折扣碼生效', getToastOption())
       const { discount_id, description, point_discount, price_discount } = await res.json()
-      setDesc(description)
-      setValue(description)
+      let descArray = []
+      let descString = description
+      if (point_discount) {
+        descArray.push(`折${point_discount}點`)
+      }
+      if (price_discount) {
+        descArray.push(`折${price_discount}元`)
+      }
+      if (descArray.length) {
+        descString = `${descString}(${descArray.join(',')})`
+      }
+      setDesc(descString)
+      setValue(descString)
       setDiscountId(discount_id)
 
       const newOpt = createNewPlanOpt(point_discount, price_discount)
@@ -76,10 +87,10 @@ export default function DiscountInput({ planOpt, setPlanOpt, setDiscountId }: Pr
             value: `${newValue}`
           })
         } else {
-          newPlanOpt.push({
-            label: `點數 ${opt.value} 點`,
-            value: `${opt.value}`
-          })
+          // newPlanOpt.push({
+          //   label: `點數 ${opt.value} 點`,
+          //   value: `${opt.value}`
+          // })
         }
       } else if (opt.label.startsWith('單次')) {
         if (price_discount === 'free') {
@@ -96,14 +107,14 @@ export default function DiscountInput({ planOpt, setPlanOpt, setDiscountId }: Pr
             value: `${newValue}`
           })
         } else {
-          newPlanOpt.push({
-            label: `單次 ${opt.value} 元`,
-            value: `${opt.value}`
-          })
+          // newPlanOpt.push({
+          //   label: `單次 ${opt.value} 元`,
+          //   value: `${opt.value}`
+          // })
         }
       }
     })
-    if (newPlanOpt[0].value === '0' && newPlanOpt[1].value === '0') {
+    if (newPlanOpt.length === 2 && newPlanOpt[0].value === '0' && newPlanOpt[1].value === '0') {
       newPlanOpt = [{
         label: '免費體驗',
         value: '0'

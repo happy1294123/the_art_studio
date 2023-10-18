@@ -1,3 +1,6 @@
+import { number } from "zod"
+import { Payment } from "@prisma/client"
+
 type Todo = {
   userId: number,
   id: number,
@@ -28,11 +31,13 @@ type Course = {
   end_time: string,
   teacher_id: number,
   Reservation: {
+    plan_name: any
     state: string
     course_id: number,
     user_id: number,
     created_at: string
   }[],
+  Payment: Payment[],
   total_rez: number,
   baseline_rez: number,
   point: number,
@@ -101,3 +106,13 @@ type Discount = {
   price_discount: string,
   active: boolean,
 }
+
+// type Payment = {
+//   id: number,
+//   user_id: number,
+//   name: string
+//   price: number,
+//   course_id?: number,
+//   description?: string,
+//   state: 'SUCCESS' | 'PENDING' | 'CANCEL',
+// }

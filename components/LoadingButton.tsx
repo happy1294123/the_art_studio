@@ -4,7 +4,7 @@ import RingLoader from 'react-spinners/RingLoader'
 
 type Props = {
   className: string,
-  onClick: MouseEventHandler<HTMLButtonElement>,
+  onClick?: MouseEventHandler<HTMLButtonElement>,
   isLoading: boolean,
   children: React.ReactNode
 }

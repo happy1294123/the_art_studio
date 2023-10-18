@@ -19,10 +19,10 @@ import { FaLine, FaFacebookSquare, FaLink } from 'react-icons/fa'
 import { getWeekDayByDate } from '@/components/course/DateHeading'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
-import { BiSolidError } from 'react-icons/bi'
 import { KeyedMutator } from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import { useSession } from 'next-auth/react'
+import { Course, Reservation } from '@/type'
 
 type Props = {
   course: Course,
@@ -47,7 +47,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
     }
     const checkResData = await checkRes.json()
     if (checkResData.type === 'alert') {
-      toast(checkResData.message, getToastOption('light', <BiSolidError className="my-auto text-xl" />))
+      toast(checkResData.message, getToastOption('light', 'error'))
       return
     }
     const isConfirm = confirm(checkResData.message)

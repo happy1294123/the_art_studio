@@ -32,13 +32,15 @@ export async function POST(req: any) {
         course_id: body.course_id,
         user_id: token.id as number,
         plan_name: body.plan_name,
-        plan_value: +body.plan_value
+        plan_value: +body.plan_value,
+        state: body.plan_name.startsWith('單次') && +body.plan_value > 0 ? 'PENDING' : 'SUCCESS'
       }
     })
     if (!newData) NextResponse.json('預約失敗', { status: 500 })
     revalidateTag('course')
     const result = {
-      point: token.point
+      point: token.point,
+      paymentId: 0
     }
     // 更新點數
     if (body.plan_name.startsWith('點數') && parseInt(body.plan_value) > 0) {
@@ -62,6 +64,21 @@ export async function POST(req: any) {
         }
       })
     }
+
+    // 紀錄匯款紀錄
+    if (body.plan_name.startsWith('單次') && +body.plan_value > 0) {
+      const newPayment = await prisma.payment.create({
+        data: {
+          user_id: token.id,
+          name: course.name,
+          price: +body.plan_value,
+          course_id: course.id,
+          description: `${course.date} ${course.start_time}~${course.end_time}`
+        }
+      })
+      result.paymentId = newPayment.id
+    }
+
     return NextResponse.json(result, { status: 201 })
   } catch (error) {
     return NextResponse.json('未知錯誤', { status: 500 })

@@ -65,8 +65,8 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
         teacher_id: teacherOpt && teacherOpt[0].id || 0,
         total_rez: 4,
         baseline_rez: 2,
-        point: 10,
-        price: 250,
+        point: 6,
+        price: 600,
       })
     }
   }
@@ -156,7 +156,7 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
   const [openDialog, setOpenDialog] = useState(false)
   return (<>
     {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={coursesMutate} />}
-    {events && events?.length > 0 &&
+    {
       <div className={`bg-bgColorOther p-3 rounded-3xl ${style.myCalendar}`}>
         <FullCalendar
           initialView="dayGridMonth"

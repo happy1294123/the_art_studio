@@ -9,9 +9,18 @@ import useSWR from 'swr'
 import { CourseItemSkeleton } from '@/components/course/CoursesShower'
 import Link from 'next/link'
 import UserPointTabContent from '@/components/user/UserPointTabContent'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Payment } from '@prisma/client'
+import { Reservation } from '@/type'
+import UserPaymentTabContent from '@/components/user/UserPaymentTabContent'
+import { useEffect, useState } from 'react'
 
+async function myCourseFetcher(url: string): Promise<Record<string, Reservation[]>> {
+  const res = await fetch(url)
+  return await res.json()
+}
 
-async function fetcher(url: string): Promise<Record<string, Reservation[]>> {
+async function myPaymentFetcher(url: string): Promise<Payment[]> {
   const res = await fetch(url)
   return await res.json()
 }
@@ -19,13 +28,36 @@ async function fetcher(url: string): Promise<Record<string, Reservation[]>> {
 export default function UserPage() {
   const { data: reservations, mutate: mutateReservation } = useSWR(
     '/api/user/course',
-    fetcher
+    myCourseFetcher
+  )
+
+  const { data: payments, mutate: mutatePayment } = useSWR(
+    '/api/user/payment',
+    myPaymentFetcher
   )
 
   const handleTabsValueChange = (value: string) => {
-    // TODO 根據tabs 使用swr獲取資料
-    console.log(value)
+    // console.log(value)
+    if (value === 'payment') {
+      mutatePayment()
+    }
   }
+
+  const [tab, setTab] = useState('course')
+  const params = useSearchParams()
+  const router = useRouter()
+  useEffect(() => {
+    if (params.get('tab')) {
+      setTab(params.get('tab') as string)
+    }
+  }, [params])
+
+  const [unPayNum, setUnPayNum] = useState(0)
+  useEffect(() => {
+    if (payments?.filter(p => p.state === 'PENDING')) {
+      setUnPayNum(payments?.filter(p => p.state === 'PENDING').length)
+    }
+  }, [payments])
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -35,11 +67,14 @@ export default function UserPage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="course" onValueChange={handleTabsValueChange}>
+      <Tabs value={tab} onValueChange={handleTabsValueChange}>
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="course">課表</TabsTrigger>
-          <TabsTrigger value="point">點數</TabsTrigger>
-          <TabsTrigger value="record">購買記錄</TabsTrigger>
+          <TabsTrigger value="course" onClick={() => router.push('/user?tab=course')}>課表</TabsTrigger>
+          <TabsTrigger value="point" onClick={() => router.push('/user?tab=point')}>點數</TabsTrigger>
+          <TabsTrigger value="payment" onClick={() => router.push('/user?tab=payment')}>
+            匯款記錄
+            {unPayNum !== 0 && <div className='text-xs -mr-5 -mt-5 -ml-1  outline-2 outline-bgColorSecondary bg-primary rounded-full w-4 h-4 text-white'>{unPayNum}</div>}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="course">
           {reservations && Object.keys(reservations).map(date => (
@@ -65,32 +100,10 @@ export default function UserPage() {
         <TabsContent value="point">
           <UserPointTabContent />
         </TabsContent>
-        <TabsContent value="record">
-          購買記錄
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>購買記錄</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, youll be logged out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <span>Current password</span>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <span >New password</span>
-                <Input id="new" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
-          </Card> */}
+        <TabsContent value="payment">
+          <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} />
         </TabsContent>
       </Tabs >
-      {/* <div onClick={() => signOut()} className="bg-red-400 text-center p-3 mt-3 text-white cursor-pointer">Log Out</div> */}
     </div >
   )
 }

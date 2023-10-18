@@ -2,12 +2,18 @@ import { useSession } from 'next-auth/react'
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { options } from '@/app/api/auth/[...nextauth]/options'
+
+const pointOptions = [
+  { point: 35, price: 3200 },
+  { point: 75, price: 6400 },
+  { point: 150, price: 12200 },
+  { point: 250, price: 18800 },
+]
 
 export default function UserPointTabContent() {
   const { data: session } = useSession()
@@ -26,16 +32,19 @@ export default function UserPointTabContent() {
       </CardContent>
     </Card>
 
-    <Card className='px-3'>
-      <CardHeader>
-        <CardTitle className='flex'>
-          <span className='my-auto'>
-            100點
-          </span>
-          <span className='mt-auto ml-4 text-base '>NT$ 1000</span>
-          <Button className='ml-auto'>購買點數</Button>
-        </CardTitle>
-      </CardHeader>
-    </Card>
+    {pointOptions.map(option => (
+      <Card className='md:px-3 mb-2' key={option.price}>
+        <CardHeader>
+          <CardTitle className='md:flex -mb-2'>
+            <span>
+              {option.point}點
+            </span>
+            <span className='mt-auto ml-4 text-base '>NT$ {option.price}</span>
+            <Button className='float-right -mt-1' >購買點數</Button>
+          </CardTitle>
+        </CardHeader>
+      </Card>
+    ))}
+
   </>)
 }

@@ -2,7 +2,7 @@ import { BiTime } from "react-icons/bi"
 import Image from "next/image"
 import { Button } from '@/components/ui/button'
 import getColorByCourseType from "@/lib/course/getColorByCourseType"
-import { Dispatch, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 import {
   Form,
   FormControl,
@@ -26,6 +26,7 @@ import RingLoader from 'react-spinners/RingLoader'
 import { toast } from 'react-hot-toast'
 import getToastOption from "@/lib/getToastOption"
 import { AiFillDelete } from 'react-icons/ai'
+import { GoPerson } from "react-icons/go"
 
 const formSchema = z.object({
   id: z.number().optional(),
@@ -62,6 +63,27 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
     values: course
   })
   const teacher_id = form.watch('teacher_id')
+  const type = form.watch('type')
+  useEffect(() => {
+    if (type === '空中課程') {
+      form.setValue('point', 6)
+      form.setValue('price', 600)
+    } else if (type === '地面課程') {
+      form.setValue('point', 5)
+      form.setValue('price', 500)
+    }
+  }, [form, type])
+  const start_time = form.watch('start_time')
+  useEffect(() => {
+    if (start_time) {
+      setTimeout(() => {
+        const nextHour = parseInt(start_time?.slice(0, 2)) + 1
+        const start_time_min = start_time.slice(-2)
+        form.setValue('end_time', `${nextHour}:${start_time_min}`)
+      }, 500)
+    }
+  }, [form, start_time])
+
 
   const [loading, setLoading] = useState(false)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -97,6 +119,57 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 rounded-3xl mb-3 border border-gray-300 shadow-md">
+          <div className="flex -mt-2">
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="-mr-2">日期：</FormLabel>
+                  <FormControl>
+                    <input className="bg-bgColor pl-2 w-[110px]" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className='ml-auto mr-1 mt-2 text-gray-400 h-6 flex'>
+              <span className={`cursor-pointer mt-1 mr-1 ${!course.id && 'invisible'}`}
+                onClick={handleDeleteCourse}><AiFillDelete /></span >
+              <span onClick={() => setCourseForm(null)} className="cursor-pointer">x</span>
+            </div >
+          </div>
+          <div>
+            <FormField
+              control={form.control}
+              name="point"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>點數：</FormLabel>
+                  <FormControl>
+                    <input type="number" className="bg-bgColor pl-2 w-[50px] text-sm" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="mb-3">
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>單次價位：</FormLabel>
+                  <FormControl>
+                    <input type="number" className="bg-bgColor w-[50px] text-sm" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <hr className="mb-2" />
           <div className="flex">
             <FormField
               control={form.control}
@@ -136,7 +209,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="date"
               render={({ field }) => (
@@ -148,9 +221,9 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <div className="ml-auto -mr-2">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="point"
                 render={({ field }) => (
@@ -162,13 +235,13 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
-            <div className='ml-auto -mt-2 mr-1 text-gray-400 h-6 flex'>
+            {/* <div className='ml-auto -mt-2 mr-1 text-gray-400 h-6 flex'>
               <span className={`cursor-pointer mt-1 mr-1 ${!course.id && 'invisible'}`}
                 onClick={handleDeleteCourse}><AiFillDelete /></span >
               <span onClick={() => setCourseForm(null)} className="cursor-pointer">x</span>
-            </div >
+            </div > */}
           </div>
           <div className="flex gap-2.5 ml-1 mt-1">
             <BiTime className="mt-1" />
@@ -202,7 +275,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
               )}
             />
             <div className="ml-auto mr-[121px]">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="price"
                 render={({ field }) => (
@@ -214,12 +287,12 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
           </div>
           <div className="flex justify-between">
             <div className="flex gap-2">
-              <div className="w-6 h-6 my-auto rounded-full overflow-hidden" >
+              <div className="w-6 h-6 my-auto rounded-full overflow-hidden -mr-2" >
                 {teacher_id && <Image src={(teacherOpt?.find(opt => opt.id == teacher_id) as Teacher)?.image} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />}
               </div>
               < FormField
@@ -229,7 +302,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                   <FormItem key={Date.now()}>
                     <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
                       <FormControl>
-                        <SelectTrigger className="w-[100px] border-0.5">
+                        <SelectTrigger className="w-[80px] border-0.5">
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
@@ -245,7 +318,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
             </div>
             <div className="flex gap-2">
               <div className="flex mt-4 text-xs">
-                <span>開課人數：</span>
+                <span><GoPerson className="text-xs mr-[2px] mt-[1px]" /></span>
                 <FormField
                   control={form.control}
                   name="baseline_rez"
@@ -272,7 +345,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
                   )}
                 />
               </div>
-              <Button className="mt-2 w-20">
+              <Button className="mt-2 md:w-20 w-15">
                 <span className={`${loading && 'hidden'}`}>{course.id ? '修改' : '新增'}</span>
                 <RingLoader speedMultiplier={1.5} size={25} color="#FFF" loading={loading} />
               </Button>

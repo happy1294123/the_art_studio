@@ -28,6 +28,7 @@ model Course {
   updated_at   DateTime      @updatedAt
   Reservation  Reservation[]
   CancelLog    CancelLog[]
+  Payment      Payment[]
 
   @@index([teacher_id])
   @@map("courses")
@@ -71,6 +72,7 @@ model User {
   Reservation      Reservation[]
   UserDiscount     UserDiscount[]
   CancelLog        CancelLog[]
+  Payment          Payment[]
 
   @@unique([email])
   @@map("users")
@@ -125,4 +127,33 @@ model CancelLog {
   @@index([course_id])
   @@index([user_id])
   @@map("cancel_log")
+}
+
+model Payment {
+  id              Int          @id @default(autoincrement())
+  user            User         @relation(fields: [user_id], references: [id])
+  user_id         Int
+  name            String
+  price           Int
+  course          Course?      @relation(fields: [course_id], references: [id])
+  course_id       Int?
+  description     String?
+  receive_date    String?
+  receive_price   Int?
+  receive_account String?
+  receive_note    String?
+  state           PaymentState @default(PENDING)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+
+  @@index([course_id])
+  @@index([user_id])
+  @@map("payment")
+}
+
+enum PaymentState {
+  SUCCESS
+  PENDING
+  CHECKING
+  CANCEL
 }

@@ -26,7 +26,8 @@ export async function GET(req: any) {
       course: {
         include: {
           Reservation: true,
-          teacher: true
+          teacher: true,
+          Payment: true
         }
       },
     }
@@ -54,6 +55,14 @@ export async function DELETE(req: any) {
           course_id,
           user_id: token.id
         }
+      }
+    })
+    await prisma.payment.deleteMany({
+      where: {
+        AND: [
+          { course_id },
+          { user_id: token.id }
+        ]
       }
     })
   } else if (stateTo === 'CANCEL') {

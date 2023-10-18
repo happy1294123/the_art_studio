@@ -19,7 +19,8 @@ export async function GET(req: Request) {
           image: true
         }
       },
-      Reservation: true
+      Reservation: true,
+      Payment: true
     }
   })
 

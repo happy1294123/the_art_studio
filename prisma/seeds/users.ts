@@ -27,11 +27,20 @@ module.exports = [{
   image: 'https://i.pravatar.cc/300'
 }, {
   name: 'Allen',
-  email: 'allen@example.com',
+  email: 'happy1294123@gmail.com',
   password,
   role: 'STUDENT',
-  image: 'https://i.pravatar.cc/300',
-  point: 1000
+  image: 'https://i.pravatar.cc/300'
+}, {
+  name: '管理者',
+  email: 'admin@example.com',
+  password,
+  role: 'ADMIN',
+},
+{
+  name: '小編',
+  email: 'editor@example.com',
+  password,
+  role: 'EDITOR',
 }
-
 ]

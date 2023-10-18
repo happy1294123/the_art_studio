@@ -1,6 +1,14 @@
+import { JSX } from 'react'
 import { AiFillInfoCircle } from 'react-icons/ai'
+import { BiSolidError } from 'react-icons/bi'
 
-export default function getToastOption(mode = 'light', icon = <AiFillInfoCircle className="my-auto text-xl" />) {
+export default function getToastOption(mode = 'light', icon?: string | JSX.Element | undefined) {
+  if (!icon) {
+    icon = <AiFillInfoCircle className="my-auto text-xl" />
+  } else if (icon = 'error') {
+    icon = <BiSolidError className="my-auto text-xl" />
+  }
+
   if (mode === 'dark') {
     return {
       icon,
