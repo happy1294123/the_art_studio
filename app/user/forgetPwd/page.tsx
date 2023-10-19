@@ -18,7 +18,7 @@ export default function ForgetPwdPage() {
       body: JSON.stringify(email)
     })
     if (res.ok) {
-      toast('郵件發送成功', getToastOption())
+      toast('郵件發送成功', getToastOption('light', 'success'))
     } else {
       setError('該電子郵件尚未成為會員')
     }

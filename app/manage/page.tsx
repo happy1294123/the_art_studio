@@ -7,7 +7,9 @@ import UserDropDownMenu from "@/components/user/UserDropDownMenu"
 import ReceivementTable from "@/components/manage/ReceivementTable/page"
 import useSWR from "swr"
 import { Course, Discount, Teacher } from "@/type"
-import { Payment } from "@prisma/client"
+import { Payment, User } from "@prisma/client"
+import UsersTable from "@/components/manage/UsersTable/page"
+import { useState } from "react"
 
 async function courseFetcher(url: string): Promise<Course[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
@@ -29,29 +31,51 @@ async function receivementFetcher(url: string): Promise<Payment[]> {
   return await res.json()
 }
 
+async function usersFetcher(url: string): Promise<Partial<User[]>> {
+  const res = await fetch(url)
+  return await res.json()
+}
+
 export default function ManagePage() {
+  const [fetchTrigger, setFetchTrigger] = useState({
+    user: true,
+    course: false,
+    discount: false,
+    receive: false
+  })
+
+  // users data
+  const { data: users, mutate: usersMutate } = useSWR(
+    fetchTrigger.user && '/api/manage/users',
+    usersFetcher
+  )
+
   // course data
   const { data: courses, mutate: coursesMutate } = useSWR(
-    `/api/manage/course`,
+    fetchTrigger.course && `/api/manage/course`,
     courseFetcher
   )
 
   const { data: teacherOpt } = useSWR(
-    'api/manage/teacher',
+    fetchTrigger.course && 'api/manage/teacher',
     teacherFetcher
   )
 
   // discount data
   const { data: discount, mutate: discountMutate } = useSWR(
-    '/api/manage/discount',
+    fetchTrigger.discount && '/api/manage/discount',
     discountFetcher
   )
 
   // receivement data 
   const { data: receivement, mutate: receiveMutate } = useSWR(
-    '/api/manage/receivement',
+    fetchTrigger.receive && '/api/manage/receivement',
     receivementFetcher
   )
+
+  const handleValueChange = (value: string) => {
+    setFetchTrigger(prev => ({ ...prev, [value]: true }))
+  }
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -61,16 +85,15 @@ export default function ManagePage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="user">
+      <Tabs defaultValue="user" onValueChange={handleValueChange}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課表</TabsTrigger>
           <TabsTrigger value="receive">收款</TabsTrigger>
           <TabsTrigger value="discount">折扣碼</TabsTrigger>
-          {/* <TabsTrigger value="record">購買記錄</TabsTrigger> */}
         </TabsList>
         <TabsContent value="user">
-          會員名單管理
+          <UsersTable users={users} usersMutate={usersMutate} />
         </TabsContent>
         <TabsContent value="course">
           <NewCourseForm courses={courses} coursesMutate={coursesMutate} teacherOpt={teacherOpt} />

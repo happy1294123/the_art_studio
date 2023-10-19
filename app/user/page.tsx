@@ -31,44 +31,42 @@ async function myPaymentFetcher(url: string): Promise<Payment[]> {
   return await res.json()
 }
 
+async function unPayNumFetcher(url: string): Promise<number> {
+  const res = await fetch(url, { next: { tags: ['unPayNum'] } })
+  const unPayNum = await res.json()
+  return unPayNum
+}
+
 export default function UserPage() {
-  const { data: reservations, mutate: mutateReservation } = useSWR(
-    '/api/user/course',
-    myCourseFetcher
-  )
-
-  const { data: point } = useSWR(
-    '/api/user/point',
-    myPointFetcher
-  )
-
-  const { data: payments, mutate: mutatePayment } = useSWR(
-    '/api/user/payment',
-    myPaymentFetcher
-  )
-
-  const handleTabsValueChange = async (value: string) => {
-    // console.log(value)
-    if (value === 'payment') {
-      mutatePayment()
-    }
-  }
-
   const [tab, setTab] = useState('course')
   const params = useSearchParams()
   const router = useRouter()
   useEffect(() => {
     if (params.get('tab')) {
-      setTab(params.get('tab') as string)
+      const tab = params.get('tab') as string
+      setTab(tab)
     }
   }, [params])
 
-  const [unPayNum, setUnPayNum] = useState(0)
-  useEffect(() => {
-    if (payments?.filter(p => p.state === 'PENDING')) {
-      setUnPayNum(payments?.filter(p => p.state === 'PENDING').length)
-    }
-  }, [payments])
+  const { data: reservations, mutate: mutateReservation } = useSWR(
+    tab === 'course' && '/api/user/course',
+    myCourseFetcher
+  )
+
+  const { data: point } = useSWR(
+    tab === 'point' && '/api/user/point',
+    myPointFetcher
+  )
+
+  const { data: payments, mutate: mutatePayment } = useSWR(
+    tab === 'payment' && '/api/user/payment',
+    myPaymentFetcher
+  )
+
+  const { data: unPayNum, mutate: mutateUnPayNum } = useSWR(
+    '/api/user/payment?unPay=1',
+    unPayNumFetcher
+  )
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -78,13 +76,13 @@ export default function UserPage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs value={tab} onValueChange={handleTabsValueChange}>
+      <Tabs value={tab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="course" onClick={() => router.push('/user?tab=course')}>課表</TabsTrigger>
           <TabsTrigger value="point" onClick={() => router.push('/user?tab=point')}>點數</TabsTrigger>
           <TabsTrigger value="payment" onClick={() => router.push('/user?tab=payment')}>
             匯款記錄
-            {unPayNum !== 0 && <div className='text-xs -mr-5 -mt-5 -ml-1  outline-2 outline-bgColorSecondary bg-primary rounded-full w-4 h-4 text-white'>{unPayNum}</div>}
+            {(typeof unPayNum === 'number' && unPayNum !== 0) && <div className='text-xs -mr-5 -mt-5 -ml-1  outline-2 outline-bgColorSecondary bg-primary rounded-full w-4 h-4 text-white'>{unPayNum}</div>}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="course">
@@ -109,10 +107,10 @@ export default function UserPage() {
           }
         </TabsContent >
         <TabsContent value="point">
-          <UserPointTabContent myPoint={point} mutatePayment={mutatePayment} />
+          <UserPointTabContent myPoint={point} mutateUnPayNum={mutateUnPayNum} />
         </TabsContent>
         <TabsContent value="payment">
-          <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} />
+          <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} mutateUnPayNum={mutateUnPayNum} />
         </TabsContent>
       </Tabs >
     </div >

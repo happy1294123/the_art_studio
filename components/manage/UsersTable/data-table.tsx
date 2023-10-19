@@ -1,19 +1,12 @@
 "use client"
 import {
   ColumnDef,
-  TableOptionsResolved,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import {
   Table,
   TableBody,
@@ -23,9 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
-import dynamic from 'next/dynamic'
-import { Discount } from "@/type"
-const EditDiscountDialog = dynamic(() => import('./NewDiscountDialog'))
+import { Input } from "@/components/ui/input"
+import { BiSearch } from 'react-icons/bi'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -38,38 +30,39 @@ export function DataTable<TData, TValue>({
   data,
   mutate
 }: DataTableProps<TData, TValue>) {
-  const [openDialog, setOpenDialog] = useState(false)
-  const [discount, setDiscount] = useState<Discount>()
-  const [discountUsers, setDiscountUsers] = useState<{
-    name: string,
-    email: string
-  }[]>()
+  const [globalFilter, setGlobalFilter] = useState('')
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    []
+  )
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter,
+    },
     meta: {
-      updateData: () => {
-        mutate && mutate()
+      filterColumn: (value: string) => {
+        table.getColumn('role')?.setFilterValue(value)
       },
-      openEditDialog: (discount: Discount) => {
-        if (discount) {
-          setOpenDialog(true)
-          setDiscount(discount)
-        }
-      },
-      openUsedList: async (discount_id: string) => {
-        if (discount_id) {
-          setOpenDialog(true)
-          const res = await fetch(`/api/manage/discount/users?discount_id=${discount_id}`)
-          const users = await res.json()
-          setDiscountUsers(users)
-        }
-      }
     },
   })
 
   return (<>
+    <div className="flex w-fit ml-auto justify-end items-center py-4 relative">
+      <div className="absolute left-3 text-gray-500">
+        <BiSearch />
+      </div>
+      <Input
+        placeholder="搜尋"
+        value={globalFilter ?? ''}
+        onChange={e => setGlobalFilter(String(e.target.value))}
+        className="max-w-[200px] rounded-full border-headingColor pl-8"
+      />
+    </div>
     <div className="rounded-md">
       <Table>
         <TableHeader>
@@ -115,37 +108,5 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-    {openDialog && discount &&
-      <EditDiscountDialog
-        openProp={openDialog}
-        setOpenProp={setOpenDialog}
-        discount={discount}
-        discountMutate={mutate}
-      />}
-    {openDialog && discountUsers &&
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent className="bg-white">
-          <DialogHeader>
-            <DialogTitle>使用名單</DialogTitle>
-            <DialogDescription>
-              {discountUsers.length
-                ? (<>
-                  <div className="grid grid-cols-2 text-center -ml-10">
-                    <span>姓名</span>
-                    <span>email</span>
-                  </div>
-                  {discountUsers.map(user => (
-                    <div key={user.email} className="grid grid-cols-2 text-center -ml-10">
-                      <span>{user.name}</span>
-                      <span>{user.email}</span>
-                    </div>
-                  ))}
-                </>)
-                : <div className="flex-center">無使用者</div>}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog >
-    }
   </>)
 }

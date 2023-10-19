@@ -1,5 +1,6 @@
 import prisma from "@/lib/initPrisma"
 import { getToken } from "next-auth/jwt"
+import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function GET(req: any) {
@@ -30,6 +31,7 @@ export async function POST(req: any) {
         price
       }
     })
+    revalidateTag('unPayNum')
     return NextResponse.json(res.id)
   } catch (error) {
     console.log(error);

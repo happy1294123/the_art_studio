@@ -17,7 +17,8 @@ const UserPaymentDialog = dynamic(() => import('@/components/user/UserPaymentDia
 
 type props = {
   payments?: Payment[],
-  mutatePayment: KeyedMutator<Payment[]>
+  mutatePayment: KeyedMutator<Payment[]>,
+  mutateUnPayNum: KeyedMutator<number>
 }
 
 const stateMap = {
@@ -27,7 +28,8 @@ const stateMap = {
   CANCEL: '已取消'
 }
 
-export default function UserPaymentTabContent({ payments, mutatePayment }: props) {
+export default function UserPaymentTabContent({ payments, mutatePayment, mutateUnPayNum }: props) {
+  mutateUnPayNum()
   const [open, setOpen] = useState(false)
   const [selectPaymentId, setSelectPaymentId] = useState(0)
   const selectPayment = useMemo(() => payments?.find(p => p.id === selectPaymentId), [payments, selectPaymentId])
@@ -49,8 +51,9 @@ export default function UserPaymentTabContent({ payments, mutatePayment }: props
       method: 'delete'
     })
     if (res.ok) {
-      toast('取消購買成功', getToastOption())
+      toast('取消購買成功', getToastOption('light', 'success'))
       mutatePayment()
+      mutateUnPayNum()
     } else {
       toast('取消購買失敗', getToastOption('light', 'error'))
     }

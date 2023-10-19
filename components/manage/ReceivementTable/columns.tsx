@@ -33,23 +33,8 @@ export const columns: ColumnDef<Payment>[] = [
       } else if (state === 'CANCEL') {
         text = '取消'
       }
-      return <span className="flex-center">{text}</span>
+      return <span className="flex-center whitespace-nowrap">{text}</span>
     }
-  },
-  {
-    accessorKey: "receive_account",
-    header: () => <div className="whitespace-nowrap">帳號末5碼</div>,
-  },
-  {
-    accessorKey: "receive_price",
-    header: '金額',
-    cell: ({ row }) => {
-      return <span className="whitespace-nowrap">{row.getValue('receive_price')}元</span>
-    }
-  },
-  {
-    accessorKey: "receive_date",
-    header: () => <div className="w-20">匯款日期</div>,
   },
   {
     accessorKey: "user.name",
@@ -60,7 +45,25 @@ export const columns: ColumnDef<Payment>[] = [
     header: () => <div className="w-14">項目</div>,
   },
   {
+    accessorKey: "receive_account",
+    header: () => <div className="whitespace-nowrap">帳號末5碼</div>,
+  },
+  {
+    accessorKey: "receive_price",
+    header: '金額',
+    cell: ({ row }) => {
+      if (row.getValue('receive_price')) {
+        return <span className="whitespace-nowrap">{row.getValue('receive_price')}元</span>
+      }
+      return ''
+    }
+  },
+  {
     accessorKey: "receive_note",
     header: () => <div className="whitespace-nowrap">用戶備註</div>,
-  }
+  },
+  {
+    accessorKey: "receive_date",
+    header: () => <div className="w-20">匯款日期</div>,
+  },
 ]

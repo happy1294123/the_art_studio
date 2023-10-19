@@ -21,10 +21,10 @@ const pointOptions = [
 
 type props = {
   myPoint?: number,
-  mutatePayment: KeyedMutator<Payment[]>
+  mutateUnPayNum: KeyedMutator<number>
 }
 
-export default function UserPointTabContent({ myPoint, mutatePayment }: props) {
+export default function UserPointTabContent({ myPoint, mutateUnPayNum }: props) {
   const { data: session, update: updateSession } = useSession()
   if (myPoint) {
     updateSession({ point: myPoint })
@@ -57,7 +57,7 @@ export default function UserPointTabContent({ myPoint, mutatePayment }: props) {
           border: '2px solid #D1C0AD'
         }
       })
-      mutatePayment()
+      mutateUnPayNum()
     } else {
       toast('購買失敗', getToastOption('light', 'error'))
     }

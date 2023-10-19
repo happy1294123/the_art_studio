@@ -1,10 +1,24 @@
 import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
 import prisma from "@/lib/initPrisma"
+import { revalidateTag } from "next/cache"
 
 export async function GET(req: any) {
   const token = await getToken({ req })
   if (!token) return NextResponse.json('請先登入會員', { status: 401 })
+
+  const unPay = new URL(req.url).searchParams.get('unPay') as string
+  if (unPay) {
+    const unPayNum = await prisma.payment.count({
+      where: {
+        AND: [
+          { user_id: token.id },
+          { state: 'PENDING' }
+        ]
+      }
+    })
+    return NextResponse.json(unPayNum)
+  }
 
   const res = await prisma.payment.findMany({
     where: {
@@ -61,5 +75,6 @@ export async function DELETE(req: any) {
   if (!res.id) {
     return NextResponse.json('', { status: 400 })
   }
+  revalidateTag('unPayNum')
   return NextResponse.json('')
 }

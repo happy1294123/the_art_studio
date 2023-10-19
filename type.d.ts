@@ -106,13 +106,3 @@ type Discount = {
   price_discount: string,
   active: boolean,
 }
-
-// type Payment = {
-//   id: number,
-//   user_id: number,
-//   name: string
-//   price: number,
-//   course_id?: number,
-//   description?: string,
-//   state: 'SUCCESS' | 'PENDING' | 'CANCEL',
-// }

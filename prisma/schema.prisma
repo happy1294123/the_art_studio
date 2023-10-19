@@ -66,6 +66,7 @@ model User {
   point            Int            @default(0)
   schedule_service String?        @default("")
   email_varified   Boolean        @default(false)
+  note             String?
   created_at       DateTime       @default(now())
   updated_at       DateTime       @updatedAt
   Course           Course[]
