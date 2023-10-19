@@ -10,6 +10,7 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 import { AiFillEdit, AiOutlineUsergroupDelete, AiFillDelete } from 'react-icons/ai'
 import toast from "react-hot-toast"
 import getToastOption from "@/lib/getToastOption"
+import { Discount } from "@/type"
 
 const handleShowUsers = (discount_id: number, tableMeta: any) => {
   tableMeta && tableMeta.openUsedList(discount_id)

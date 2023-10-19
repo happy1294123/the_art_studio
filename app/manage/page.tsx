@@ -4,7 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import NewCourseForm from '@/components/manage/Course/NewCourseForm'
 import DiscountTable from '@/components/manage/DiscountTable/page'
 import UserDropDownMenu from "@/components/user/UserDropDownMenu"
+import ReceivementTable from "@/components/manage/ReceivementTable/page"
 import useSWR from "swr"
+import { Course, Discount, Teacher } from "@/type"
+import { Payment } from "@prisma/client"
 
 async function courseFetcher(url: string): Promise<Course[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
@@ -18,6 +21,11 @@ async function teacherFetcher(url: string): Promise<Teacher[]> {
 
 async function discountFetcher(url: string): Promise<Discount[]> {
   const res = await fetch(url, { next: { tags: ['discount'] } })
+  return await res.json()
+}
+
+async function receivementFetcher(url: string): Promise<Payment[]> {
+  const res = await fetch(url)
   return await res.json()
 }
 
@@ -39,6 +47,12 @@ export default function ManagePage() {
     discountFetcher
   )
 
+  // receivement data 
+  const { data: receivement, mutate: receiveMutate } = useSWR(
+    '/api/manage/receivement',
+    receivementFetcher
+  )
+
   return (
     <div className="max-w-screen-md mx-auto">
       <div className="flex justify-between -mt-5">
@@ -48,9 +62,10 @@ export default function ManagePage() {
         </div>
       </div>
       <Tabs defaultValue="user">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="user">會員名單</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課表</TabsTrigger>
+          <TabsTrigger value="receive">收款</TabsTrigger>
           <TabsTrigger value="discount">折扣碼</TabsTrigger>
           {/* <TabsTrigger value="record">購買記錄</TabsTrigger> */}
         </TabsList>
@@ -62,6 +77,10 @@ export default function ManagePage() {
         </TabsContent >
         <TabsContent value="discount">
           <DiscountTable discount={discount} discountMutate={discountMutate} />
+        </TabsContent>
+        <TabsContent value="receive">
+          {/* 操作已收款、帳號末5碼、金額、匯款日期、用戶、名目、備註 */}
+          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
         </TabsContent>
       </Tabs >
     </div>

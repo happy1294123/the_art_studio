@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
@@ -24,6 +23,12 @@ type props = {
   setOpen: Dispatch<boolean>,
   payment: Payment,
   mutatePayment: KeyedMutator<Payment[]>
+}
+
+const stateMap = {
+  CHECKING: '資料核對中',
+  SUCCESS: '匯款完成',
+  ERROR: '匯款有誤',
 }
 
 export default function UserPaymentDialog({ open, setOpen, payment, mutatePayment }: props) {
@@ -116,7 +121,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               onBlur={e => e.target.type = 'text'}
               onChange={e => handleOnChange('date', e.target.value)}
               value={formData.date || ''}
-              disabled={payment.state === 'CHECKING'}
+              disabled={payment.state !== 'PENDING'}
             />
             {error.date && <span className="ml-2 text-primary/80">{error.date}</span>}
           </div>
@@ -127,7 +132,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               placeholder="請輸入匯款金額"
               onChange={e => handleOnChange('price', e.target.value)}
               value={formData.price || ''}
-              disabled={payment.state === 'CHECKING'}
+              disabled={payment.state !== 'PENDING'}
             />
             {error.price && <span className="ml-2 text-primary/80">{error.price}</span>}
           </div>
@@ -138,7 +143,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               placeholder="請輸入您的帳號末5碼"
               onChange={e => handleOnChange('account', e.target.value)}
               value={formData.account || ''}
-              disabled={payment.state === 'CHECKING'}
+              disabled={payment.state !== 'PENDING'}
             />
             {error.account && <span className="ml-2 text-primary/80">{error.account}</span>}
           </div>
@@ -149,18 +154,19 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               placeholder="請輸入備註（選填）"
               onChange={e => handleOnChange('note', e.target.value)}
               value={formData.note || ''}
-              disabled={payment.state === 'CHECKING'}
+              disabled={payment.state !== 'PENDING'}
             />
           </div>
           <div>
-            {payment.state === 'CHECKING'
-              ? <span className="flex-center text-gray-400">資料核對中</span>
-              : <LoadingButton
-                isLoading={isLoading}
-                className="mt-1 w-full text-xl h-10"
-              >
-                確認送出
-              </LoadingButton>}
+            {payment.state === 'PENDING' && <LoadingButton
+              isLoading={isLoading}
+              className="mt-1 w-full text-xl h-10"
+            >
+              確認送出
+            </LoadingButton>}
+            <span className="flex-center text-gray-400">
+              {stateMap[payment.state as keyof typeof stateMap]}
+            </span>
           </div>
         </form>
       </DialogContent>

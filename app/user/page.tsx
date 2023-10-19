@@ -16,12 +16,18 @@ import UserPaymentTabContent from '@/components/user/UserPaymentTabContent'
 import { useEffect, useState } from 'react'
 
 async function myCourseFetcher(url: string): Promise<Record<string, Reservation[]>> {
-  const res = await fetch(url)
+  const res = await fetch(url, { next: { tags: ['myReservation'] } })
   return await res.json()
 }
 
+async function myPointFetcher(url: string): Promise<number> {
+  const res = await fetch(url, { next: { tags: ['myPoint'] } })
+  const { point } = await res.json()
+  return point
+}
+
 async function myPaymentFetcher(url: string): Promise<Payment[]> {
-  const res = await fetch(url)
+  const res = await fetch(url, { next: { tags: ['payment'] } })
   return await res.json()
 }
 
@@ -31,12 +37,17 @@ export default function UserPage() {
     myCourseFetcher
   )
 
+  const { data: point } = useSWR(
+    '/api/user/point',
+    myPointFetcher
+  )
+
   const { data: payments, mutate: mutatePayment } = useSWR(
     '/api/user/payment',
     myPaymentFetcher
   )
 
-  const handleTabsValueChange = (value: string) => {
+  const handleTabsValueChange = async (value: string) => {
     // console.log(value)
     if (value === 'payment') {
       mutatePayment()
@@ -98,7 +109,7 @@ export default function UserPage() {
           }
         </TabsContent >
         <TabsContent value="point">
-          <UserPointTabContent />
+          <UserPointTabContent myPoint={point} mutatePayment={mutatePayment} />
         </TabsContent>
         <TabsContent value="payment">
           <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} />

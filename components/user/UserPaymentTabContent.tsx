@@ -10,11 +10,21 @@ import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import { KeyedMutator } from 'swr'
 import { useSearchParams } from 'next/navigation'
+import { AiOutlineClose } from 'react-icons/ai'
+import toast from 'react-hot-toast'
+import getToastOption from '@/lib/getToastOption'
 const UserPaymentDialog = dynamic(() => import('@/components/user/UserPaymentDialog'))
 
 type props = {
   payments?: Payment[],
   mutatePayment: KeyedMutator<Payment[]>
+}
+
+const stateMap = {
+  SUCCESS: '完成',
+  ERROR: '有誤',
+  CHECKING: '核對中',
+  CANCEL: '已取消'
 }
 
 export default function UserPaymentTabContent({ payments, mutatePayment }: props) {
@@ -31,6 +41,21 @@ export default function UserPaymentTabContent({ payments, mutatePayment }: props
     }
   }, [params, payments])
 
+  const handleCancelPayment = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>, payment: Payment) => {
+    e.stopPropagation()
+    const isConfirm = confirm('是否要取消購買？')
+    if (!isConfirm) return
+    const res = await fetch(`/api/user/payment?id=${payment.id}`, {
+      method: 'delete'
+    })
+    if (res.ok) {
+      toast('取消購買成功', getToastOption())
+      mutatePayment()
+    } else {
+      toast('取消購買失敗', getToastOption('light', 'error'))
+    }
+  }
+
   return (<>
     {payments?.length
       ? <>{payments.map(payment => (
@@ -42,7 +67,8 @@ export default function UserPaymentTabContent({ payments, mutatePayment }: props
             setOpen(true)
           }}
         >
-          <CardHeader>
+          <CardHeader className='relative'>
+            {payment.state === 'PENDING' && <div className='absolute right-3 top-3 p-1' onClick={(e) => handleCancelPayment(e, payment)}><AiOutlineClose /></div>}
             <CardTitle className='-mb-2 md:text-left text-center'>
               <div>
                 {payment.name}
@@ -53,9 +79,11 @@ export default function UserPaymentTabContent({ payments, mutatePayment }: props
                   <span className='text-base'>{payment.description}</span>
                 </div>
                 <div className='md:mt-0 mt-2'>
-                  {payment.state === 'CHECKING'
-                    ? <Button variant="ghost" className='w-full max-w-[200px] text-base'>核對中</Button>
-                    : <Button className='w-full max-w-[200px] text-base'>立即匯款</Button>}
+                  {payment.state === 'PENDING'
+                    ? <Button className='w-full max-w-[200px] text-base'>立即匯款</Button>
+                    : <Button variant="ghost" className='w-full max-w-[200px] text-base'>
+                      {stateMap[payment.state]}
+                    </Button>}
                 </div>
               </div>
             </CardTitle>

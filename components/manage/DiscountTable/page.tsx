@@ -4,6 +4,7 @@ import { DataTable } from "./data-table"
 import { KeyedMutator } from 'swr'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
+import { Discount } from '@/type'
 const NewDiscountDialog = dynamic(() => import('./NewDiscountDialog'))
 
 type Props = {

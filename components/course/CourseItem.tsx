@@ -26,9 +26,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
   const { data: session } = useSession()
   const hasReserve = Boolean(course.Reservation.find(r => r.user_id === session?.user.id))
   const hasCancel = Boolean(course.Reservation.find(r => r.user_id === session?.user.id && r.state === 'CANCEL'))
-  // const needPay = course.Reservation[0] && course.Reservation[0].plan_name.startsWith('單次') && course.Reservation[0].state === 'PENDING'
   const payState = course.Payment.find(p => p.user_id === session?.user.id)?.state
-  // console.log('course', course.Payment);
 
   const getUserPageBtn = () => {
     if (payState === 'PENDING') {
@@ -40,7 +38,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
     if (current_rez >= course.baseline_rez) {
       return <Button>已開課</Button>
     } else {
-      return <Button variant="secondary">待確認</Button>
+      return <Button variant="secondary">待開課</Button>
     }
   }
 

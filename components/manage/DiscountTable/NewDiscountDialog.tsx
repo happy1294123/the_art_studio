@@ -15,6 +15,7 @@ import getToastOption from '@/lib/getToastOption'
 import LoadingButton from '@/components/LoadingButton'
 import { KeyedMutator } from "swr"
 import { Switch } from "@/components/ui/switch"
+import { Discount } from "@/type"
 
 type Props = {
   openProp?: boolean,
@@ -91,7 +92,7 @@ export default function NewDiscountDialog({ openProp, setOpenProp, discount, dis
                     className='rounded-full h-7'
                     placeholder='請輸入8位元折扣碼'
                     value={formData?.code}
-                    onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value }))}
+                    onChange={(e) => setFormData((prev: any) => ({ ...prev, code: e.target.value }))}
                     max={8}
                   />
                   <span
