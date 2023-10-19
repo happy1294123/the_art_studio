@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (<>
-    <div className="flex w-fit ml-auto justify-end items-center py-4 relative">
+    {data.length > 0 && <div className="flex w-fit ml-auto justify-end items-center relative">
       <div className="absolute left-3 text-gray-500">
         <BiSearch />
       </div>
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
         onChange={e => setGlobalFilter(String(e.target.value))}
         className="max-w-[200px] rounded-full border-headingColor pl-8"
       />
-    </div>
+    </div>}
     <div className="rounded-md">
       <Table>
         <TableHeader>

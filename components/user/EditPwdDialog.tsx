@@ -65,7 +65,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
           修改密碼
         </DialogTitle>
         <DialogDescription className="text-2xl">
-          <form className="grid md:grid-cols-3 gap-2 text-black" onSubmit={e => e.preventDefault()}>
+          <form className="grid gap-2 text-black" onSubmit={e => e.preventDefault()}>
             <div>
               <Label htmlFor='oldPwd' className='ml-3'>舊密碼</Label>
               <Input
@@ -100,7 +100,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
               className='text-[14px] ml-3 -mb-6 text-primary/80'>{error}
             </span>}
             <LoadingButton
-              className='text-2xl h-10 mt-3'
+              className='text-2xl h-10 mt-3 w-full'
               onClick={handleEditPwd}
               isLoading={isPending}
             >修改密碼

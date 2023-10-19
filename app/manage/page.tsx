@@ -99,12 +99,11 @@ export default function ManagePage() {
         <TabsContent value="course">
           <NewCourseForm courses={courses} coursesMutate={coursesMutate} teacherOpt={teacherOpt} />
         </TabsContent >
+        <TabsContent value="receive">
+          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
+        </TabsContent>
         <TabsContent value="discount">
           <DiscountTable discount={discount} discountMutate={discountMutate} />
-        </TabsContent>
-        <TabsContent value="receive">
-          {/* 操作已收款、帳號末5碼、金額、匯款日期、用戶、名目、備註 */}
-          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
         </TabsContent>
       </Tabs >
     </div>
