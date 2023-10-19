@@ -27,6 +27,7 @@ import { toast } from 'react-hot-toast'
 import getToastOption from "@/lib/getToastOption"
 import { AiFillDelete } from 'react-icons/ai'
 import { GoPerson } from "react-icons/go"
+import { Course, Teacher } from "@/type"
 
 const formSchema = z.object({
   id: z.number().optional(),
@@ -94,7 +95,7 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
     })
     if (res.ok) {
       mutate()
-      toast(course.id ? '修改成功' : '新增成功', getToastOption('light'))
+      toast(course.id ? '修改成功' : '新增成功', getToastOption())
     }
     setLoading(false)
   }
@@ -107,11 +108,11 @@ export default function EditCourseItem({ course, setCourseForm, teacherOpt, muta
       body: JSON.stringify(course.id)
     })
     if (res.ok) {
-      toast('刪除成功', getToastOption('light'))
+      toast('刪除成功', getToastOption())
       setCourseForm(null)
       mutate()
     } else {
-      toast('刪除失敗', getToastOption('light'))
+      toast('刪除失敗', getToastOption('error'))
     }
   }
 

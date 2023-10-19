@@ -43,11 +43,11 @@ export default function NewDiscountDialog({ openDialog, setOpenDialog, usersMuta
     })
 
     if (res.ok) {
-      toast('新增成功', getToastOption('light', 'success'))
+      toast('新增成功', getToastOption())
       setOpenDialog(false)
       usersMutate()
     } else {
-      toast('新增失敗', getToastOption('light', 'error'))
+      toast('新增失敗', getToastOption('error'))
     }
   }
 

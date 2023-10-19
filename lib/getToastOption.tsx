@@ -3,26 +3,17 @@ import { AiFillInfoCircle, AiFillCheckCircle } from 'react-icons/ai'
 import { BiSolidError } from 'react-icons/bi'
 
 const getIcon = (iconFlag?: string | JSX.Element) => {
-  if (iconFlag === 'success') {
-    return <AiFillCheckCircle className="my-auto text-xl" />
+  if (iconFlag === 'info') {
+    return <AiFillInfoCircle className="my-auto text-xl" />
   }
   if (iconFlag === 'error') {
     return <BiSolidError className="my-auto text-xl ml-1" />
   }
-  return <AiFillInfoCircle className="my-auto text-xl" />
+  // default success
+  return <AiFillCheckCircle className="my-auto text-xl" />
 }
 
-export default function getToastOption(mode = 'light', icon?: string | JSX.Element | undefined) {
-  // if (!icon) {
-  //   icon = <AiFillInfoCircle className="my-auto text-xl" />
-  // }
-  // if (icon = 'success') {
-  //   icon = <AiFillCheckCircle className="my-auto text-xl" />
-  // }
-  // if (icon = 'error') {
-  //   icon = <BiSolidError className="my-auto text-xl ml-1" />
-  // }
-
+export default function getToastOption(icon?: string | JSX.Element | undefined, mode = 'light') {
   if (mode === 'dark') {
     return {
       icon: getIcon(icon),

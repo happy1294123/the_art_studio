@@ -34,7 +34,7 @@ export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymen
       paymentMutator()
       setOpenDialog(false)
     } else {
-      toast('回覆失敗', getToastOption('light', 'error'))
+      toast('回覆失敗', getToastOption('error'))
     }
   }
 

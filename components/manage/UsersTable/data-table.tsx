@@ -31,9 +31,9 @@ export function DataTable<TData, TValue>({
   mutate
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState('')
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
+  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+  //   []
+  // )
 
   const table = useReactTable({
     data,

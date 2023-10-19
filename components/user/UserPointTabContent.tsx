@@ -59,7 +59,7 @@ export default function UserPointTabContent({ myPoint, mutateUnPayNum }: props) 
       })
       mutateUnPayNum()
     } else {
-      toast('購買失敗', getToastOption('light', 'error'))
+      toast('購買失敗', getToastOption('error'))
     }
   }
 

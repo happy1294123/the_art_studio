@@ -57,7 +57,7 @@ export default function UploadStaticScheduleDialog({ openDialog, setOpenDialog }
       toast('靜態課表更新成功', getToastOption())
       setOpenDialog(false)
     } else {
-      toast('靜態課表更新失敗', getToastOption())
+      toast('靜態課表更新失敗', getToastOption('error'))
     }
     setIsLoading(false)
   }

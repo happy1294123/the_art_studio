@@ -37,14 +37,14 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
       body: JSON.stringify(service)
     })
     if (res.ok) {
-      toast('行事曆設定成功', getToastOption('light', <AiFillCheckCircle className="my-auto text-xl" />))
+      toast('行事曆設定成功', getToastOption())
       update({ schedule_service: service })
       downloadSchedule && downloadSchedule(service)
       setIsPending(false)
       setOpenDialog(false)
     } else {
       const data = await res.json()
-      toast(data, getToastOption('light'))
+      toast(data, getToastOption('error'))
       setIsPending(false)
     }
   }

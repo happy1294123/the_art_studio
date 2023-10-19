@@ -1,6 +1,7 @@
 import { MouseEvent, useState, useEffect, useRef } from 'react'
 import styles from './style.module.css'
 import { getWeekDayByWeekIndex } from '../DateHeading'
+import { MyDate } from '@/type'
 
 type Props = {
   dateList: MyDate[],

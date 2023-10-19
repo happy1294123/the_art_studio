@@ -14,6 +14,7 @@ import getToastOption from '@/lib/getToastOption'
 import { KeyedMutator } from 'swr'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
+import { Course, Teacher } from '@/type'
 const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 
 type Props = {

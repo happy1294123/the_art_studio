@@ -3,6 +3,7 @@ import { getToken } from "next-auth/jwt";
 import prisma from "@/lib/initPrisma";
 import { revalidatePath } from "next/cache";
 import dateFormatter from "@/lib/dateFormatter";
+import { CourseEvent, CreateCourse } from "@/type";
 
 function copyCourse(sample: CreateCourse, date: Date): CreateCourse {
   return {

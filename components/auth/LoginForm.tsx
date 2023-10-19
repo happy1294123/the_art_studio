@@ -21,7 +21,7 @@ export default function LoginForm() {
 
     if (register === 'success') {
       toast('註冊帳號成功', getToastOption())
-      toast('請至Email完成信箱驗證', getToastOption())
+      toast('請至Email完成信箱驗證', getToastOption('info'))
     }
   }, [searchParams])
 

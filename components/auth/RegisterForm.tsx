@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button'
 import FloatLabelInput from '@/components/FloatLabelInput'
 import RingLoader from 'react-spinners/RingLoader'
 import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
-import getToastOption from '@/lib/getToastOption'
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null)

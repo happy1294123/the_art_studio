@@ -40,6 +40,9 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
       setError('新密碼不一致')
       return
     }
+    if (formData.newPwd.length < 6) {
+      setError('密碼小於6個字元')
+    }
     setIsPending(true)
     const res = await fetch('/api/user/editPwd', {
       method: 'POST',

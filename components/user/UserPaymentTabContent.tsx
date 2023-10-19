@@ -51,11 +51,11 @@ export default function UserPaymentTabContent({ payments, mutatePayment, mutateU
       method: 'delete'
     })
     if (res.ok) {
-      toast('取消購買成功', getToastOption('light', 'success'))
+      toast('取消購買成功', getToastOption())
       mutatePayment()
       mutateUnPayNum()
     } else {
-      toast('取消購買失敗', getToastOption('light', 'error'))
+      toast('取消購買失敗', getToastOption('error'))
     }
   }
 

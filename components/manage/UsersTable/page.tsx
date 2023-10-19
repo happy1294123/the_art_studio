@@ -9,8 +9,8 @@ import dynamic from "next/dynamic"
 const NewTeacherDialog = dynamic(() => import('./NewTeacherDialog'))
 
 type Props = {
-  users?: Partial<User[]>,
-  usersMutate: KeyedMutator<Partial<User[]>>
+  users?: User[],
+  usersMutate: KeyedMutator<User[]>
 }
 
 export default function MemberTable({ users, usersMutate }: Props) {

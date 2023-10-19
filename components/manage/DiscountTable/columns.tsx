@@ -28,7 +28,7 @@ const handleDeleteDiscount = async (id: number, tableMeta: any) => {
     toast('刪除成功', getToastOption())
     tableMeta && tableMeta.updateData()
   } else {
-    toast('刪除失敗，請重試', getToastOption())
+    toast('刪除失敗', getToastOption('error'))
   }
 }
 

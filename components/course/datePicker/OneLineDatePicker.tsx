@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import dateFormatter from '@/lib/dateFormatter'
 import DateItems from './DateItems'
 import MyCalander from './MyCalendar'
+import { MyDate } from '@/type'
 
 const createDateList = (coursesDateSet: string[]) => {
   const today = new Date()

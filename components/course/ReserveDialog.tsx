@@ -92,14 +92,14 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
       setPaymentId(paymentId)
     } else {
       const message = await res.json()
-      toast(message, getToastOption('light'))
+      toast(message, getToastOption('error'))
       setIsPending(false)
     }
   }
 
   const checkLogin = () => {
     if (!session) {
-      toast('請先登入會員', getToastOption('dark'))
+      toast('請先登入會員', getToastOption('info', 'dark'))
       const callbackUrl = `${location.protocol}//${location.host}/course?id_date=${course.id}_${course.date}`
       router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)
       setIsPending(false)

@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import dynamic from 'next/dynamic'
+import { Course } from '@/type'
 const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
 
 export default function ScheduleHref({
@@ -15,7 +16,7 @@ export default function ScheduleHref({
 
   const handleDownSchedule = () => {
     if (!session.user) {
-      toast('請先登入', getToastOption('light'))
+      toast('請先登入', getToastOption('info'))
     }
     if (!session.user.schedule_service) {
       setOpenDialog(true)

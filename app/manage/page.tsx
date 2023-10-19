@@ -31,10 +31,11 @@ async function receivementFetcher(url: string): Promise<Payment[]> {
   return await res.json()
 }
 
-async function usersFetcher(url: string): Promise<Partial<User[]>> {
+async function usersFetcher(url: string): Promise<User[]> {
   const res = await fetch(url)
   return await res.json()
 }
+
 
 export default function ManagePage() {
   const [fetchTrigger, setFetchTrigger] = useState({

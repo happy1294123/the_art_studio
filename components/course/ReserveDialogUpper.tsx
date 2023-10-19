@@ -47,7 +47,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
     }
     const checkResData = await checkRes.json()
     if (checkResData.type === 'alert') {
-      toast(checkResData.message, getToastOption('light', 'error'))
+      toast(checkResData.message, getToastOption('error'))
       return
     }
     const isConfirm = confirm(checkResData.message)
@@ -61,7 +61,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
       body: JSON.stringify({ course_id: course.id, stateTo: checkResData.stateTo, returnPoint: checkResData.returnPoint })
     })
     if (res.ok) {
-      toast('取消課程成功', getToastOption('light'))
+      toast('取消課程成功', getToastOption())
       setOpen && setOpen(false)
       mutate && mutate()
       mutateReservation && mutateReservation()
@@ -70,11 +70,9 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
         point: currentPoint
       })
       if (checkResData.returnPoint) {
-        toast(`退還${checkResData.returnPoint}點點數`, getToastOption())
+        toast(`退還${checkResData.returnPoint}點點數`, getToastOption('info'))
       }
     }
-    // const data = await res.json()
-    // console.log(data)
   }
 
   const currentCourseUrl = useMemo(() => {
@@ -83,7 +81,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
 
   const handleCopyUrl = async () => {
     await navigator.clipboard.writeText(currentCourseUrl)
-    toast('已複製此課程網址', getToastOption('light'))
+    toast('已複製此課程網址', getToastOption('info'))
   }
 
   return (

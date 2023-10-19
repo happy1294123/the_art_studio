@@ -85,7 +85,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
       console.log(payment);
       toast('送出成功', getToastOption())
     } else {
-      toast('送出失敗', getToastOption('light', 'error'))
+      toast('送出失敗', getToastOption('error'))
     }
 
     setIsLoading(false)

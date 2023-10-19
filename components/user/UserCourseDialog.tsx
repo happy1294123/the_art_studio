@@ -32,7 +32,7 @@ export default function UserCourseDialog({ open, setOpen, course, current_rez, m
 
   const handleCopyUrl = async () => {
     await navigator.clipboard.writeText(currentCourseUrl)
-    toast('已複製此課程網址', getToastOption('light'))
+    toast('已複製此課程網址', getToastOption('info'))
   }
 
   const { data: session } = useSession()
