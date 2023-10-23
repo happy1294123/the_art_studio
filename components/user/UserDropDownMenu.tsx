@@ -10,24 +10,20 @@ import { BiSolidEdit } from 'react-icons/bi'
 import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 import { AiOutlineSchedule } from 'react-icons/ai'
+import { RiFileUserLine } from 'react-icons/ri'
 import { useState } from "react"
 import dynamic from 'next/dynamic'
+import { useSearchParams } from "next/navigation"
 const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
 const EditPwdDialog = dynamic(() => import('@/components/user/EditPwdDialog'))
+const UserInfoDialog = dynamic(() => import('@/components/user/UserInfoDialog'))
 
-type Props = {
-  defaultAction?: string
-}
-
-export default function UserDropDownMenu({ defaultAction }: Props) {
+export default function UserDropDownMenu() {
   const { data: session } = useSession()
+  const params = useSearchParams()
   const [openSetSkdDialog, setOpenSetSkdDialog] = useState(false)
-  const [openEditPwd, setOpenEditPwd] = useState(() => {
-    if (defaultAction) {
-      return defaultAction === 'editPwd'
-    }
-    return false
-  })
+  const [openUserInfo, setOpenUserInfo] = useState(false)
+  const [openEditPwd, setOpenEditPwd] = useState(params.get('action') === 'editPwd')
 
   return (
     <>
@@ -37,12 +33,16 @@ export default function UserDropDownMenu({ defaultAction }: Props) {
           <DropdownMenuContent >
             <DropdownMenuLabel>
               <div className="cursor-pointer flex"
-                onClick={() => setOpenSetSkdDialog(true)}>
-                <AiOutlineSchedule className="my-auto mr-1" />行事曆設定</div >
+                onClick={() => setOpenUserInfo(true)}><RiFileUserLine className="my-auto mr-1" />個人資料</div >
             </DropdownMenuLabel>
             <DropdownMenuLabel>
               <div className="cursor-pointer flex"
                 onClick={() => setOpenEditPwd(true)}><BiSolidEdit className="my-auto mr-1" />修改密碼</div >
+            </DropdownMenuLabel>
+            <DropdownMenuLabel>
+              <div className="cursor-pointer flex"
+                onClick={() => setOpenSetSkdDialog(true)}>
+                <AiOutlineSchedule className="my-auto mr-1" />行事曆設定</div >
             </DropdownMenuLabel>
             <DropdownMenuLabel>
               <div className="cursor-pointer flex" onClick={() => signOut()}><LuLogOut className="my-auto mr-1" />登出</div >
@@ -52,6 +52,7 @@ export default function UserDropDownMenu({ defaultAction }: Props) {
       }
       {openSetSkdDialog && <SelectScheduleServiceDialog openDialog={openSetSkdDialog} setOpenDialog={setOpenSetSkdDialog} />}
       {openEditPwd && <EditPwdDialog openDialog={openEditPwd} setOpenDialog={setOpenEditPwd} />}
+      {openUserInfo && <UserInfoDialog openDialog={openUserInfo} setOpenDialog={setOpenUserInfo} />}
     </>
   )
 }

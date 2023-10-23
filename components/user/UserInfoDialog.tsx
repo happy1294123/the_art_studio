@@ -15,10 +15,9 @@ import { useRouter } from "next/navigation"
 type Props = {
   openDialog: boolean,
   setOpenDialog: Dispatch<boolean>,
-  downloadSchedule?: Function
 }
 
-export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog, downloadSchedule }: Props) {
+export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog }: Props) {
   const [isPending, setIsPending] = useState(false)
   const [formData, setFormData] = useState({
     oldPwd: '',
@@ -61,12 +60,16 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
     setIsPending(false)
   }
 
+  // 可以修改
+  // name, image, address, birth, gender, phone, medical
+  // em_  name, relation, phone
+
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent className="bg-bgColorSecondary border-headingColor drop-shadow-md data-[state=open]:animate-[dialog-content-show_300ms]
                     data-[state=closed]:animate-[dialog-content-hide_300ms]">
         <DialogTitle className="text-2xl font-bold mx-auto">
-          修改密碼
+          修改個人資料
         </DialogTitle>
         <DialogDescription className="text-2xl">
           <form className="grid gap-2 text-black" onSubmit={e => e.preventDefault()}>
@@ -107,7 +110,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
               className='text-2xl h-10 mt-3 w-full'
               onClick={handleEditPwd}
               isLoading={isPending}
-            >修改密碼
+            >修改個人資料
             </LoadingButton>
           </form>
         </DialogDescription >

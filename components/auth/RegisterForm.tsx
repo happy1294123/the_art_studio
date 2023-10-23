@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button'
 import FloatLabelInput from '@/components/FloatLabelInput'
 import RingLoader from 'react-spinners/RingLoader'
 import { useRouter } from 'next/navigation'
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Textarea } from '../ui/textarea'
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -14,24 +17,38 @@ export default function RegisterForm() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    birth: '',
+    phone: '',
+    address: '',
+    gender: '',
+    medical: '',
+    em_name: '',
+    em_relation: '',
+    em_phone: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  const requiredFieldList = [
+    { field: 'name', cnField: '姓名' },
+    { field: 'email', cnField: '電子郵件' },
+    { field: 'password', cnField: '密碼' },
+    { field: 'birth', cnField: '生日' },
+    { field: 'em_name', cnField: '緊急聯絡人姓名' },
+    { field: 'em_relation', cnField: '緊急聯絡人關係' },
+    { field: 'em_phone', cnField: '緊急聯絡人手機' },
+  ]
   const handleSubmit = async () => {
     setIsLoading(true)
-    if (!formData.name) {
-      (ref.current?.querySelector(`input[name="name"]`) as HTMLInputElement)?.select()
-      setError({ name: 'name', message: '名稱是必填欄位' })
-      setIsLoading(false)
-      return
-    }
-    if (!formData.email) {
-      (ref.current?.querySelector(`input[name="email"]`) as HTMLInputElement)?.select()
-      setError({ name: 'email', message: '電子郵件是必填欄位' })
-      setIsLoading(false)
-      return
+
+    for (let { field, cnField } of requiredFieldList) {
+      if (!formData[field as keyof typeof formData]) {
+        (ref.current?.querySelector(`input[name="${field}"]`) as HTMLInputElement)?.select()
+        setError({ name: field, message: `${cnField}是必填欄位` })
+        setIsLoading(false)
+        return
+      }
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -40,12 +57,31 @@ export default function RegisterForm() {
       setIsLoading(false)
       return
     }
-    if (!finishRead) {
-      setError({ name: 'database', message: '請閱讀會員條款' })
-      console.log('請閱讀會員條款')
+
+    if (!formData.gender) {
+      setError({ name: 'gender', message: '必填欄位' })
       setIsLoading(false)
       return
     }
+
+    if (!medicalRadio.hasCheck) {
+      setError({ name: 'medical', message: '必填欄位' })
+      setIsLoading(false)
+      return
+    }
+
+    if (medicalRadio.showText && !formData.medical) {
+      setError({ name: 'medical', message: '請簡述' })
+      setIsLoading(false)
+      return
+    }
+
+    if (!finishRead) {
+      setError({ name: 'database', message: '請閱讀會員條款' })
+      setIsLoading(false)
+      return
+    }
+
     const res = await fetch('/api/register', {
       method: 'POST',
       body: JSON.stringify(formData)
@@ -77,21 +113,32 @@ export default function RegisterForm() {
     }
   }
 
+  const [medicalRadio, setMedicalRadio] = useState({
+    hasCheck: false,
+    showText: false,
+  })
+  const handleChangeMedical = (value: string) => {
+    setMedicalRadio(prev => ({ ...prev, hasCheck: true }))
+    setError({ name: '', message: '' })
+    setMedicalRadio(prev => ({ ...prev, showText: value === 'has_medical' }))
+  }
+
   return (
-    <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
+    <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl mt-16 mb-8">
       <div className="bg-slate-400 max-w-fit rounded-full mx-auto">
         <Link href="/">
           <Image src="/logoBW.png" width={65} height={65} alt='logo' className="-mt-14" />
         </Link>
       </div>
       <form className="flex flex-col" onSubmit={(e) => e.preventDefault()} ref={ref}>
+        <label className='text-headingColor -mb-3'>會員資料</label>
         <FloatLabelInput
           error={checkError('name')}
           autoFocus
           required
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           name="name"
-          labelText='名稱'
+          labelText='姓名'
           className='mt-8
           bg-bgColorSecondary' />
         <FloatLabelInput
@@ -139,9 +186,143 @@ export default function RegisterForm() {
           type='password'
           className='mt-8
           bg-bgColorSecondary' />
+        <FloatLabelInput
+          error={checkError('birth')}
+          onChange={(e) => {
+            setFormData({ ...formData, birth: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          name="birth"
+          labelText='生日'
+          type='text'
+          onFocus={e => e.target.type = 'date'}
+          onBlur={e => e.target.type = 'text'}
+          className='mt-8
+          bg-bgColorSecondary' />
+        <FloatLabelInput
+          error={checkError('phone')}
+          onChange={(e) => {
+            setFormData({ ...formData, phone: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          required
+          name="phone"
+          labelText='手機'
+          className='mt-8
+          bg-bgColorSecondary' />
+        <FloatLabelInput
+          error={checkError('address')}
+          onChange={(e) => {
+            setFormData({ ...formData, address: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          name="address"
+          labelText='地址 (選填)'
+          className='mt-8
+          bg-bgColorSecondary' />
 
-        <div className='overflow-y-auto mt-3  w-[300px] h-[150px]' onScroll={handleScroll}>
-          <div className='text-2xl mb-1'>會員條款</div>
+        <div className='mt-2'>
+          <Label className='text-fontColor/60'>性別
+            {error.name === 'gender' && <span className='ml-2 text-primary/80'>{error.message}</span>}
+          </Label>
+          <RadioGroup defaultValue="" className='flex gap-4 mt-1' onValueChange={(value) => {
+            if (value) {
+              setFormData({ ...formData, gender: value })
+              setError({ name: '', message: '' })
+            }
+          }}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="FEMALE" id="female" />
+              <Label htmlFor="female">女性</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="MALE" id="male" />
+              <Label htmlFor="male">男性</Label>
+            </div>
+          </RadioGroup>
+        </div>
+
+        <div className='mt-2'>
+          <Label className='text-fontColor/60'>是否有相關病史或曾經受傷的部位
+            {error.name === 'medical' && <span className='ml-2 text-primary/80'>{error.message}</span>}
+          </Label>
+          <RadioGroup defaultValue="" className='flex gap-8 mt-1' onValueChange={handleChangeMedical}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="no_medical" id="no_medical" />
+              <Label htmlFor="no_medical">否</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="has_medical" id="has_medical" />
+              <Label htmlFor="has_medical">有</Label>
+            </div>
+          </RadioGroup>
+          {medicalRadio.showText &&
+            <Textarea
+              className='mt-2 border-headingColor rounded-t-2xl rounded-l-2xl placeholder:text-fontColor/60'
+              placeholder='請簡述相關病史或曾經受傷部位'
+              onChange={e => {
+                setError({ name: '', message: '' })
+                setFormData(prev => ({ ...prev, medical: e.target.value }))
+              }}
+            />}
+        </div>
+
+        <label className='text-headingColor mt-8 -mb-3'>緊急聯絡人</label>
+        <FloatLabelInput
+          error={checkError('em_name')}
+          onChange={(e) => {
+            setFormData({ ...formData, em_name: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          required
+          name="em_name"
+          labelText='緊急聯絡人姓名'
+          className='mt-8
+          bg-bgColorSecondary' />
+        <FloatLabelInput
+          error={checkError('em_relation')}
+          onChange={(e) => {
+            setFormData({ ...formData, em_relation: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          required
+          name="em_relation"
+          labelText='緊急聯絡人關係'
+          className='mt-8
+          bg-bgColorSecondary' />
+        <FloatLabelInput
+          error={checkError('em_phone')}
+          onChange={(e) => {
+            setFormData({ ...formData, em_phone: e.target.value })
+            setError({
+              name: '',
+              message: ''
+            })
+          }}
+          required
+          name="em_phone"
+          labelText='緊急聯絡人手機'
+          className='mt-8
+          bg-bgColorSecondary' />
+
+        <label className='text-headingColor mt-8'>會員條款</label>
+        <div className='overflow-y-auto w-[300px] h-[150px]' onScroll={handleScroll}>
+          {/* <div className='text-headingColor text-2xl mb-1'>會員條款</div> */}
           會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款
         </div>
 

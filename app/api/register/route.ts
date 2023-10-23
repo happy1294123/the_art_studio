@@ -4,7 +4,21 @@ import bcrypt from 'bcryptjs'
 import sendVarifyMail from '@/lib/sendVarifyMail'
 
 export async function POST(req: Request) {
-  const { name, email, password, confirmPassword } = await req.json()
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    birth,
+    phone,
+    address,
+    gender,
+    medical,
+    em_name,
+    em_relation,
+    em_phone
+  } = await req.json()
+
   // name require
   if (!name) {
     return NextResponse.json({
@@ -37,8 +51,8 @@ export async function POST(req: Request) {
     }, { status: 422 })
   }
 
-  // email duplicate
   try {
+    // email duplicate
     const isEmailDup = await prisma.user.findFirst({
       where: { email }
     })
@@ -49,13 +63,43 @@ export async function POST(req: Request) {
       }, { status: 422 })
     }
 
+    // find serial number starts with A 
+    const latestUser = await prisma.user.findFirst({
+      where: {
+        serial_number: {
+          startsWith: 'A'
+        }
+      },
+      orderBy: {
+        serial_number: 'desc'
+      },
+      select: {
+        serial_number: true
+      }
+    })
+
+    const new_serial = (() => {
+      if (!latestUser) return 100
+      if (!latestUser.serial_number) return 100
+      return parseInt(latestUser.serial_number.slice(1)) + 1
+    })()
+
     // create user
     const hashPassword = await bcrypt.hash(password as string, 10)
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password: hashPassword
+        password: hashPassword,
+        birth,
+        phone,
+        address,
+        gender,
+        medical,
+        em_name,
+        em_relation,
+        em_phone,
+        serial_number: `A${new_serial}`
       }
     })
     if (newUser.id) {
@@ -68,6 +112,8 @@ export async function POST(req: Request) {
       }, { status: 500 })
     }
   } catch (e) {
+    console.log(e);
+
     return NextResponse.json({
       name: 'database',
       message: '資料庫錯誤，請重試'

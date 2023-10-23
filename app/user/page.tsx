@@ -73,7 +73,7 @@ export default function UserPage() {
       <div className="flex justify-between -mt-5">
         <TheTitle>個人頁面</TheTitle>
         <div className="flex mt-8">
-          <UserDropDownMenu defaultAction={params.get('action') as string || ''} />
+          <UserDropDownMenu />
         </div>
       </div>
       <Tabs value={tab}>

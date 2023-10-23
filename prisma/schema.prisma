@@ -58,6 +58,7 @@ enum ReservationState {
 
 model User {
   id               Int            @id @default(autoincrement())
+  serial_number    String?
   name             String
   email            String
   password         String
@@ -66,6 +67,14 @@ model User {
   point            Int            @default(0)
   schedule_service String?        @default("")
   email_varified   Boolean        @default(false)
+  gender           Gender         @default(UNKNOW)
+  birth            String?
+  phone            String?
+  medical          String?
+  em_name          String?
+  em_relation      String?
+  em_phone         String?
+  address          String?
   note             String?
   created_at       DateTime       @default(now())
   updated_at       DateTime       @updatedAt
@@ -84,6 +93,12 @@ enum Role {
   EDITOR
   TEACHER
   STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOW
 }
 
 model Discount {
