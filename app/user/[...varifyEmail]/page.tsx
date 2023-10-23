@@ -1,8 +1,6 @@
-'use client'
 import UpdateSession from "@/components/user/UpdateSession"
 import varifyEmail from "@/lib/varifyEmail"
 
-// eslint-disable-next-line @next/next/no-async-client-component
 export default async function VarifyEmail({ params }: { params: { varifyEmail: string[] } }) {
   const email = decodeURIComponent(params.varifyEmail[0])
   const hash = decodeURIComponent(params.varifyEmail[1])

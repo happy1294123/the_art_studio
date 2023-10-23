@@ -5,7 +5,7 @@
 import { transporter, mailOptions } from '@/lib/transporter'
 // import sendVarifyMail from '@/lib/sendVarifyMail'
 // import varify from '@/mailTemplate/varify.html'
-
+import { compareSync } from "bcryptjs"
 
 export default async function Home() {
   // sendVarifyMail('test@example.com')
@@ -25,9 +25,15 @@ export default async function Home() {
   // }
 
   // sm()
+  const email = 'happy1294123@gmail.com'
+  const hash = '$2a$10$O/.RtyBocGxpfmlBDMXhQ.h5UkKZkqVyf.MVDIykGZLZLq1jeFSFS'
+  const res = compareSync(`${email}_the-art-studio`, hash)
+  console.log(res);
+
 
   return (
     <>
+      test
       {/* {varify.replace('${html}', 'this is variable')} */}
       {/* <EmailTemplate /> */}
       {/* <TheTitle>主頁</TheTitle> */}
