@@ -45,6 +45,7 @@ export const options: NextAuthOptions = {
         return {
           ...token,
           id: user.id,
+          name: user.name,
           role: user.role,
           point: user.point,
           schedule_service: user.schedule_service,
@@ -59,6 +60,7 @@ export const options: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
+          name: token.name,
           role: token.role,
           point: token.point,
           schedule_service: token.schedule_service,

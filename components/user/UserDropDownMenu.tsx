@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 import { AiOutlineSchedule } from 'react-icons/ai'
 import { RiFileUserLine } from 'react-icons/ri'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import dynamic from 'next/dynamic'
 import { useSearchParams } from "next/navigation"
 const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
@@ -19,16 +19,21 @@ const EditPwdDialog = dynamic(() => import('@/components/user/EditPwdDialog'))
 const UserInfoDialog = dynamic(() => import('@/components/user/UserInfoDialog'))
 
 export default function UserDropDownMenu() {
-  const { data: session } = useSession()
+  const { data: session, update: updateSession } = useSession()
   const params = useSearchParams()
+  const [open, setOpen] = useState(false)
   const [openSetSkdDialog, setOpenSetSkdDialog] = useState(false)
   const [openUserInfo, setOpenUserInfo] = useState(false)
   const [openEditPwd, setOpenEditPwd] = useState(params.get('action') === 'editPwd')
 
+  useEffect(() => {
+    setOpen(false)
+  }, [openSetSkdDialog, openUserInfo, openEditPwd])
+
   return (
     <>
       {session &&
-        <DropdownMenu>
+        <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger className="h-7 p-1 flex outline-none">歡迎回來，{session?.user?.name}<IoMdArrowDropdownCircle className="mt-1 ml-1" /></DropdownMenuTrigger>
           <DropdownMenuContent >
             <DropdownMenuLabel>
@@ -52,7 +57,13 @@ export default function UserDropDownMenu() {
       }
       {openSetSkdDialog && <SelectScheduleServiceDialog openDialog={openSetSkdDialog} setOpenDialog={setOpenSetSkdDialog} />}
       {openEditPwd && <EditPwdDialog openDialog={openEditPwd} setOpenDialog={setOpenEditPwd} />}
-      {openUserInfo && <UserInfoDialog openDialog={openUserInfo} setOpenDialog={setOpenUserInfo} />}
+      {openUserInfo &&
+        <UserInfoDialog
+          openDialog={openUserInfo}
+          setOpenDialog={setOpenUserInfo}
+          userSession={session?.user}
+          updateSession={updateSession}
+        />}
     </>
   )
 }

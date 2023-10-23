@@ -69,7 +69,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
           修改密碼
         </DialogTitle>
         <DialogDescription className="text-2xl">
-          <form className="grid gap-2 text-black" onSubmit={e => e.preventDefault()}>
+          <form className="grid gap-2 text-fontColor/70" onSubmit={e => e.preventDefault()}>
             <div>
               <Label htmlFor='oldPwd' className='ml-3'>舊密碼</Label>
               <Input

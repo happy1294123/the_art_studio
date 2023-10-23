@@ -15,7 +15,6 @@ import { Dispatch, useState } from 'react'
 import RingLoader from 'react-spinners/RingLoader'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
-import { AiFillCheckCircle } from 'react-icons/ai'
 import { useSession } from 'next-auth/react'
 
 type Props = {
