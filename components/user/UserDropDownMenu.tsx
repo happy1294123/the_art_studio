@@ -16,13 +16,18 @@ const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/Sele
 const EditPwdDialog = dynamic(() => import('@/components/user/EditPwdDialog'))
 
 type Props = {
-  defaultAction: string
+  defaultAction?: string
 }
 
 export default function UserDropDownMenu({ defaultAction }: Props) {
   const { data: session } = useSession()
   const [openSetSkdDialog, setOpenSetSkdDialog] = useState(false)
-  const [openEditPwd, setOpenEditPwd] = useState(defaultAction === 'editPwd')
+  const [openEditPwd, setOpenEditPwd] = useState(() => {
+    if (defaultAction) {
+      return defaultAction === 'editPwd'
+    }
+    return false
+  })
 
   return (
     <>
