@@ -17,7 +17,9 @@ export default async function ForgetPwdCallback({ params, searchParams }: { para
   const email = decodeURIComponent(params.callback)
   const hash = searchParams.hash
   const isSuccess = await varifyEmail(email, hash)
-  resetPwd(email)
+  if (isAlive && isSuccess) {
+    await resetPwd(email)
+  }
 
   return (
     <>
