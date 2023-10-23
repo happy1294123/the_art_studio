@@ -15,10 +15,14 @@ import dynamic from 'next/dynamic'
 const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
 const EditPwdDialog = dynamic(() => import('@/components/user/EditPwdDialog'))
 
-export default function UserDropDownMenu() {
+type Props = {
+  defaultAction: string
+}
+
+export default function UserDropDownMenu({ defaultAction }: Props) {
   const { data: session } = useSession()
   const [openSetSkdDialog, setOpenSetSkdDialog] = useState(false)
-  const [openEditPwd, setOpenEditPwd] = useState(false)
+  const [openEditPwd, setOpenEditPwd] = useState(defaultAction === 'editPwd')
 
   return (
     <>

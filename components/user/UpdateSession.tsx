@@ -1,9 +1,8 @@
 'use client'
 import { useSession } from "next-auth/react"
-import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import ClipLoader from 'react-spinners/ClipLoader'
+import LoadingButton from "../LoadingButton"
 
 export default function UpdateSession() {
   const { update } = useSession()
@@ -14,13 +13,12 @@ export default function UpdateSession() {
   const [loading, setLoading] = useState(false)
   return (
     <div>
-      <Button className="flex-center mt-3 mx-auto" onClick={() => {
+      <LoadingButton className="flex-center mt-3 mx-auto w-[90px]" isLoading={loading} onClick={() => {
         setLoading(true)
         router.replace('/user')
-      }}>個人頁面</Button>
-      {loading && <div className="flex-center mx-auto mt-2">
-        <ClipLoader size={20} color="#D1C0AD" />
-      </div>}
+      }}>
+        個人頁面
+      </LoadingButton>
     </div>
   )
 }

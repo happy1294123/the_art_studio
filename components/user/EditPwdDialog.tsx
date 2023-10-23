@@ -50,6 +50,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
     })
     if (res.ok) {
       toast('修改密碼成功', getToastOption())
+      setOpenDialog(false)
     } else {
       const error = await res.json()
       setError(error)

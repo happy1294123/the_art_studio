@@ -22,16 +22,16 @@ export default async function ForgetPwdCallback({ params, searchParams }: { para
   }
 
   return (
-    <>
+    <div className="flex-center items-center" style={{ height: `calc(100vh - 200px)` }}>
       {isAlive ?
-        <div>{isSuccess ? <>
+        <div>{isSuccess ? <div className="bg-bgColorOther rounded-3xl md:p-10 p-6">
           <div className="grid place-content-center text-headingColor text-3xl text-center">
             <span>您的密碼已經重置</span>
           </div>
           <div className="text-center mt-2">
             <p>重置後密碼為:</p>
             <p>12345678</p>
-            <Link href='/login'>
+            <Link href='/user?action=editPwd'>
               <Button className="my-2">登入頁面</Button>
             </Link>
             <p className="text-sm text-gray-400">請於登入後修改密碼</p>
@@ -44,7 +44,7 @@ export default async function ForgetPwdCallback({ params, searchParams }: { para
             </div>
           </div>
           {/* <UpdateSession /> */}
-        </> : <>
+        </div> : <>
           <div className="grid place-content-center text-headingColor text-3xl text-center">
             <span>密碼重置失敗</span>
             請聯絡官方
@@ -53,6 +53,7 @@ export default async function ForgetPwdCallback({ params, searchParams }: { para
         : <div className="grid place-content-center text-headingColor text-3xl text-center">
           <span>此連結已經過期</span>
         </div>
-      }</>
+      }
+    </div>
   )
 }
