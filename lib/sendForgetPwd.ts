@@ -6,7 +6,7 @@ export default async function sendVarifyMail(email: string) {
   console.log('準備發送信件')
   const hash = hashSync(`${email}_the-art-studio`, 10)
   const dateTime = (new Date()).getTime()
-  const replaceUrl = `${process.env.NEXT_PUBLIC_HOST}/user/forgetPwd/${encodeURIComponent(email)}/${encodeURIComponent(hash)}/${encodeURIComponent(dateTime)}`
+  const replaceUrl = `${process.env.NEXT_PUBLIC_HOST}/user/forgetPwd/${encodeURIComponent(email)}?hash=${hash}&dateTime=${dateTime}`
 
   const res = await transporter.sendMail({
     ...mailOptions,

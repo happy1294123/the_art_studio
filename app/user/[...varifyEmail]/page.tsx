@@ -1,11 +1,17 @@
 import UpdateSession from "@/components/user/UpdateSession"
 import varifyEmail from "@/lib/varifyEmail"
 
-export default async function VarifyEmail({ params }: { params: { varifyEmail: string[] } }) {
-  const email = decodeURIComponent(params.varifyEmail[0])
-  const hash = decodeURIComponent(params.varifyEmail[1])
+export default async function VarifyEmail({
+  params,
+  searchParams
+}: {
+  params: { varifyEmail: string },
+  searchParams: { [key: string]: string }
+}) {
+
+  const email = decodeURIComponent(params.varifyEmail)
+  const hash = searchParams?.hash
   const isSuccess = await varifyEmail(email, hash)
-  console.log('isSuccess', isSuccess);
 
   return (
     <div>{isSuccess ? <>

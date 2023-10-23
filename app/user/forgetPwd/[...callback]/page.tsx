@@ -7,17 +7,16 @@ import { BsArrowRightShort } from "react-icons/bs"
 const checkIsAlive = (dateTime: string) => {
   const now = (new Date()).getTime()
   const delta = Math.abs(parseInt(dateTime) - now) / 36e5
-  console.log('delta', delta)
+  // console.log('delta', delta)
   // 少於兩小時
   return delta <= 2
 }
 
-export default async function ForgetPwdCallback({ params }: { params: { callback: string[] } }) {
-  const email = decodeURIComponent(params.callback[0])
-  const hash = decodeURIComponent(params.callback[1])
-  const isAlive = checkIsAlive(decodeURIComponent(params.callback[2]))
+export default async function ForgetPwdCallback({ params, searchParams }: { params: { callback: string }, searchParams: { [key: string]: string } }) {
+  const isAlive = checkIsAlive(searchParams.dateTime)
+  const email = decodeURIComponent(params.callback)
+  const hash = searchParams.hash
   const isSuccess = await varifyEmail(email, hash)
-
   resetPwd(email)
 
   return (

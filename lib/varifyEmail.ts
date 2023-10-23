@@ -3,8 +3,6 @@ import prisma from "./initPrisma"
 
 export default async function varifyEmail(email: string, hash: string): Promise<boolean> {
   const res = compareSync(`${email}_the-art-studio`, hash)
-  console.log(email, hash);
-  console.log('res', res);
 
   if (res) {
     const updateRes = await prisma.user.update({

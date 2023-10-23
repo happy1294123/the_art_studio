@@ -26,14 +26,17 @@ export default async function Home() {
 
   // sm()
   const email = 'happy1294123@gmail.com'
-  const hash = '$2a$10$O/.RtyBocGxpfmlBDMXhQ.h5UkKZkqVyf.MVDIykGZLZLq1jeFSFS'
+  const a = '%242a%2410%24QeOtujN3T4gFJ%2FKd7xeufOtUw7CiMkYUBkJPbfMl3iGzCA8VIRMzG'
+  // console.log(decodeURIComponent(a));
+
+  const hash = decodeURIComponent(a)
   const res = compareSync(`${email}_the-art-studio`, hash)
   console.log(res);
 
 
   return (
     <>
-      test
+      {/* test */}
       {/* {varify.replace('${html}', 'this is variable')} */}
       {/* <EmailTemplate /> */}
       {/* <TheTitle>主頁</TheTitle> */}
