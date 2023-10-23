@@ -10,10 +10,11 @@ type Props = {
 
 export default function DiscountTable({ receivement, receiveMutate }: Props) {
   return (<>
-    {receivement ? <>
+    {receivement && <>
       <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
         <DataTable columns={columns} data={receivement} mutate={receiveMutate} />
       </div>
-    </> : <span className="flex-center">目前沒有款項</span>}
+    </>}
+    {/* : <span className="flex-center">目前沒有款項</span> */}
   </>)
 }

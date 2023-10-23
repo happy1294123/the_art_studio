@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       }
     })
     if (newUser.id) {
-      sendVarifyMail(newUser.email)
+      await sendVarifyMail(newUser.email)
       return NextResponse.json({}, { status: 201 })
     } else {
       return NextResponse.json({
