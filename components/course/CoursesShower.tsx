@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, Suspense, useEffect } from 'react'
+import { useState, useMemo, Suspense } from 'react'
 import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
 import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDatePicker'
 import dateFormatter from '@/lib/dateFormatter'
@@ -22,16 +22,20 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
 
   return (
     <>
-      <div className="md:grid grid-cols-2 gap-8">
-        <div className="hidden h-full md:block mx-auto">
-          <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
-        </div>
+      <div className="gap-8">
         <div className="w-full">
           <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
           <DateHeading date={selectedDate} />
-          <Suspense fallback={[1, 2, 3].map(i => <CourseItemSkeleton key={i} />)}>
-            <CourseItems selectedDate={selectedDate} />
-          </Suspense >
+          <div className='flex gap-6'>
+            <div className='hidden md:block col'>
+              <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
+            </div>
+            <div className="col w-full">
+              <Suspense fallback={[1, 2, 3].map(i => <CourseItemSkeleton key={i} />)}>
+                <CourseItems selectedDate={selectedDate} />
+              </Suspense >
+            </div>
+          </div>
         </div>
       </div >
       <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>

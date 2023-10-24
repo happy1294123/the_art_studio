@@ -25,6 +25,19 @@ export async function POST(req: any) {
   const { reply, payment_id } = await req.json()
   const state = reply === 'success' ? 'SUCCESS' : 'ERROR'
 
+  const findPayment = await prisma.payment.findFirst({
+    where: {
+      id: payment_id
+    },
+    select: {
+      state: true
+    }
+  })
+  if (findPayment?.state === 'SUCCESS') {
+    return NextResponse.json('已經完成回覆', { status: 400 })
+  }
+
+
   const res = await prisma.payment.update({
     where: {
       id: payment_id
@@ -41,12 +54,19 @@ export async function POST(req: any) {
   // 購買點數
   if (!res.course_id) {
     const addPoint = parseInt(res.name.slice(0, -1))
+    // 刷新點數期限
+    const newPointDeadline = (() => {
+      const date = new Date()
+      date.setDate(date.getDate() + 30)
+      return date
+    })()
     await prisma.user.update({
       where: {
         id: res.user_id
       },
       data: {
-        point: { increment: addPoint }
+        point: { increment: addPoint },
+        point_deadline: newPointDeadline
       }
     })
     revalidateTag('myPoint')

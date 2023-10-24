@@ -20,10 +20,9 @@ async function myCourseFetcher(url: string): Promise<Record<string, Reservation[
   return await res.json()
 }
 
-async function myPointFetcher(url: string): Promise<number> {
+async function myPointFetcher(url: string): Promise<{ point: number, point_deadline: Date }> {
   const res = await fetch(url, { next: { tags: ['myPoint'] } })
-  const { point } = await res.json()
-  return point
+  return await res.json()
 }
 
 async function myPaymentFetcher(url: string): Promise<Payment[]> {
@@ -33,8 +32,7 @@ async function myPaymentFetcher(url: string): Promise<Payment[]> {
 
 async function unPayNumFetcher(url: string): Promise<number> {
   const res = await fetch(url, { next: { tags: ['unPayNum'] } })
-  const unPayNum = await res.json()
-  return unPayNum
+  return await res.json()
 }
 
 export default function UserPage() {

@@ -35,7 +35,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
   const [formData, setFormData] = useState({
     paymentId: payment.id,
     date: payment.receive_date,
-    price: payment.receive_price,
+    price: payment.price,
     account: payment.receive_account,
     note: payment.receive_note,
   })
@@ -64,9 +64,9 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
       error.date = '請填寫匯款日期'
       setError(prev => ({ ...prev, date: '請填寫匯款日期' }))
     }
-    if (!formData.price) {
-      setError(prev => ({ ...prev, price: '請填寫匯款金額' }))
-    }
+    // if (!formData.price) {
+    //   setError(prev => ({ ...prev, price: '請填寫匯款金額' }))
+    // }
     if (!formData.account || formData.account.length !== 5) {
       setError(prev => ({ ...prev, account: '請填寫您的帳號末5碼' }))
     }
@@ -94,12 +94,13 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="bg-white">
-        <DialogHeader>
+        <DialogHeader className="text-left">
           <DialogTitle className="text-xl">匯款資訊</DialogTitle>
-          <ul>
+          <ul className="ml-2">
             <li>{payment.course_id ? '課程' : '點數'}：{payment.name}</li>
-            <li>銀行：XXXXXX</li>
-            <li>帳號：XXXXXX</li>
+            <li>戶名：何亭儀</li>
+            <li>銀行：玉山銀行(808) 北投分行</li>
+            <li>帳號：0864979149975</li>
             <li>金額：NT$ {payment.price}</li>
           </ul>
           <hr />
@@ -112,6 +113,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
           </Popover>
         </DialogTitle>
         <form className="-mt-2 space-y-2" onSubmit={handleSubmit}>
+          <div className="ml-2">金額：NT$ {payment.price}</div>
           <div>
             <Input
               type="text"
@@ -125,7 +127,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
             />
             {error.date && <span className="ml-2 text-primary/80">{error.date}</span>}
           </div>
-          <div>
+          {/* <div>
             <Input
               type="number"
               className={`rounded-full h-9 border-gray-400 ${error.price && 'border-primary'}`}
@@ -135,7 +137,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               disabled={payment.state !== 'PENDING'}
             />
             {error.price && <span className="ml-2 text-primary/80">{error.price}</span>}
-          </div>
+          </div> */}
           <div>
             <Input
               type="text"

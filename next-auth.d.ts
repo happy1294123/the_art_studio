@@ -9,6 +9,7 @@ declare module 'next-auth' {
       email: string,
       role: string,
       point: number,
+      point_deadline: DateTime,
       schedule_service: string,
       email_varified: number
     } & DefaultSession
@@ -20,6 +21,7 @@ declare module 'next-auth' {
     email: string,
     role: string,
     point: number,
+    point_deadline: DateTime,
     schedule_service: string,
     email_varified: number
   }
@@ -32,6 +34,7 @@ declare module 'next-auth/jwt' {
     email: string,
     role: string,
     point: number,
+    point_deadline: DateTime,
     schedule_service: string,
     email_varified: number
   }

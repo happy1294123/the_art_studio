@@ -41,6 +41,7 @@ export function DataTable<TData, TValue>({
   const [openDialog, setOpenDialog] = useState(false)
   const [discount, setDiscount] = useState<Discount>()
   const [discountUsers, setDiscountUsers] = useState<{
+    serial_number: number,
     name: string,
     email: string
   }[]>()
@@ -127,15 +128,17 @@ export function DataTable<TData, TValue>({
         <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>使用名單</DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="pr-6">
               {discountUsers.length
                 ? (<>
-                  <div className="grid grid-cols-2 text-center -ml-10">
+                  <div className="grid grid-cols-3 text-center -ml-10 text-headingColor">
+                    <span>編號</span>
                     <span>姓名</span>
-                    <span>email</span>
+                    <span>電子郵件</span>
                   </div>
                   {discountUsers.map(user => (
-                    <div key={user.email} className="grid grid-cols-2 text-center -ml-10">
+                    <div key={user.email} className="grid grid-cols-3 text-center -ml-10">
+                      <span>{user.serial_number}</span>
                       <span>{user.name}</span>
                       <span>{user.email}</span>
                     </div>

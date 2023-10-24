@@ -16,6 +16,7 @@ export async function GET(req: any) {
   })
 
   const simpleRes = res.map(r => ({
+    serial_number: r.user.serial_number,
     name: r.user.name,
     email: r.user.email
   }))

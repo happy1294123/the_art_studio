@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/dialog"
 import getToastOption from "@/lib/getToastOption"
 import { Payment } from "@prisma/client"
-import { Dispatch } from "react"
+import { Dispatch, useState } from "react"
 import toast from "react-hot-toast"
 import { KeyedMutator } from "swr"
+import LoadingButton from "@/components/LoadingButton"
 
 type props = {
   openDialog: boolean,
@@ -20,7 +21,9 @@ type props = {
 }
 
 export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymentMutator }: props) {
+  const [isLoading, setIsLoading] = useState(false)
   const handleReply = async (reply: string) => {
+    setIsLoading(true)
     const res = await fetch('/api/manage/receivement', {
       method: 'POST',
       body: JSON.stringify({
@@ -34,8 +37,10 @@ export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymen
       paymentMutator()
       setOpenDialog(false)
     } else {
-      toast('回覆失敗', getToastOption('error'))
+      const message = await res.json()
+      toast(message || '回覆失敗', getToastOption('error'))
     }
+    setIsLoading(false)
   }
 
   return (
@@ -45,8 +50,12 @@ export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymen
           <DialogTitle className="text-center">回覆收款</DialogTitle>
           <DialogDescription>
             <div className="flex gap-4 mt-4">
-              <Button variant="secondary" className="w-full" onClick={() => handleReply('error')}>有誤</Button>
-              <Button className="w-full" onClick={() => handleReply('success')}>正確</Button>
+              <LoadingButton
+                isLoading={isLoading}
+                className="w-full"
+                onClick={() => handleReply('success')}
+                disabledWhileLoading
+              >已收到</LoadingButton>
             </div>
           </DialogDescription>
         </DialogHeader>

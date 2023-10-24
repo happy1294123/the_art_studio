@@ -12,7 +12,8 @@ export async function GET(req: any) {
       id: token.id
     },
     select: {
-      point: true
+      point: true,
+      point_deadline: true
     }
   })
   return NextResponse.json(res)
@@ -28,7 +29,8 @@ export async function POST(req: any) {
       data: {
         user_id: token.id,
         name: `${point}點`,
-        price
+        price,
+        category: 'POINT'
       }
     })
     revalidateTag('unPayNum')

@@ -33,7 +33,8 @@ export async function POST(req: any) {
         user_id: token.id as number,
         plan_name: body.plan_name,
         plan_value: +body.plan_value,
-        state: body.plan_name.startsWith('單次') && +body.plan_value > 0 ? 'PENDING' : 'SUCCESS'
+        state: body.plan_name.startsWith('單次') && +body.plan_value > 0 ? 'PENDING' : 'SUCCESS',
+        category: body.plan_name.startsWith('單次') ? 'SINGLE' : 'POINT'
       }
     })
     if (!newData) NextResponse.json('預約失敗', { status: 500 })
@@ -60,7 +61,8 @@ export async function POST(req: any) {
       await prisma.userDiscount.create({
         data: {
           user_id: token.id,
-          discount_id: body.discount_id
+          discount_id: body.discount_id,
+          course_id: body.course_id
         }
       })
     }
@@ -73,7 +75,8 @@ export async function POST(req: any) {
           name: course.name,
           price: +body.plan_value,
           course_id: course.id,
-          description: `${course.date} ${course.start_time}~${course.end_time}`
+          description: `${course.date} ${course.start_time}~${course.end_time}`,
+          category: 'SINGLE'
         }
       })
       result.paymentId = newPayment.id
@@ -81,6 +84,8 @@ export async function POST(req: any) {
 
     return NextResponse.json(result, { status: 201 })
   } catch (error) {
+    console.log(error);
+
     return NextResponse.json('未知錯誤', { status: 500 })
   }
 }

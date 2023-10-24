@@ -22,7 +22,7 @@ type Props = {
 export default function CourseItem({ course, mutate, mutateReservation, isInUserPage = false }: Props) {
   const id_date = useSearchParams().get('id_date')
   const [open, setOpen] = useState(id_date?.split('_')[0] === String(course.id) ? true : false)
-  const current_rez = course.Reservation.length
+  const current_rez = course.Reservation.filter(r => r.state === 'SUCCESS').length
   const { data: session } = useSession()
   const hasReserve = Boolean(course.Reservation.find(r => r.user_id === session?.user.id))
   const hasCancel = Boolean(course.Reservation.find(r => r.user_id === session?.user.id && r.state === 'CANCEL'))
@@ -40,6 +40,24 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
     } else {
       return <Button variant="secondary">待開課</Button>
     }
+  }
+
+  const getCoursePageSpan = () => {
+
+    if (current_rez === course.total_rez) {
+      return <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
+    }
+    if (hasReserve) {
+      let spanText = hasCancel ? '已取消' : '已預約'
+      const pending = course.Reservation.find(r => r.state === 'PENDING' && r.user_id === session?.user.id)
+      if (pending) {
+        spanText = '已保留'
+      }
+      return <span className="px-2.5 text-sm mt-auto">
+        {spanText}
+      </span>
+    }
+    return <Button>預約</Button>
   }
 
 
@@ -69,18 +87,17 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
               <span className="text-xs">{current_rez}/{course.total_rez}</span>
             </div>
             {isInUserPage && getUserPageBtn()}
-            {/* {isInUserPage && needPay
-              ? <Button>待匯款</Button>
-              : isInUserPage && (current_rez >= course.baseline_rez
-                ? <Button>已開課</Button>
-                : <Button variant="secondary">待確認</Button>)} */}
 
-            {!isInUserPage && (current_rez === course.total_rez
+            {!isInUserPage && getCoursePageSpan()}
+
+            {/* {!isInUserPage && (current_rez === course.total_rez
               ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
               : !isInUserPage && hasReserve
-                ? <span className="px-2.5 text-sm mt-auto">{hasCancel ? '已取消' : '已預約'}</span>
+                ? <span className="px-2.5 text-sm mt-auto">
+                  {hasCancel ? '已取消' : '已預約'}
+                </span>
                 : <Button>預約</Button>
-            )}
+            )} */}
           </div>
         </div>
       </div >

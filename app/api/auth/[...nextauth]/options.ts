@@ -48,6 +48,7 @@ export const options: NextAuthOptions = {
           name: user.name,
           role: user.role,
           point: user.point,
+          point_deadline: user.point_deadline,
           schedule_service: user.schedule_service,
           email_varified: user.email_varified
         }
@@ -63,6 +64,7 @@ export const options: NextAuthOptions = {
           name: token.name,
           role: token.role,
           point: token.point,
+          point_deadline: token.point_deadline,
           schedule_service: token.schedule_service,
           email_varified: token.email_varified
         }

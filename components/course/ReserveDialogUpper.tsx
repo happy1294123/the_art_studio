@@ -1,4 +1,4 @@
-import { Dispatch, useMemo } from 'react'
+import { Dispatch, useMemo, useState } from 'react'
 import { BiTime } from 'react-icons/bi'
 import Image from "next/image"
 import {
@@ -23,6 +23,7 @@ import { KeyedMutator } from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import { useSession } from 'next-auth/react'
 import { Course, Reservation } from '@/type'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 type Props = {
   course: Course,
@@ -39,21 +40,31 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
   }, [course.date])
   const { update: updateSession } = useSession()
 
+  const [checking, setChecking] = useState(false)
   const handleCancelCourse = async () => {
+    setChecking(true)
     const checkRes = await fetch(`/api/user/course/checkCancel?course_id=${course.id}`)
     if (!checkRes.ok) {
       console.log('檢查錯誤');
+      setChecking(false)
       return
     }
     const checkResData = await checkRes.json()
+    console.log(checkResData);
+
     if (checkResData.type === 'alert') {
       toast(checkResData.message, getToastOption('error'))
+      setChecking(false)
       return
     }
+    if (checkResData.hasDiscount) {
+      alert('此折扣碼優惠將無法再使用')
+    }
     const isConfirm = confirm(checkResData.message)
-    if (!isConfirm) return
-    // TODO 討論更改課程流程
-    // TODO 取消免費體驗的流程(折扣碼)
+    if (!isConfirm) {
+      setChecking(false)
+      return
+    }
     if (checkResData.stateTo === 'PENDING') return
 
     const res = await fetch('/api/user/course', {
@@ -73,6 +84,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
         toast(`退還${checkResData.returnPoint}點點數`, getToastOption('info'))
       }
     }
+    setChecking(false)
   }
 
   const currentCourseUrl = useMemo(() => {
@@ -134,9 +146,13 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
             <DropdownMenuContent className="bg-bgColorOther text-headingColor drop-shadow-md border-headingColor data-[state=open]:animate-[dialog-content-show_300ms]
                     data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[5rem]">
               <DropdownMenuLabel >
-                <div className="cursor-pointer flex gap-1" onClick={handleCancelCourse}>
-                  <TbCalendarCancel className="my-auto" />取消預約
-                </div >
+                {checking
+                  ? <div className="flex-center px-7">
+                    <ClipLoader size={20} color="#D1C0AD" />
+                  </div>
+                  : <div className="cursor-pointer flex gap-1" onClick={handleCancelCourse}>
+                    <TbCalendarCancel className="my-auto" />取消預約
+                  </div >}
               </DropdownMenuLabel>
             </DropdownMenuContent>
           </DropdownMenu>}

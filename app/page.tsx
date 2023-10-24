@@ -8,7 +8,12 @@ import { transporter, mailOptions } from '@/lib/transporter'
 // import { compareSync } from "bcryptjs"
 
 // import prisma from '@/lib/initPrisma'
-import { promises as fs } from 'fs';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default async function Home() {
   // const { serial_number } = await prisma.user.findFirst({
@@ -86,6 +91,19 @@ export default async function Home() {
 
   return (
     <>
+      {/* <Card className='mb-4'>
+        <CardContent>
+          <div className='text-center text-3xl -mb-4 mt-3 flex justify-between'>
+            <span className='text-headingColor text-left'>
+              剩餘點數
+              <p className='text-base mt-1'>使用期限：2023/10/30</p>
+            </span>
+            <div className='my-auto'>
+              38
+            </div>
+          </div>
+        </CardContent>
+      </Card> */}
       {/* test */}
       {/* {varify.replace('${html}', 'this is variable')} */}
       {/* <EmailTemplate /> */}

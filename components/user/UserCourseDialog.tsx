@@ -11,7 +11,6 @@ import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { Course, Reservation } from '@/type'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 

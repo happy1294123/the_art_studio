@@ -38,7 +38,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "user.name",
-    header: '用戶'
+    header: () => <div className="w-14">用戶</div>
   },
   {
     accessorKey: "name",

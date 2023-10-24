@@ -1,7 +1,7 @@
-import { useState, useEffect, Dispatch, useRef } from 'react'
+import { useState, useEffect, Dispatch } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { BsFillCheckCircleFill } from 'react-icons/bs'
+import { BsFillCheckCircleFill, BsInfoCircleFill } from 'react-icons/bs'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -156,13 +156,25 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
             animate={{ opacity: 1 }}
           >
             <div className="grid place-items-center h-[600px]">
-              <div className="my-6">
-                <BsFillCheckCircleFill className="mx-auto text-green-800 text-4xl mb-1" />
-                <span className="flex text-[50px] gap-3">預約成功</span>
-                <div className="text-center text-gray-400">{plan.label}</div>
-                {plan.label.startsWith('點數') && <div className="text-center text-gray-400">剩餘點數{`${session?.user?.point}`}點</div>}
-                {plan.label.startsWith('單次') && paymentId && <div className='flex-center mt-1'><Button className='' onClick={() => router.push(`/user?tab=payment&id=${paymentId}`)}>前往匯款</Button></div>}
-              </div>
+              {plan.label.startsWith('點數')
+                && <div className="my-6">
+                  <BsFillCheckCircleFill className="mx-auto text-green-800 text-4xl mb-1" />
+                  <span className="flex text-[50px] gap-3">預約成功</span>
+                  <div className="text-center text-gray-400">{plan.label}</div>
+                  <div className="text-center text-gray-400">剩餘點數{`${session?.user?.point}`}點</div>
+                </div>}
+
+              {plan.label.startsWith('單次')
+                && <div className="my-6">
+                  <BsInfoCircleFill className="mx-auto text-headingColor text-4xl mb-1" />
+                  <span className="flex text-[50px] gap-3">保留預約</span>
+                  <div className="text-center text-gray-400">{plan.label}</div>
+                  <div className='text-gray-400 text-center'>
+                    <p>匯款完成後</p>
+                    <p>即可完成預約</p>
+                  </div>
+                  {paymentId && <div className='flex-center mt-1'><Button className='' onClick={() => router.push(`/user?tab=payment&id=${paymentId}`)}>前往匯款</Button></div>}
+                </div>}
               <div className="w-full mt-auto">
                 <div className="text-center max-w-fit mx-auto text-gray-400 cursor-pointer" onClick={() => setOpen(false)}>繼續選課</div>
                 <Link href="/user"><Button variant="secondary" className="w-full h-10 my-3 text-xl">查看個人課表</Button></Link>
