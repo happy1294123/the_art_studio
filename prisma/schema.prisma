@@ -35,6 +35,14 @@ model Course {
   @@map("courses")
 }
 
+model CourseType {
+  id    Int    @id @default(autoincrement())
+  name  String
+  color String
+
+  @@map("course_type")
+}
+
 model Reservation {
   course     Course           @relation(fields: [course_id], references: [id])
   course_id  Int

@@ -18,7 +18,7 @@ export default function UserPointDetail() {
     <div>
       {!pointDetails
         ? <div className="flex-center">
-          <ClipLoader />
+          <ClipLoader color="#D1C0AD" />
         </div>
         : pointDetails?.map(detail => (
           <UserPointDetailItem key={String(detail.created_at)} detail={detail} />

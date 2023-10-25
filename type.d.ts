@@ -1,5 +1,5 @@
 import { number } from "zod"
-import { Payment } from "@prisma/client"
+import { Payment, ReservationState, Reservation } from "@prisma/client"
 
 type Todo = {
   userId: number,
@@ -30,13 +30,7 @@ type Course = {
   start_time: string,
   end_time: string,
   teacher_id: number,
-  Reservation: {
-    plan_name: any
-    state: string
-    course_id: number,
-    user_id: number,
-    created_at: string
-  }[],
+  Reservation: Reservation[],
   Payment: Payment[],
   total_rez: number,
   baseline_rez: number,

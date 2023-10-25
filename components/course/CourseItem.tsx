@@ -86,18 +86,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
               <GoPerson className="text-xs mr-[2px] mt-[1px]" />
               <span className="text-xs">{current_rez}/{course.total_rez}</span>
             </div>
-            {isInUserPage && getUserPageBtn()}
-
-            {!isInUserPage && getCoursePageSpan()}
-
-            {/* {!isInUserPage && (current_rez === course.total_rez
-              ? <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
-              : !isInUserPage && hasReserve
-                ? <span className="px-2.5 text-sm mt-auto">
-                  {hasCancel ? '已取消' : '已預約'}
-                </span>
-                : <Button>預約</Button>
-            )} */}
+            {isInUserPage ? getUserPageBtn() : getCoursePageSpan()}
           </div>
         </div>
       </div >

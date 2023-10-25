@@ -1,3 +1,5 @@
+
+
 export default function getColorByCourseType(type: string | null): string {
   switch (type) {
     case '空中課程':
@@ -6,8 +8,6 @@ export default function getColorByCourseType(type: string | null): string {
       return '#D9CACA'
     case '兒童課程':
       return '#DCC1A7'
-    case '新開課程':
-      return '#F3E2BC'
     default:
       return '#000'
   }

@@ -31,7 +31,17 @@ export async function GET(req: any) {
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
   const allCourses = await prisma.course.findMany({
     include: {
-      teacher: true
+      teacher: true,
+      Reservation: {
+        include: {
+          user: {
+            select: {
+              serial_number: true,
+              name: true,
+            }
+          }
+        }
+      }
     }
   })
   return NextResponse.json(allCourses)

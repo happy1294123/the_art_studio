@@ -24,5 +24,25 @@
        background-color: #D1C0AD;
        border-color: #D1C0AD;
        color: #947964;
-   }   
+   }
+   @media (max-width:768px) {
+       :global(.fc-toolbar h2) {
+            position: block;
+            text-align: center;
+            width: max-content;
+            // margin-top: -50px;
+            margin: -50px -100px 0;
+            font-size: 20px;
+        }
+        :global(.fc-header-toolbar) {
+            margin-top: 30px;
+        }
+        :global(.fc-view-harness) {
+            font-size: 4px;
+            overflow-x: auto;
+        }
+        :global(.fc-event-main) {
+            font-size: 2px;
+        }
+   }
 }

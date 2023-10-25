@@ -1,3 +1,4 @@
+'use client'
 // import TheTitle from '@/components/TheTitle'
 // import TestReplace from '@/components/TestReplace'
 // import EmailTemplate from '@/components/email/EmailTemplate'
@@ -14,8 +15,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { TestContent } from '@/lib/contexts//TestContent'
+import { useContext } from 'react'
 
-export default async function Home() {
+export default function Home() {
   // const { serial_number } = await prisma.user.findFirst({
   //   where: {
   //     serial_number: {
@@ -86,11 +90,20 @@ export default async function Home() {
   //   }
   // })
   // console.log(res);
-
+  const fake = {
+    color: 'white',
+    name: 'allen'
+  }
 
 
   return (
     <>
+
+      {/* <TestContent.Provider value={fake}>
+
+        <TestComponent />
+      </TestContent.Provider> */}
+
       {/* <Card className='mb-4'>
         <CardContent>
           <div className='text-center text-3xl -mb-4 mt-3 flex justify-between'>
@@ -113,5 +126,29 @@ export default async function Home() {
       {/* <TestMotion /> */}
       {/* {process.env.HOST} */}
     </>
+  )
+}
+
+const useTestHook = (newVal?: string) => {
+  const fake = useContext(TestContent)
+
+
+  if (!fake) {
+    throw new Error('fake error')
+  }
+
+  if (newVal) {
+    fake.color = newVal
+  }
+  return fake
+}
+
+const TestComponent = () => {
+  const fake = useTestHook('red')
+
+  return (<div>
+    {JSON.stringify(fake)}
+    test com
+  </div>
   )
 }

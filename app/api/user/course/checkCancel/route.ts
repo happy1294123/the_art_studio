@@ -23,9 +23,6 @@ export async function GET(req: any) {
     }
   })
 
-
-  // console.log(res.plan_name.startsWith('單次') && res.course.Payment.find((p: { user_id: number }) => p.user_id === token.id).state === 'CHECKING');
-
   let hasDiscount = false
   const userDiscount = await prisma.userDiscount.findFirst({
     where: {
@@ -57,9 +54,9 @@ export async function GET(req: any) {
   }
 
   // 點數
-  const reservationTime = res?.created_at.getTime() as number
+  const nowTime = (new Date()).getTime() as number
   const startCourseTime = (new Date(`${res?.course.date} ${res?.course.start_time}`)).getTime()
-  const deltaHour = Math.abs(reservationTime - startCourseTime) / 36e5
+  const deltaHour = Math.abs(nowTime - startCourseTime) / 36e5
   if (deltaHour > 24) {
     return NextResponse.json({ stateTo: 'delete row', returnPoint: res.plan_value, message: '可全額退還點數，是否要取消預約？', hasDiscount })
   } else if (deltaHour > 3 && deltaHour <= 24) {

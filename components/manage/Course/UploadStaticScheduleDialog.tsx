@@ -66,7 +66,7 @@ export default function UploadStaticScheduleDialog({ openDialog, setOpenDialog }
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogContent className='bg-white'>
         <DialogHeader>
-          <DialogTitle>更新靜態課表</DialogTitle>
+          <DialogTitle>靜態課表</DialogTitle>
           <DialogDescription>
             <div className='flex-center mt-2'>
               <Image src={preViewSrc} width={500} height={600} alt="course_schedule" />

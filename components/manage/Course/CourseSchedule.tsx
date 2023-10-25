@@ -5,25 +5,41 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import zhCn from '@fullcalendar/core/locales/zh-cn';
 import style from './style.module.scss'
-import { useState, useRef, useMemo } from 'react';
-import getColorByCourseType from '@/lib/course/getColorByCourseType'
-import EditCourseItem from '@/components/manage/Course/EditCourseItem'
+import { useState, useRef, useMemo, useEffect } from 'react';
 import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
-import { KeyedMutator } from 'swr'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
-import { Course, Teacher } from '@/type'
+import { Course } from '@/type'
+import { Progress } from "@/components/ui/progress"
 const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
+import CourseTypeDialog from './CourseTypeDialog'
+import { useCourse } from '@/lib/contexts/ManageCourseContent'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
+import CourseDetail from './CourseDialog/CourseDetail'
+const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))
+import { Switch } from "@/components/ui/switch"
+import { Label } from '@/components/ui/label'
 
-type Props = {
-  courses?: Course[],
-  coursesMutate: KeyedMutator<Course[]>,
-  teacherOpt?: Teacher[]
-}
+export default function CourseSchedule() {
+  const {
+    courses,
+    coursesMutate,
+    courseType,
+    courseTypeMutate,
+    teacherOpt,
+  } = useCourse()
+  const [courseForm, setCourseForm] = useState<Partial<Course> | null>(null)
+  useEffect(() => {
+    if (!courseForm) return
+    const selectedCourse = courses?.find(c => c.id === courseForm.id)
+    if (!selectedCourse) return
+    if (courseForm?.Reservation?.length !== selectedCourse?.Reservation.length) {
+      setCourseForm(selectedCourse)
+    }
+  }, [courses, courseForm])
 
-export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Props) {
   const events = useMemo(() => {
     return courses?.map(course => ({
       title: course.name,
@@ -31,10 +47,13 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
       date: course.date,
       start: `${course.date.replaceAll('/', '-')} ${course.start_time}`,
       end: `${course.date.replaceAll('/', '-')} ${course.end_time}`,
-      color: getColorByCourseType(course.type),
-      textColor: '#000'
+      color: courseType.find((type: { name: string | null }) => type.name === course.type)?.color,
+      textColor: '#000',
+      reservationNum: course.Reservation.length,
+      base_rez: course.baseline_rez,
+      total_rez: course.total_rez,
     }))
-  }, [courses])
+  }, [courseType, courses])
 
   const calendarRef = useRef(null)
   const handleDateClick = (dateInfo: any) => {
@@ -57,6 +76,7 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     // add course
     if (dateInfo.view.type === 'dayGridWeek') {
       const date = dateFormatter(clickDate)
+      setDialogState('modify')
       setCourseForm({
         name: '',
         type: '空中課程',
@@ -72,14 +92,13 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     }
   }
 
-  const [courseForm, setCourseForm] = useState<Partial<Course> | null>()
   const handleClickEvent = (eventInfo: any) => {
     const clickedCourse = courses?.find(c => c.id === eventInfo.event.extendedProps.courseId)
     if (!clickedCourse) {
       alert('有錯誤')
       return
     }
-    // console.log(clickedCourse)
+
     setCourseForm(clickedCourse)
   }
 
@@ -95,7 +114,7 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     })
     const clickedCourse = courses?.find(c => c.id === courseId) as Course
     clickedCourse.date = date
-    await coursesMutate(clickedCourse)
+    await coursesMutate()
     setCourseForm(clickedCourse)
   }
 
@@ -154,58 +173,92 @@ export default function NewCourseForm({ courses, coursesMutate, teacherOpt }: Pr
     }
   }
 
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openUploadScheduleDialog, setOpenUploadScheduleDialog] = useState(false)
+  const [openCourseTypeDialog, setCourseTypeDialog] = useState(false)
+  const [dialogState, setDialogState] = useState('courseDetail')
   return (<>
-    {courseForm && <EditCourseItem course={courseForm} setCourseForm={setCourseForm} teacherOpt={teacherOpt} mutate={coursesMutate} />}
-    {
-      <div className={`bg-bgColorOther p-3 rounded-3xl ${style.myCalendar}`}>
-        <FullCalendar
-          initialView="dayGridMonth"
-          height='auto'
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          locale={zhCn}
-          customButtons={{
-            copyWeekToNextWeek: {
-              text: '下週照舊',
-              click: handleCopyWeekToNextWeek,
-            },
-            copyWeekToNext3Week: {
-              text: '下3週照舊',
-              click: handleCopyWeekToNext3Week
-            }
-          }}
-          headerToolbar={{
-            left: 'prev,next',
-            center: 'title',
-            right: 'dayGridMonth,dayGridWeek'
-          }}
-          selectable={true}
-          datesSet={handleChangeView}
-          // viewDidMount={handleChangeView}
-          dateClick={handleDateClick}
-          eventDrop={handleDrag}
-          droppable={false}
-          editable={true}
-          eventClick={handleClickEvent}
-          events={events}
-          eventContent={renderEventContent}
-          eventDisplay='block'
-          eventTimeFormat={{
-            hour: 'numeric',
-            minute: '2-digit',
-            meridiem: 'short'
-          }}
-          ref={calendarRef}
-        />
-      </div>}
-    <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenDialog(true)} >更新靜態課表</Button>
-    {openDialog && <UploadStaticScheduleDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />}
+    {!!courseForm && (<>
+      <Dialog open={!!courseForm} onOpenChange={() => setCourseForm(null)}>
+        <DialogContent className="bg-white">
+          <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
+            <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
+            <Switch
+              id='dialog-state'
+              checked={dialogState === 'modify'}
+              onCheckedChange={checked => setDialogState(checked ? 'modify' : 'courseDetail')}
+            />
+          </div>
+          {dialogState === 'courseDetail' && <CourseDetail courseForm={courseForm as Course} />}
+          {dialogState === 'modify' && <ModifyForm courseForm={courseForm} setCourseForm={setCourseForm} />}
+        </DialogContent>
+      </Dialog>
+    </>)}
+
+    <div className={`bg-bgColorOther p-3 rounded-3xl relative overflow-auto ${style.myCalendar}`}>
+      <FullCalendar
+        initialView="dayGridMonth"
+        height='auto'
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        locale={zhCn}
+        customButtons={{
+          copyWeekToNextWeek: {
+            text: '下週照舊',
+            click: handleCopyWeekToNextWeek,
+          },
+          copyWeekToNext3Week: {
+            text: '下3週照舊',
+            click: handleCopyWeekToNext3Week
+          }
+        }}
+        headerToolbar={{
+          left: 'prev,next',
+          center: 'title',
+          right: 'dayGridMonth,dayGridWeek'
+        }}
+        selectable={true}
+        datesSet={handleChangeView}
+        // viewDidMount={handleChangeView}
+        dateClick={handleDateClick}
+        eventDrop={handleDrag}
+        droppable={false}
+        editable={true}
+        eventClick={handleClickEvent}
+        events={events}
+        eventContent={renderEventContent}
+        eventDisplay='block'
+        eventTimeFormat={{
+          hour: 'numeric',
+          minute: '2-digit',
+          meridiem: 'short'
+        }}
+        ref={calendarRef}
+      />
+    </div>
+    <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
+    <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
+    {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
+    {openCourseTypeDialog && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
   </>)
 }
 
 function renderEventContent(eventInfo: any) {
-  return (<div className='px-2'>
-    <div className='grid'>{eventInfo.timeText}</div>
-    <div className='grid'>{eventInfo.event.title}</div>
+  const props = eventInfo.event._def.extendedProps
+
+  return (<div className='md:p-2 py-1 space-y-1'>
+    <div style={{ display: 'flex' }}>
+      {eventInfo.timeText}
+      {/* {props.reservationNum >= props.base_rez
+        && <span className='ml-auto mt-1'>
+          <BsCheck />
+        </span>
+      } */}
+    </div>
+    <div className='hidden md:block'>{eventInfo.event.title}</div>
+    <div className='relative flex'>
+      <div className="absolute flex-center w-full z-10 text-black/60">
+        {props.reservationNum}/{props.total_rez}
+      </div>
+      <Progress value={(props.reservationNum / props.total_rez) * 100} className='mt-[1px]' />
+    </div>
   </div>)
 }

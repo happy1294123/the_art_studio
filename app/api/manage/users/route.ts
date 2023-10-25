@@ -8,6 +8,8 @@ export async function GET(req: any) {
 
   const res = await prisma.user.findMany({
     select: {
+      id: true,
+      serial_number: true,
       name: true,
       email: true,
       role: true,
