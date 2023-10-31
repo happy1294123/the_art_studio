@@ -1,7 +1,6 @@
 "use client"
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -18,6 +17,8 @@ import {
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { BiSearch } from 'react-icons/bi'
+import { User } from "@prisma/client"
+import UserDetailDialog from "./UserDetailDialog"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -31,10 +32,6 @@ export function DataTable<TData, TValue>({
   mutate
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState('')
-  // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-  //   []
-  // )
-
   const table = useReactTable({
     data,
     columns,
@@ -51,19 +48,24 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const [selectedUser, setSelectedUser] = useState<User | undefined>()
+  const handleClickRow = (row: User) => {
+    setSelectedUser(row)
+  }
+
   return (<>
-    {data.length > 0 && <div className="flex w-fit ml-auto justify-end items-center relative">
-      <div className="absolute left-3 text-gray-500">
+    {data.length > 0 && <div className="flex w-fit ml-auto justify-end items-center relative ">
+      <div className="absolute left-3 text-headingColor">
         <BiSearch />
       </div>
       <Input
         placeholder="搜尋"
         value={globalFilter ?? ''}
         onChange={e => setGlobalFilter(String(e.target.value))}
-        className="max-w-[200px] rounded-full border-headingColor pl-8"
+        className="max-w-[200px] rounded-full border-headingColor/70 text-headingColor pl-8"
       />
     </div>}
-    <div className="rounded-md">
+    <div className={`rounded-md whitespace-nowrap`}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -89,7 +91,8 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className="border-headingColor"
+                className="border-headingColor cursor-pointer"
+                onClick={() => handleClickRow(row.original as User)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -108,5 +111,6 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
+    {selectedUser && <UserDetailDialog selectedUser={selectedUser} setSelectedUser={setSelectedUser} userMutate={mutate} />}
   </>)
 }

@@ -13,7 +13,7 @@ type Props = {
   usersMutate: KeyedMutator<User[]>
 }
 
-export default function MemberTable({ users, usersMutate }: Props) {
+export default function UsersTable({ users, usersMutate }: Props) {
   const [openDialog, setOpenDialog] = useState(false)
   return (<>
     <Tabs defaultValue="student">

@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import dateFormatter from "@/lib/dateFormatter"
 
 const roleMap = {
   STUDENT: '學生',
@@ -30,7 +31,32 @@ const handleSelectFilter = (value: string, tableMeta: any) => {
 
 const roleFilterOptions = ['無', '學生', '老師', '小編', '管理員']
 
+// id               Int @id @default (autoincrement())
+//   serial_number    String ?
+//   name             String
+//   email            String
+//   password         String
+//   image            String ?
+//   role             Role @default (STUDENT)
+//   point            Int @default (0)
+//   point_deadline   DateTime ?
+//   schedule_service String ? @default ("")
+//   email_varified   Boolean @default (false)
+//   gender           Gender @default (UNKNOW)
+//   birth            String ?
+//   phone            String ?
+//     medical          String ?
+//       em_name          String ?
+//         em_relation      String ?
+//           em_phone         String ?
+//             address          String ?
+//               note             String ?
+
 export const columns: ColumnDef<Partial<User>>[] = [
+  {
+    accessorKey: "serial_number",
+    header: "編號",
+  },
   {
     accessorKey: "name",
     header: "名稱",
@@ -39,37 +65,33 @@ export const columns: ColumnDef<Partial<User>>[] = [
     accessorKey: "email",
     header: "電子郵件",
   },
-  // {
-  //   accessorKey: "role",
-  //   header: ({ table }) => {
-  //     const filterValue = table.getColumn('role')?.getFilterValue() as keyof typeof roleMap
-  //     const cnFilterValue = roleMap[filterValue] ?? '無'
-
-  //     return <DropdownMenu>
-  //       <DropdownMenuTrigger className="outline-none"><div className="flex cursor-pointer">角色<BsFilter className="my-auto" /></div></DropdownMenuTrigger>
-  //       <DropdownMenuContent>
-  //         {roleFilterOptions.map(opt => (
-  //           <DropdownMenuItem
-  //             key={opt}
-  //             className={`${opt === cnFilterValue && 'bg-bgColorSecondary/70'}`}
-  //             onClick={() => handleSelectFilter(opt, table.options.meta)}
-  //           >
-  //             {opt}
-  //           </DropdownMenuItem>))}
-  //       </DropdownMenuContent>
-  //     </DropdownMenu>
-  //   },
-  //   cell: ({ row }) => {
-  //     const role = row.getValue('role') as keyof typeof roleMap
-  //     return <span>{roleMap[role]}</span>
-  //   }
-  // },
   {
     accessorKey: "point",
-    header: '點數'
+    header: '點數',
+    cell: ({ row }) => <span>{row.original.point} 點</span>
   },
   {
-    accessorKey: "note",
-    header: '備註'
+    accessorKey: "point_deadline",
+    header: '點數期限',
+    cell: ({ row }) => {
+      if (row.original.point_deadline) {
+        return <span>{dateFormatter(new Date(row.original.point_deadline))}</span>
+      }
+    }
   },
+  // {
+  //   accessorKey: "schedule_service",
+  //   header: '行事曆'
+  // },
+  // {
+  //   accessorKey: "email_varified",
+  //   header: '信箱驗證',
+  //   cell: ({ row }) => {
+  //     return row.original.email_varified ? '通過' : '未通過'
+  //   }
+  // },
+  // {
+  //   accessorKey: "note",
+  //   header: '備註'
+  // },
 ]

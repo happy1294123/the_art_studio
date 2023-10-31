@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { KeyedMutator } from "swr"
+import style from './dataTableStyle.module.scss'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -40,7 +41,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className={`rounded-md border whitespace-nowrap ${customClass} `}>
+    <div className={`rounded-md border whitespace-nowrap ${customClass} ${style.myScroller} `}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
