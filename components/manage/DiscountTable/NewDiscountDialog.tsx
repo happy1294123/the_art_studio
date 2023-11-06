@@ -81,81 +81,81 @@ export default function NewDiscountDialog({ openProp, setOpenProp, discount, dis
       </DialogTrigger> */}
       <DialogContent className='bg-white'>
         <DialogHeader>
-          <DialogTitle className='text-2xl'>新增折扣碼</DialogTitle>
-          <DialogDescription className='p-3'>
-            <form onSubmit={(e) => e.preventDefault()} className='grid space-y-5'>
-              <div>
-                <Label htmlFor='code' className='ml-3'>折扣碼</Label>
-                <div className='flex'>
-                  <Input
-                    id="code"
-                    className='rounded-full h-7'
-                    placeholder='請輸入8位元折扣碼'
-                    value={formData?.code}
-                    onChange={(e) => setFormData((prev: any) => ({ ...prev, code: e.target.value }))}
-                    max={8}
-                  />
-                  <span
-                    className="my-auto ml-1 cursor-pointer p-1"
-                    onClick={handleSetRandomCode}
-                    title="隨機生成折扣碼"
-                  >
-                    <FiCornerDownLeft />
-                  </span>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor='description' className='ml-3'>描述訊息</Label>
-                <Input
-                  id="description"
-                  className='rounded-full h-7'
-                  placeholder='請輸入描述訊息'
-                  value={formData?.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label htmlFor='point_discount' className='ml-3'>點數折扣</Label>
-                <Input
-                  id="point_discount"
-                  className='rounded-full h-7'
-                  placeholder='請輸入點數折扣'
-                  value={formData?.point_discount}
-                  onChange={(e) => setFormData(prev => ({ ...prev, point_discount: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label htmlFor='price_discount' className='ml-3'>價錢折扣</Label>
-                <Input
-                  id="price_discount"
-                  className='rounded-full h-7'
-                  placeholder='請輸入價錢折扣'
-                  value={formData?.price_discount}
-                  onChange={(e) => setFormData(prev => ({ ...prev, price_discount: e.target.value }))}
-                />
-              </div>
-              {discount && <div className="ml-3">
-                <Label htmlFor="active">啟用狀態</Label>
-                <Switch
-                  id="active"
-                  className="ml-3"
-                  checked={formData?.active}
-                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, active: checked }))}
-                />
-              </div>}
-              <div>
-                {error && <span className='ml-2 text-red-400'>{error}</span>}
-                <LoadingButton
-                  className='w-full text-xl'
-                  onClick={handleAddCode}
-                  isLoading={isLoading}
-                >
-                  {actionText}
-                </LoadingButton>
-              </div>
-            </form>
+          <DialogTitle className=''>新增折扣碼</DialogTitle>
+          <DialogDescription >
           </DialogDescription>
         </DialogHeader>
+        <form onSubmit={(e) => e.preventDefault()} className='grid space-y-5'>
+          <div>
+            <Label htmlFor='code' className='ml-2'>折扣碼</Label>
+            <div className='flex'>
+              <Input
+                id="code"
+                className='rounded-2xl h-10 border-gray-400'
+                placeholder='請輸入8位元折扣碼'
+                value={formData?.code}
+                onChange={(e) => setFormData((prev: any) => ({ ...prev, code: e.target.value }))}
+                max={8}
+              />
+              <span
+                className="my-auto ml-1 cursor-pointer p-1 text-gray-400"
+                onClick={handleSetRandomCode}
+                title="隨機生成折扣碼"
+              >
+                <FiCornerDownLeft />
+              </span>
+            </div>
+          </div>
+          <div>
+            <Label htmlFor='description' className='ml-2'>描述訊息</Label>
+            <Input
+              id="description"
+              className='rounded-2xl h-10 border-gray-400'
+              placeholder='請輸入描述訊息'
+              value={formData?.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            />
+          </div>
+          <div>
+            <Label htmlFor='point_discount' className='ml-2'>點數折扣</Label>
+            <Input
+              id="point_discount"
+              className='rounded-2xl h-10 border-gray-400'
+              placeholder='請輸入點數折扣'
+              value={formData?.point_discount}
+              onChange={(e) => setFormData(prev => ({ ...prev, point_discount: e.target.value }))}
+            />
+          </div>
+          <div>
+            <Label htmlFor='price_discount' className='ml-2'>價錢折扣</Label>
+            <Input
+              id="price_discount"
+              className='rounded-2xl h-10 border-gray-400'
+              placeholder='請輸入價錢折扣'
+              value={formData?.price_discount}
+              onChange={(e) => setFormData(prev => ({ ...prev, price_discount: e.target.value }))}
+            />
+          </div>
+          {discount && <div className="ml-3">
+            <Label htmlFor="active">啟用狀態</Label>
+            <Switch
+              id="active"
+              className="ml-3"
+              checked={formData?.active}
+              onCheckedChange={(checked) => setFormData(prev => ({ ...prev, active: checked }))}
+            />
+          </div>}
+          <div>
+            {error && <span className='ml-2 text-red-400'>{error}</span>}
+            <LoadingButton
+              className='w-full text-lg'
+              onClick={handleAddCode}
+              isLoading={isLoading}
+            >
+              {actionText}
+            </LoadingButton>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   )

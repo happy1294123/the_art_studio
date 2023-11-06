@@ -15,9 +15,6 @@ export default function CourseItems({ selectedDate }: { selectedDate: Date }) {
     fetcher
   )
 
-  // console.log('courses', courses);
-
-
   return (
     <div className="mt-2">
       {isLoading

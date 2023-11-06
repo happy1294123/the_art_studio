@@ -8,7 +8,7 @@ import BrandSection from "@/components/home/BrandSection"
 export default function Home() {
   return (
     <div>
-      <div className={`w-full h-[650px] md:h-[760px] absolute top-0 left-0 -z-10 ${style.bg}`}>
+      <div className={`w-full h-[760px] absolute top-0 left-0 -z-10 ${style.bg}`}>
         {/* bg-[#ECF2F2]  */}
       </div>
       <div className="grid grid-cols-2 mt-[120px]">
@@ -21,13 +21,13 @@ export default function Home() {
       <div className="absolute top-0 -mr-[100px] md:left-[250px] -z-10">
         <Image src="/hero_img.png" width={500} height={500} alt='' />
       </div>
-      <div className="flex-center">
+      <div className="flex-center mt-[100px] md:mt-0">
         <DownArrow />
       </div>
 
-      <div className="flex-center mt-[150px]">
+      <div className="flex-center mt-[150px] relative">
         <div>
-          <div className="-mt-10 mb-10" id="start"></div>
+          <div className="absolute -top-[100px] md:-top-[30px]" id="start"></div>
           <CourseSection />
           <Image className="rotate-[340deg] ml-4 md:-ml-[50px]" src="/home/course_section/S__5988398.svg" width={130} height={130} alt="decorate" />
           <TeacherSection />

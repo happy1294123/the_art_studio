@@ -31,7 +31,7 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
               <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
             </div>
             <div className="col w-full">
-              <Suspense fallback={[1, 2, 3].map(i => <CourseItemSkeleton key={i} />)}>
+              <Suspense fallback={Array(3).fill(<CourseItemSkeleton />)}>
                 <CourseItems selectedDate={selectedDate} />
               </Suspense >
             </div>

@@ -210,8 +210,8 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
                     control={form.control}
                     name='email_varified'
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
+                      <FormItem className="space-y-0">
+                        <FormLabel >信箱驗證</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="border-gray-400">

@@ -29,8 +29,9 @@ export default function MoblieSection1() {
           </div>
         </div>
       </div>
-      <div className="hidden md:block -mx-[200px]">
-        <Image src="/home/course_section/img.svg" width={550} height={550} alt="img" />
+      <div className="hidden md:block -mx-[50px]">
+        {/* <Image src="/home/course_section/img.svg" width={550} height={550} alt="img" /> */}
+        <Image src="/home/course_section/img2.svg" width={250} height={250} alt="img" />
       </div>
     </div>
   )
