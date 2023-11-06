@@ -1,154 +1,39 @@
-'use client'
-// import TheTitle from '@/components/TheTitle'
-// import TestReplace from '@/components/TestReplace'
-// import EmailTemplate from '@/components/email/EmailTemplate'
-// import createRandomCode from '@/lib/createRandomCode'
-import { transporter, mailOptions } from '@/lib/transporter'
-// import sendVarifyMail from '@/lib/sendVarifyMail'
-// import varify from '@/mailTemplate/varify.html'
-// import { compareSync } from "bcryptjs"
-
-// import prisma from '@/lib/initPrisma'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { TestContent } from '@/lib/contexts//TestContent'
-import { useContext } from 'react'
+import Image from "next/image"
+import style from './homeStyle.module.scss'
+import CourseSection from "@/components/home/CourseSection"
+import DownArrow from "@/components/home/DownArrow"
+import TeacherSection from "@/components/home/TeacherSection"
+import BrandSection from "@/components/home/BrandSection"
 
 export default function Home() {
-  // const { serial_number } = await prisma.user.findFirst({
-  //   where: {
-  //     serial_number: {
-  //       startsWith: 'A'
-  //     }
-  //   },
-  //   orderBy: {
-  //     serial_number: 'desc'
-  //   },
-  //   select: {
-  //     serial_number: true
-  //   }
-  // })
-
-  // let num: number
-  // if (!serial_number) {
-  //   num = 100
-  // } else {
-  //   num = parseInt(serial_number.slice(1)) + 1
-  // }
-
-
-  // console.log('latestUser', serial_number);
-  // console.log('new_serial', `A${num}`);
-  // const file = await fs.readFile(process.cwd() + '/app/data.json', 'utf8');
-  // const jsonData = JSON.parse(file);
-  // console.log(jsonData);
-
-  // await fs.writeFile(process.cwd() + '/app/data.json', JSON.stringify({ ...jsonData, user_serial_count: jsonData.user_serial_count + 1 }));
-
-
-  // sendVarifyMail('test@example.com')
-  // const code = createRandomCode()
-  // const sm = async () => {
-  //   console.log('send mail')
-  //   // console.log(varify)
-
-  //   const res = await transporter.sendMail({
-  //     ...mailOptions,
-  //     subject: '【媞藝術空間】註冊驗證信箱',
-  //     html: varify.replace('https://varify/callback', 'www.google.com')
-  //   })
-  //   if (res.accepted.length) {
-  //     console.log('發送成功')
-  //   }
-  // }
-
-  // sm()
-  // const email = 'happy1294123@gmail.com'
-  // const a = '%242a%2410%24QeOtujN3T4gFJ%2FKd7xeufOtUw7CiMkYUBkJPbfMl3iGzCA8VIRMzG'
-  // // console.log(decodeURIComponent(a));
-
-  // const hash = decodeURIComponent(a)
-  // const res = compareSync(`${email}_the-art-studio`, hash)
-  // console.log(res);
-
-  // const res = await prisma.user.findFirst({
-  //   orderBy: {
-  //     serial_number: 'desc'
-  //   },
-  //   // where: {
-  //   //   serial_number: {
-
-  //   //   }
-  //   // },
-  //   select: {
-  //     serial_number: true
-  //   }
-  // })
-  // console.log(res);
-  const fake = {
-    color: 'white',
-    name: 'allen'
-  }
-
-
   return (
-    <>
+    <div>
+      <div className={`w-full h-[650px] md:h-[760px] absolute top-0 left-0 -z-10 ${style.bg}`}>
+        {/* bg-[#ECF2F2]  */}
+      </div>
+      <div className="grid grid-cols-2 mt-[120px]">
+        <div className="col-span-1 text-2xl md:text-3xl whitespace-nowrap text-center leading-8 tracking-widest text-[#789759] md:mr-[150px]">
+          <Image className="ml-[70px] md:ml-[20px] mb-3 drop-shadow-lg md:invisible" src="/logo.svg" width={60} height={60} alt="" priority />
+          <div className="ml-5">瑜伽 放鬆伸展</div>
+          <div>身體訓練 舒緩釋放</div>
+        </div>
+      </div>
+      <div className="absolute top-0 -mr-[100px] md:left-[250px] -z-10">
+        <Image src="/hero_img.png" width={500} height={500} alt='' />
+      </div>
+      <div className="flex-center">
+        <DownArrow />
+      </div>
 
-      {/* <TestContent.Provider value={fake}>
-
-        <TestComponent />
-      </TestContent.Provider> */}
-
-      {/* <Card className='mb-4'>
-        <CardContent>
-          <div className='text-center text-3xl -mb-4 mt-3 flex justify-between'>
-            <span className='text-headingColor text-left'>
-              剩餘點數
-              <p className='text-base mt-1'>使用期限：2023/10/30</p>
-            </span>
-            <div className='my-auto'>
-              38
-            </div>
-          </div>
-        </CardContent>
-      </Card> */}
-      {/* test */}
-      {/* {varify.replace('${html}', 'this is variable')} */}
-      {/* <EmailTemplate /> */}
-      {/* <TheTitle>主頁</TheTitle> */}
-      {/* <TestReplace />
-      {code} */}
-      {/* <TestMotion /> */}
-      {/* {process.env.HOST} */}
-    </>
-  )
-}
-
-const useTestHook = (newVal?: string) => {
-  const fake = useContext(TestContent)
-
-
-  if (!fake) {
-    throw new Error('fake error')
-  }
-
-  if (newVal) {
-    fake.color = newVal
-  }
-  return fake
-}
-
-const TestComponent = () => {
-  const fake = useTestHook('red')
-
-  return (<div>
-    {JSON.stringify(fake)}
-    test com
-  </div>
+      <div className="flex-center mt-[150px]">
+        <div>
+          <div className="-mt-10 mb-10" id="start"></div>
+          <CourseSection />
+          <Image className="rotate-[340deg] ml-4 md:-ml-[50px]" src="/home/course_section/S__5988398.svg" width={130} height={130} alt="decorate" />
+          <TeacherSection />
+          <BrandSection />
+        </div>
+      </div>
+    </div>
   )
 }

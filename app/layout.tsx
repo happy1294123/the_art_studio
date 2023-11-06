@@ -32,13 +32,12 @@ const LXGWWenKai = localFont({
 // import { Inter } from 'next/font/google'
 // const inter = Inter({ subsets: ['latin'] })
 
-
 export const metadata: Metadata = {
   title: '媞藝術空間',
-  description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹',
+  description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹｜皮拉提斯｜身體雕塑｜空間租借',
   openGraph: {
     title: '媞藝術空間',
-    description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹',
+    description: '媞藝術空間官方網站 ｜ 瑜珈 ｜ 空中瑜伽 ｜ 預約課程 ｜ 合作品牌 ｜ 師資介紹｜皮拉提斯｜身體雕塑｜空間租借',
     images: [{
       url: 'https://the-art-studio.vercel.app/logoBW.png',
       width: 168,

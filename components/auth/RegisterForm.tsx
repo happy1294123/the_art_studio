@@ -320,10 +320,12 @@ export default function RegisterForm() {
           className='mt-8
           bg-bgColorSecondary' />
 
-        <label className='text-headingColor mt-8'>會員條款</label>
-        <div className='overflow-y-auto w-[300px] h-[150px]' onScroll={handleScroll}>
-          {/* <div className='text-headingColor text-2xl mb-1'>會員條款</div> */}
-          會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款
+        <div className='bg-bgColorOther mt-4 rounded-2xl p-2'>
+          <label className='text-headingColor mt-8'>會員條款</label>
+          <div className="overflow-y-auto p-2 w-[280px] h-[150px]" onScroll={handleScroll}>
+            {/* <div className='text-headingColor text-2xl mb-1'>會員條款</div> */}
+            會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款會員條款
+          </div>
         </div>
 
         <div className="flex gap-2 text-sm justify-end mr-2 text-gray-500  underline-offset-4 mt-5">

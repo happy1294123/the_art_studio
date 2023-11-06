@@ -1,8 +1,11 @@
 import { FaInstagramSquare, FaFacebookSquare, FaLine } from 'react-icons/fa'
+import HomePageOnly from '@/components/home/HomePageOnly'
 
 export default function Footer() {
+
   return (
     <div className="bg-bgColorSecondary w-full p-1">
+      <HomePageOnly />
       <div className='flex justify-center gap-5 p-1'>
         <a href="https://www.instagram.com/the_art_studio.tw/">
           <FaInstagramSquare size={20} />

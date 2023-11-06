@@ -33,10 +33,10 @@ async function discountFetcher(url: string): Promise<Discount[]> {
   return await res.json()
 }
 
-// async function receivementFetcher(url: string): Promise<Payment[]> {
-//   const res = await fetch(url)
-//   return await res.json()
-// }
+async function receivementFetcher(url: string): Promise<Payment[]> {
+  const res = await fetch(url)
+  return await res.json()
+}
 
 async function usersFetcher(url: string): Promise<User[]> {
   const res = await fetch(url)
@@ -49,7 +49,7 @@ export default function ManagePage() {
     user: true,
     course: false,
     discount: false,
-    // receive: false
+    receive: false
   })
 
   // users data
@@ -81,10 +81,10 @@ export default function ManagePage() {
   )
 
   // receivement data 
-  // const { data: receivement, mutate: receiveMutate } = useSWR(
-  //   fetchTrigger.receive && '/api/manage/receivement',
-  //   receivementFetcher
-  // )
+  const { data: receivement, mutate: receiveMutate } = useSWR(
+    fetchTrigger.receive && '/api/manage/receivement', 
+    receivementFetcher
+  )
 
   const handleValueChange = (value: string) => {
     setFetchTrigger(prev => ({ ...prev, [value]: true }))
@@ -99,11 +99,11 @@ export default function ManagePage() {
         </div>
       </div>
       <Tabs defaultValue="user" onValueChange={handleValueChange}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
-          {/* <TabsTrigger value="receive">收款</TabsTrigger> */}
-          <TabsTrigger value="discount">折扣碼</TabsTrigger>
+          <TabsTrigger value="discount">折扣</TabsTrigger>
+          <TabsTrigger value="receive">收款</TabsTrigger>
         </TabsList>
         {/* 會員 */}
         <TabsContent value="user">
@@ -121,13 +121,13 @@ export default function ManagePage() {
               <ClipLoader color="#D1C0AD" />
             </div>}
         </TabsContent >
-        {/* 收款 */}
-        {/* <TabsContent value="receive">
-          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
-        </TabsContent> */}
         {/* 折扣碼 */}
         <TabsContent value="discount">
           <DiscountTable discount={discount} discountMutate={discountMutate} />
+        </TabsContent>
+        {/* 收款 */}
+        <TabsContent value="receive">
+          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
         </TabsContent>
       </Tabs >
     </div>

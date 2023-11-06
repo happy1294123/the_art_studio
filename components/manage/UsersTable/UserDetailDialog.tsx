@@ -247,7 +247,7 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
                       </FormItem>
                     )}
                   />
-                  <LoadingButton isLoading={loading} className="w-full">更新資料</LoadingButton>
+                  <LoadingButton isLoading={loading} className="w-full text-lg h-10">更新資料</LoadingButton>
                 </form>
               </Form>
             </>

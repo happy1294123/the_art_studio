@@ -1,0 +1,17 @@
+.bg {
+background-color:hsla(180,18%,93%,1);
+background-image:
+radial-gradient(at 91% 99%, hsla(22,36%,54%,0.29) 0px, transparent 50%),
+radial-gradient(at 0% 0%, hsla(13,46%,87%,1) 0px, transparent 50%);
+
+// background-color:hsla(180,18%,93%,1);
+// background-image:
+// radial-gradient(at 91% 99%, hsla(22,36%,54%,0.29) 0px, transparent 50%),
+// radial-gradient(at 0% 0%, hsla(180,13%,81%,1) 0px, transparent 50%);
+
+// background-color:hsla(180,18%,93%,1);
+// background-image:
+// radial-gradient(at 50% 100%, hsla(31,27%,74%,0.58) 0px, transparent 50%),
+// radial-gradient(at 0% 0%, hsla(180,18%,93%,1) 0px, transparent 50%);
+filter: blur(20px);
+}

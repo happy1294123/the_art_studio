@@ -38,7 +38,7 @@ export default function Navbar() {
     <>
       {(pathname !== '/login' && pathname !== '/register') &&
         <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}`}>
-          <Link href="/" className="my-auto">
+          <Link href="/" className={`my-auto ${pathname === '/' && 'invisible md:visible'}`}>
             <Image src="/logoWithText3x.png" width={150} height={35} alt="logo" />
           </Link>
           {showSidebar ? (
