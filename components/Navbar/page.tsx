@@ -46,7 +46,7 @@ export default function Navbar() {
   return (
     <>
       {(pathname !== '/login' && pathname !== '/register') &&
-        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}  w-full items-center z-50 `}>
+        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}  w-full items-center`}>
           {/* ${showMdLink ? 'block' : 'hidden'} */}
           <Link href="/" className={`my-auto ${pathname === '/' && 'invisible md:visible'}`}>
             <Image src="/logoWithText3x.png" width={150} height={35} alt="logo" />

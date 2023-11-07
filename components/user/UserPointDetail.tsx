@@ -20,9 +20,10 @@ export default function UserPointDetail() {
         ? <div className="flex-center">
           <ClipLoader color="#D1C0AD" />
         </div>
-        : pointDetails?.map(detail => (
+        : pointDetails.length > 0 ? pointDetails?.map(detail => (
           <UserPointDetailItem key={String(detail.created_at)} detail={detail} />
-        ))}
+        )) : <span className="flex-center">無點數明細</span>
+      }
     </div>
   )
 }

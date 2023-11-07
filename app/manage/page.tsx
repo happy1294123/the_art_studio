@@ -12,7 +12,8 @@ import UsersTable from "@/components/manage/UsersTable/page"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { CourseContent } from '@/lib/contexts/ManageCourseContent'
-import SalaryTable from "@/components/manage/Salary/SalaryTable"
+import dynamic from "next/dynamic"
+const SalaryTable = dynamic(() => import('@/components/manage/Salary/SalaryTable'))
 
 async function courseFetcher(url: string): Promise<Course[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
@@ -24,7 +25,7 @@ async function courseTypeFetcher(url: string): Promise<CourseType[]> {
   return await res.json()
 }
 
-async function teacherFetcher(url: string): Promise<Teacher[]> {
+async function teacherOptFetcher(url: string): Promise<Teacher[]> {
   const res = await fetch(url)
   return await res.json()
 }
@@ -40,19 +41,28 @@ async function receivementFetcher(url: string): Promise<Payment[]> {
 }
 
 async function usersFetcher(url: string): Promise<User[]> {
-  // TODO 後端直接篩選出role === STUDENT 的會員
   const res = await fetch(url)
   return await res.json()
 }
 
+async function salaryFetcher(url: string): Promise<[]> {
+  // Promise<Salary[]>
+  const res = await fetch(url)
+  return await res.json()
+}
 
 export default function ManagePage() {
   const [fetchTrigger, setFetchTrigger] = useState({
     user: true,
     course: false,
     discount: false,
-    receive: false
+    receive: false,
+    salary: false
   })
+
+  const handleValueChange = (value: string) => {
+    setFetchTrigger(prev => ({ ...prev, [value]: true }))
+  }
 
   // users data
   const { data: users, mutate: usersMutate } = useSWR(
@@ -73,7 +83,7 @@ export default function ManagePage() {
 
   const { data: teacherOpt } = useSWR(
     fetchTrigger.course && 'api/manage/teacher',
-    teacherFetcher
+    teacherOptFetcher
   )
 
   // discount data
@@ -88,9 +98,14 @@ export default function ManagePage() {
     receivementFetcher
   )
 
-  const handleValueChange = (value: string) => {
-    setFetchTrigger(prev => ({ ...prev, [value]: true }))
-  }
+  // salary data
+  const { data: salary } = useSWR(
+    fetchTrigger.salary && '/api/manage/salary',
+    salaryFetcher
+  )
+
+  console.log('salary', salary);
+
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -134,7 +149,8 @@ export default function ManagePage() {
         </TabsContent>
         {/* 薪資 */}
         <TabsContent value="salary">
-          <SalaryTable users={users} usersMutate={usersMutate} />
+          {fetchTrigger.salary && <SalaryTable />}
+          {/* <SalaryTable /> */}
           {/* <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} /> */}
         </TabsContent>
       </Tabs >

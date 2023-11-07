@@ -17,7 +17,7 @@ export default function UsersTable({ users, usersMutate }: Props) {
   // const [openDialog, setOpenDialog] = useState(false)
   return (<>
     {users && <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
-      <DataTable columns={columns} data={users.filter(user => user?.role === 'STUDENT')} mutate={usersMutate} />
+      <DataTable columns={columns} data={users} mutate={usersMutate} />
     </div>}
     {/* <Tabs defaultValue="student">
       <TabsList className="grid w-full grid-cols-2">

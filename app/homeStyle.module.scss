@@ -15,3 +15,20 @@ radial-gradient(at 0% 0%, hsla(13,46%,87%,1) 0px, transparent 50%);
 // radial-gradient(at 0% 0%, hsla(180,18%,93%,1) 0px, transparent 50%);
 filter: blur(20px);
 }
+
+.defaultScroller {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  } 
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    background: white !important;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    background: gray;
+    border-radius: 10px;
+  }
+}

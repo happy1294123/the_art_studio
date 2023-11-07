@@ -5,6 +5,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { AiFillStar } from 'react-icons/ai'
+import style from '@/app/homeStyle.module.scss'
 
 type Props = {
   review: Review
@@ -12,7 +13,7 @@ type Props = {
 
 export default function GoogleReview({ review }: Props) {
   return (
-    <div className="bg-white rounded-3xl p-5 mx-2 w-[400px]">
+    <div className="bg-white rounded-3xl p-5 mx-2 w-[300px]">
       <div className="flex">
         <Avatar>
           <AvatarImage src={review.profile_photo_url} alt="avatar" className="p-1" />
@@ -32,8 +33,10 @@ export default function GoogleReview({ review }: Props) {
           </span>
         </div>
       </div>
-      <div className="p-1 mt-1">
-        {review.text}
+      <div className={`${style.defaultScroller}`}>
+        <div className="p-1 mt-1 h-[150px] overflow-y-auto">
+          {review.text}
+        </div>
       </div>
     </div>
   )

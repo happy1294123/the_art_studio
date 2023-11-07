@@ -4,11 +4,11 @@ import { Review } from '@/type';
 import style from '@/components/course/datePicker/style.module.css'
 import { AiOutlineLeft } from 'react-icons/ai'
 import { useRef } from 'react';
+import useWindowWidth from '@/lib/useWindowWidth';
 
 async function reviewsFetcher(url: string): Promise<Review[]> {
   const res = await fetch(url)
-  const data = await res.json()
-  return data
+  return await res.json()
 }
 
 export default function GoogleArea({ apiKey }: { apiKey: string }) {
@@ -29,7 +29,7 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
     if (!ref.current) return
     clearInterval(intervalId)
     const div = ref.current as HTMLDivElement
-    const step = 100
+    const step = 105
     if (derection === 'right') {
       intervalId = setInterval(() => {
         div.scroll({
@@ -51,6 +51,7 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
     clearInterval(intervalId)
   }
 
+  const windowWidth = useWindowWidth()
 
   return (
     <>
@@ -62,7 +63,7 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
           >
             <AiOutlineLeft fontSize={24} />
           </div>
-          <div className={`overflow-auto relative w-full h-[282px] ${style.noScroll} ${'style.myGradient'} rounded-3xl`} ref={ref}>
+          <div className={`overflow-auto relative w-full h-[254px] ${style.noScroll} rounded-3xl`} ref={ref}>
             <div className="flex absolute">
               {reviews.map(review => (
                 <GoogleReview key={review.time} review={review} />
@@ -83,10 +84,10 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
         </div>
       )}
       <div className='mx-6'>
-        <div className="flex-center w-fit mx-auto rounded-3xl overflow-hidden">
+        <div className="flex-center w-fit mx-auto rounded-3xl overflow-hidden aspect-w-16 aspect-h-9">
           <iframe
-            width="600"
-            height="450"
+            width={windowWidth > 768 ? 600 : windowWidth - 80}
+            height={windowWidth > 768 ? 450 : 400}
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"

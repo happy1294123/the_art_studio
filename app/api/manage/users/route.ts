@@ -6,7 +6,11 @@ export async function GET(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
 
-  const res = await prisma.user.findMany()
+  const res = await prisma.user.findMany({
+    where: {
+      role: 'STUDENT'
+    }
+  })
 
   return NextResponse.json(res)
 }
@@ -18,7 +22,7 @@ export async function POST(req: any) {
   const data = await req.json()
   const newUser = await prisma.user.update({
     where: {
-      id: data.id
+      id: data.id,
     },
     data: {
       serial_number: data.serial_number,

@@ -18,14 +18,14 @@ export default function Home() {
           <div>身體訓練 舒緩釋放</div>
         </div>
       </div>
-      <div className="absolute top-0 -mr-[100px] md:left-[250px] -z-10">
-        <Image src="/hero_img.png" width={500} height={500} alt='' />
+      <div className="absolute top-0 right-10 md:left-[250px] -z-10">
+        <Image src="/hero_img.png" width={250} height={250} alt='' />
       </div>
-      <div className="flex-center mt-[100px] md:mt-0">
+      <div className="flex-center mt-[30px] md:mt-0">
         <DownArrow />
       </div>
 
-      <div className="flex-center mt-[150px] relative">
+      <div className="flex-center mt-[250px] md:mt-[150px] relative">
         <div>
           <div className="absolute -top-[100px] md:-top-[30px]" id="start"></div>
           <CourseSection />

@@ -122,8 +122,8 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
           <div>
             {userInfo.map(data => (
               <div key={data.field} className="grid md:grid-cols-5 mt-2 items-center">
-                <Label className="whitespace-nowrap col-span-1 text-fontColor/60">{data.field}:</Label>
-                <span>{String(data.value)}</span>
+                <Label className="whitespace-nowrap col-span-1 text-fontColor/60 ">{data.field}:</Label>
+                <span className="ml-4 md:ml-0">{String(data.value)}</span>
               </div>
             ))}
             <Accordion type="single" collapsible className="w-full">
@@ -133,7 +133,7 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
                   {userDetail.map(data => (
                     <div key={data.field} className="grid md:grid-cols-5 mt-2 items-center">
                       <Label className="whitespace-nowrap col-span-1 text-fontColor/60">{data.field}:</Label>
-                      <span className="md:whitespace-nowrap">{String(data.value)}</span>
+                      <span className="md:whitespace-nowrap ml-4 md:ml-0">{String(data.value)}</span>
                     </div>
                   ))}
                   <div className="mt-4">
@@ -141,7 +141,7 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
                     {userEmDetail.map(data => (
                       <div key={data.field} className="grid md:grid-cols-5 mt-2 items-center">
                         <Label className="whitespace-nowrap col-span-1 text-fontColor/60">{data.field}:</Label>
-                        <span className="md:whitespace-nowrap">{String(data.value)}</span>
+                        <span className="md:whitespace-nowrap ml-4 md:ml-0">{String(data.value)}</span>
                       </div>
                     ))}
                   </div>
