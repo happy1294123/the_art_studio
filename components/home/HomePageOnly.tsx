@@ -3,12 +3,12 @@ import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 const GoogleArea = dynamic(() => import('@/components/home/GoogleArea'))
 
-export default function HomePageOnly() {
+export default function HomePageOnly({ apiKey }: { apiKey: string }) {
   const pathname = usePathname()
 
   return (
     <div>
-      {pathname === '/' && <GoogleArea />}
+      {pathname === '/' && <GoogleArea apiKey={apiKey} />}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const apiKey = 'AIzaSyA7eFyuzKsFjgVye3LbpW5BjpdZ-XNVN24'
+  const apiKey = process.env.NEXT_GOOGLE_API_KEY
   const placeid = 'ChIJQ18DdJOpQjQRGgiBfm9TunY'
 
   const res = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?key=${apiKey}&placeid=${placeid}&language=zh-TW`)

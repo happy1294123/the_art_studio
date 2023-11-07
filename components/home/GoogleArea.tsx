@@ -11,7 +11,7 @@ async function reviewsFetcher(url: string): Promise<Review[]> {
   return data
 }
 
-export default function GoogleArea() {
+export default function GoogleArea({ apiKey }: { apiKey: string }) {
   const { data: reviews } = useSWR(
     '/api/google/reviews',
     reviewsFetcher
@@ -36,14 +36,14 @@ export default function GoogleArea() {
           behavior: 'smooth',
           left: div.scrollLeft + step
         })
-      }, 50)
+      }, 100)
     } else if (derection === 'left') {
       intervalId = setInterval(() => {
         div.scroll({
           behavior: 'smooth',
           left: div.scrollLeft - step
         })
-      }, 50)
+      }, 100)
     }
   }
 
@@ -82,17 +82,19 @@ export default function GoogleArea() {
           </div>
         </div>
       )}
-      <div className="flex-center px-6">
-        <iframe
-          width="600"
-          height="450"
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyA7eFyuzKsFjgVye3LbpW5BjpdZ-XNVN24
+      <div className='mx-6'>
+        <div className="flex-center w-fit mx-auto rounded-3xl overflow-hidden">
+          <iframe
+            width="600"
+            height="450"
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}
         &q=ChIJQ18DdJOpQjQRGgiBfm9TunY235台灣新北市中和區中山路三段170巷8弄9號`}>
-        </iframe>
-      </div >
+          </iframe>
+        </div >
+      </div>
       <div className="flex flex-col gap-2 text-[#321911] my-4 text-xl">
         <div className="mx-auto">
           ｜空間位置｜

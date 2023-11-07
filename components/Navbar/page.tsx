@@ -32,23 +32,22 @@ export default function Navbar() {
   useEffect(() => setLoaded(true), [])
   useEffect(() => setShowSidebar(false), [pathname])
 
-  const [showMdLink, setShowMdLink] = useState(false)
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 60) {
-        setShowMdLink(true)
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-
+  // const [showMdLink, setShowMdLink] = useState(false)
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY > 60) {
+  //       setShowMdLink(true)
+  //     }
+  //   }
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [])
 
   return (
     <>
       {(pathname !== '/login' && pathname !== '/register') &&
-        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'} bg-bgColorSecondary fixed w-full items-center z-50 ${showMdLink ? 'block' : 'hidden'}`}>
+        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}  w-full items-center z-50 `}>
+          {/* ${showMdLink ? 'block' : 'hidden'} */}
           <Link href="/" className={`my-auto ${pathname === '/' && 'invisible md:visible'}`}>
             <Image src="/logoWithText3x.png" width={150} height={35} alt="logo" />
           </Link>
