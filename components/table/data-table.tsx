@@ -41,14 +41,14 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className={`rounded-md border whitespace-nowrap ${customClass} ${style.myScroller} `}>
+    <div className={`rounded-md whitespace-nowrap ${customClass} ${style.myScroller} `}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="border-headingColor">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="whitespace-nowrap text-headingColor">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -67,6 +67,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="border-headingColor cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

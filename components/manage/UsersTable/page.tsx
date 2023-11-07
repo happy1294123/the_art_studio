@@ -14,9 +14,12 @@ type Props = {
 }
 
 export default function UsersTable({ users, usersMutate }: Props) {
-  const [openDialog, setOpenDialog] = useState(false)
+  // const [openDialog, setOpenDialog] = useState(false)
   return (<>
-    <Tabs defaultValue="student">
+    {users && <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
+      <DataTable columns={columns} data={users.filter(user => user?.role === 'STUDENT')} mutate={usersMutate} />
+    </div>}
+    {/* <Tabs defaultValue="student">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="student">學生</TabsTrigger>
         <TabsTrigger value="teacher">老師</TabsTrigger>
@@ -38,6 +41,6 @@ export default function UsersTable({ users, usersMutate }: Props) {
         </Button>
         {openDialog && <NewTeacherDialog openDialog={openDialog} setOpenDialog={setOpenDialog} usersMutate={usersMutate} />}
       </TabsContent >
-    </Tabs >
+    </Tabs > */}
   </>)
 }

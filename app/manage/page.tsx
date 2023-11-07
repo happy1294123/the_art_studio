@@ -12,6 +12,7 @@ import UsersTable from "@/components/manage/UsersTable/page"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { CourseContent } from '@/lib/contexts/ManageCourseContent'
+import SalaryTable from "@/components/manage/Salary/SalaryTable"
 
 async function courseFetcher(url: string): Promise<Course[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
@@ -39,6 +40,7 @@ async function receivementFetcher(url: string): Promise<Payment[]> {
 }
 
 async function usersFetcher(url: string): Promise<User[]> {
+  // TODO 後端直接篩選出role === STUDENT 的會員
   const res = await fetch(url)
   return await res.json()
 }
@@ -82,7 +84,7 @@ export default function ManagePage() {
 
   // receivement data 
   const { data: receivement, mutate: receiveMutate } = useSWR(
-    fetchTrigger.receive && '/api/manage/receivement', 
+    fetchTrigger.receive && '/api/manage/receivement',
     receivementFetcher
   )
 
@@ -99,13 +101,14 @@ export default function ManagePage() {
         </div>
       </div>
       <Tabs defaultValue="user" onValueChange={handleValueChange}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="user">會員</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="user">學員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
           <TabsTrigger value="discount">折扣</TabsTrigger>
           <TabsTrigger value="receive">收款</TabsTrigger>
+          <TabsTrigger value="salary">薪資</TabsTrigger>
         </TabsList>
-        {/* 會員 */}
+        {/* 學員 */}
         <TabsContent value="user">
           <UsersTable users={users} usersMutate={usersMutate} />
         </TabsContent>
@@ -128,6 +131,11 @@ export default function ManagePage() {
         {/* 收款 */}
         <TabsContent value="receive">
           <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
+        </TabsContent>
+        {/* 薪資 */}
+        <TabsContent value="salary">
+          <SalaryTable users={users} usersMutate={usersMutate} />
+          {/* <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} /> */}
         </TabsContent>
       </Tabs >
     </div>

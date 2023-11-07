@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { usePathname } from "next/navigation";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,9 +17,7 @@ export default function Navbar() {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const { data: session } = useSession()
-  const isManager = useMemo(() => {
-    return session && ['ADMIN', 'EDITOR'].includes(session.user.role)
-  }, [session])
+  const isManager = session && ['ADMIN', 'EDITOR'].includes(session.user.role)
 
   useEffect(() => {
     const handleHideSidebar = (event: MouseEvent) => {
@@ -34,24 +32,37 @@ export default function Navbar() {
   useEffect(() => setLoaded(true), [])
   useEffect(() => setShowSidebar(false), [pathname])
 
+  const [showMdLink, setShowMdLink] = useState(false)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 60) {
+        setShowMdLink(true)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+
+
   return (
     <>
       {(pathname !== '/login' && pathname !== '/register') &&
-        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'}`}>
+        <div className={`flex justify-between h-[60px] px-6 lg:px-12 ${pathname !== '/' && 'bg-bgColorSecondary'} bg-bgColorSecondary fixed w-full items-center z-50 ${showMdLink ? 'block' : 'hidden'}`}>
           <Link href="/" className={`my-auto ${pathname === '/' && 'invisible md:visible'}`}>
             <Image src="/logoWithText3x.png" width={150} height={35} alt="logo" />
           </Link>
           {showSidebar ? (
             <Button variant="secondary" className="z-30 bg-bgColorOther rounded-full text-lg font-bold drop-shadow-lg px-3 my-auto" onClick={() => setShowSidebar(false)}>X</Button>
           ) : (
-            <>
+            <div>
               <Button variant="link" className="p-2 md:hidden my-auto" onClick={() => setShowSidebar(true)}>
                 <IconHamburger />
               </Button>
-              <div className='hidden md:block w-50 h-[37px] my-auto'>
+              <div className={`hidden md:block w-50 h-[37px] my-auto`}>
                 <MdLinkGroup />
               </div>
-            </>
+            </div>
           )}
         </div>
       }
