@@ -3,8 +3,7 @@ import GoogleReview from './GoogleReview';
 import { Review } from '@/type';
 import style from '@/components/course/datePicker/style.module.css'
 import { AiOutlineLeft } from 'react-icons/ai'
-import { useRef } from 'react';
-import useWindowWidth from '@/lib/useWindowWidth';
+import { useEffect, useRef, useState } from 'react';
 
 async function reviewsFetcher(url: string): Promise<Review[]> {
   const res = await fetch(url)
@@ -51,7 +50,15 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
     clearInterval(intervalId)
   }
 
-  const windowWidth = useWindowWidth()
+  const [windowWidth, setWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window?.innerWidth)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <>
