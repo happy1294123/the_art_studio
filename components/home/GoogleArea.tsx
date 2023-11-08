@@ -65,6 +65,7 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
       {(reviews && reviews?.length > 0) && (
         <div className='my-6 relative flex items-center'>
           <div
+            className='invisible md:visible'
             onMouseDown={() => handleScroll('left')}
             onMouseUp={clearScroll}
           >
@@ -85,7 +86,7 @@ export default function GoogleArea({ apiKey }: { apiKey: string }) {
               </div>
             </div>
           </div>
-          <div className='rotate-180' onMouseDown={() => handleScroll('right')} onMouseUp={clearScroll}>
+          <div className='rotate-180 invisible md:visible' onMouseDown={() => handleScroll('right')} onMouseUp={clearScroll}>
             <AiOutlineLeft fontSize={24} />
           </div>
         </div>
