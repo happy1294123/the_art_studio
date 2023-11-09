@@ -10,6 +10,7 @@ import MdLinkGroup from './MdLinkGroup';
 import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
 import { useSession } from "next-auth/react"
 import ManageLink from './ManageLink';
+import LinkWithAnim from './LinkWithAnim';
 
 export default function Navbar() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -17,7 +18,9 @@ export default function Navbar() {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const { data: session } = useSession()
+  const isLogin = !!session
   const isManager = session && ['ADMIN', 'EDITOR'].includes(session.user.role)
+  const isTeacher = session && session.user.role === 'TEACHER'
 
   useEffect(() => {
     const handleHideSidebar = (event: MouseEvent) => {
@@ -59,7 +62,7 @@ export default function Navbar() {
                 <IconHamburger />
               </Button>
               <div className={`hidden md:block w-50 h-[37px] my-auto`}>
-                <MdLinkGroup />
+                  <MdLinkGroup isManager={isManager} isTeacher={isTeacher} isLogin={isLogin} />
               </div>
             </div>
           )}
@@ -70,7 +73,10 @@ export default function Navbar() {
       <div className={`border-s-2 border-gray-400 rounded-s-2xl drop-shadow-2xl top-0 end-0 h-full w-8/12 z-20 bg-bgColorSecondary fixed container ease-in-out duration-300 ${showSidebar ? 'translate-x-0' : 'translate-x-full'} ${loaded ? 'block' : 'hidden'}`} ref={sidebarRef}>
         <div className='mt-14 text-xl grid gap-2'>
           {isManager && <ManageLink />}
-          <LoginBtnOrUserProfile isLogin={!!session} />
+          {isTeacher && (<LinkWithAnim href='/teacher' className="text-md md:text-xl ml-6 md:ml-0 mb-2 md:mb-0">
+            老師專區
+          </LinkWithAnim >)}
+          <LoginBtnOrUserProfile isLogin={isLogin} />
           <LinkGroup />
         </div>
       </div >

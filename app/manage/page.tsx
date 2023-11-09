@@ -6,14 +6,15 @@ import DiscountTable from '@/components/manage/DiscountTable/page'
 import UserDropDownMenu from "@/components/user/UserDropDownMenu"
 import ReceivementTable from "@/components/manage/ReceivementTable/page"
 import useSWR from "swr"
-import { Course, Discount, Teacher } from "@/type"
-import { CourseType, Payment, User } from "@prisma/client"
+import { Discount, Salary, Teacher } from "@/type"
+import { Course, CourseType, Payment, User } from "@prisma/client"
 import UsersTable from "@/components/manage/UsersTable/page"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { CourseContent } from '@/lib/contexts/ManageCourseContent'
 import dynamic from "next/dynamic"
 import dateFormatter from "@/lib/dateFormatter"
+import { useSession } from "next-auth/react"
 const SalaryTable = dynamic(() => import('@/components/manage/Salary/SalaryTable'))
 
 async function courseFetcher(url: string): Promise<Course[]> {
@@ -37,6 +38,8 @@ async function discountFetcher(url: string): Promise<Discount[]> {
 }
 
 async function receivementFetcher(url: string): Promise<Payment[]> {
+  console.log('fetch rec');
+
   const res = await fetch(url)
   return await res.json()
 }
@@ -46,8 +49,8 @@ async function usersFetcher(url: string): Promise<User[]> {
   return await res.json()
 }
 
-async function salaryFetcher(url: string): Promise<[]> {
-  // Promise<Salary[]>
+async function salaryFetcher(url: string): Promise<Salary[]> {
+  console.log('fetch salary');
   const res = await fetch(url)
   return await res.json()
 }
@@ -58,8 +61,11 @@ export default function ManagePage() {
     course: false,
     discount: false,
     receive: false,
-    salary: true
+    salary: false
   })
+
+  const { data: session } = useSession()
+  const isAdmin = session?.user.role === 'ADMIN'
 
   const handleValueChange = (value: string) => {
     setFetchTrigger(prev => ({ ...prev, [value]: true }))
@@ -114,13 +120,23 @@ export default function ManagePage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="salary" onValueChange={handleValueChange}>
-        <TabsList className="grid w-full grid-cols-5">
+      <Tabs defaultValue="user" onValueChange={handleValueChange}>
+        <TabsList className={`grid w-full grid-cols-${isAdmin ? '5' : '3'}`}>
           <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
           <TabsTrigger value="discount">折扣</TabsTrigger>
-          <TabsTrigger value="receive">收款</TabsTrigger>
-          <TabsTrigger value="salary">薪資</TabsTrigger>
+          <TabsTrigger
+            className={`hidden ${isAdmin && 'block'}`}
+            value="receive"
+          >
+            收款
+          </TabsTrigger>
+          <TabsTrigger
+            className={`hidden ${isAdmin && 'block'}`}
+            value="salary"
+          >
+            薪資
+          </TabsTrigger>
         </TabsList>
         {/* 學員 */}
         <TabsContent value="user">
@@ -150,26 +166,29 @@ export default function ManagePage() {
               <ClipLoader color="#D1C0AD" />
             </div>}
         </TabsContent>
-        {/* 收款 */}
-        <TabsContent value="receive">
-          {receivement
-            ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
-        </TabsContent>
-        {/* 薪資 */}
-        <TabsContent value="salary">
-          {/* {JSON.stringify(salary)} */}
-          {fetchTrigger.salary && (
-            salary
-              ? <SalaryTable salary={salary} salaryMonth={salaryMonth} setSalaryMonth={setSalaryMonth} />
+        {isAdmin && (<>
+          {/* 收款 */}
+          < TabsContent value="receive">
+            {receivement
+              ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
               : <div className="flex-center">
                 <ClipLoader color="#D1C0AD" />
-              </div>
-          )}
-        </TabsContent>
+              </div>}
+          </TabsContent>
+          {/* 薪資 */}
+          <TabsContent value="salary">
+            {/* {JSON.stringify(salary)} */}
+            {fetchTrigger.salary && (
+              salary
+                ? <SalaryTable salary={salary} salaryMonth={salaryMonth} setSalaryMonth={setSalaryMonth} />
+                : <div className="flex-center">
+                  <ClipLoader color="#D1C0AD" />
+                </div>
+            )}
+          </TabsContent>
+        </>)
+        }
       </Tabs >
-    </div>
+    </div >
   )
 }

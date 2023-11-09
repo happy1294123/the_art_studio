@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 
 export async function GET(req: any) {
   const token = await getToken({ req })
-  if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  if (!token || !['ADMIN'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
 
   const res = await prisma.payment.findMany({
     orderBy: {
@@ -20,7 +20,7 @@ export async function GET(req: any) {
 
 export async function POST(req: any) {
   const token = await getToken({ req })
-  if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  if (!token || !['ADMIN'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
 
   const { reply, payment_id } = await req.json()
   const state = reply === 'success' ? 'SUCCESS' : 'ERROR'

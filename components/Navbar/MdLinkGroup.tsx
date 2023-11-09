@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,15 +10,16 @@ import {
 import { motion } from "framer-motion"
 import LinkWithAnim from './LinkWithAnim';
 import LoginBtnOrUserProfile from '@/components/Navbar/LoginBtnOrUserProfile'
-import { useSession } from "next-auth/react"
 import ManageLink from './ManageLink';
 
-export default function MdLinkGroup() {
+type Props = {
+  isLogin: boolean,
+  isManager: boolean | null,
+  isTeacher: boolean | null
+}
+
+export default function MdLinkGroup({ isLogin, isManager, isTeacher }: Props) {
   const [offsetClass, setOffsetClass] = useState('')
-  const { data: session } = useSession()
-  const isManager = useMemo(() => {
-    return session && ['ADMIN', 'EDITOR'].includes(session.user.role)
-  }, [session])
 
   return (
     <>
@@ -28,7 +29,7 @@ export default function MdLinkGroup() {
             <LinkWithAnim href="/news" className="text-xl ml-1 md:ml-0">最新消息</LinkWithAnim>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl pr-0" onMouseEnter={() => setOffsetClass(isManager ? 'mr-[150px]' : 'mr-[100px]')}>
+            <NavigationMenuTrigger className="text-xl pr-0" onMouseEnter={() => setOffsetClass((isManager || isTeacher) ? 'mr-[150px]' : 'mr-[100px]')}>
               <span>關於課程</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent className="bg-bgColorSecondary text-secondary-foreground mx-auto" asChild>
@@ -47,7 +48,7 @@ export default function MdLinkGroup() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl p-0 ml-4 md:ml-0 md:pl-1" onMouseEnter={() => setOffsetClass(isManager ? 'mr-[30px]' : 'ml-[20px]')}>
+            <NavigationMenuTrigger className="text-xl p-0 ml-4 md:ml-0 md:pl-1" onMouseEnter={() => setOffsetClass((isManager || isTeacher) ? 'mr-[30px]' : 'ml-[20px]')}>
               關於我們
             </NavigationMenuTrigger>
             < NavigationMenuContent className="bg-bgColorSecondary text-secondary-foreground" asChild>
@@ -70,11 +71,18 @@ export default function MdLinkGroup() {
             </LinkWithAnim>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <LoginBtnOrUserProfile isLogin={!!session} />
+            <LoginBtnOrUserProfile isLogin={isLogin} />
           </NavigationMenuItem>
           {isManager && (
             <NavigationMenuItem>
               <ManageLink />
+            </NavigationMenuItem>
+          )}
+          {isTeacher && (
+            <NavigationMenuItem>
+              <LinkWithAnim href='/teacher' className="text-md md:text-xl ml-6 md:ml-0 mb-2 md:mb-0">
+                老師專區
+              </LinkWithAnim >
             </NavigationMenuItem>
           )}
         </NavigationMenuList>

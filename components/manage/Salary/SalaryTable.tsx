@@ -15,6 +15,11 @@ type Props = {
 
 export default function SalaryTable({ salary, salaryMonth, setSalaryMonth }: Props) {
   const [selectRow, setSelectRow] = useState<Salary | undefined>()
+
+  if (typeof salary === 'string' && salary === '權限不足') {
+    return <div className="flex-center">{salary}</div>
+  }
+
   return (<>
     <div>
       <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
@@ -27,12 +32,14 @@ export default function SalaryTable({ salary, salaryMonth, setSalaryMonth }: Pro
           />
         </div>
         {/* {salaryMonth} */}
-        <DataTable
-          columns={getColumns(salaryMonth)}
-          data={salary}
-          hasSearch
-          setSelectRow={setSelectRow}
-        />
+        {salary.length && (
+          <DataTable
+            columns={getColumns(salaryMonth)}
+            data={salary}
+            hasSearch
+            setSelectRow={setSelectRow}
+          />
+        )}
       </div>
     </div>
     {selectRow && <SalaryDialog data={selectRow} setData={setSelectRow} monthString={salaryMonth} />}

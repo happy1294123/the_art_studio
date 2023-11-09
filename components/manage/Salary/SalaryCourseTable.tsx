@@ -17,6 +17,17 @@ type Props = {
 export default function SalaryCourseTable({ data }: Props) {
   console.log(data);
   return (<>
+    <div className="flex flex-col">
+      <span>
+        薪資：$10000
+      </span>
+      <span>
+        完成課程：10 堂
+      </span>
+      <span>
+        排定課程：20 堂
+      </span>
+    </div>
     <Table>
       {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
       {/* - 時間（月、上課、下課）
@@ -31,9 +42,9 @@ export default function SalaryCourseTable({ data }: Props) {
           <TableHead className="text-center">時間</TableHead>
           <TableHead className="text-center">名稱</TableHead>
           <TableHead className="text-center">人數</TableHead>
-          <TableHead className="text-center">鐘點費</TableHead>
-          <TableHead className="text-center">獎金</TableHead>
-          <TableHead className="text-center">總計</TableHead>
+          {/* <TableHead className="text-center">鐘點費</TableHead>
+          <TableHead className="text-center">獎金</TableHead> */}
+          <TableHead className="text-center">小計</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -67,14 +78,24 @@ export default function SalaryCourseTable({ data }: Props) {
                 </span>
               </div>
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               $1000
             </TableCell>
             <TableCell>
               $500
-            </TableCell>
+            </TableCell> */}
             <TableCell>
-              $1500
+              <div className="flex-center flex-col">
+                <span>
+                  鐘點費 $1000
+                </span>
+                <span>
+                  獎金 $500
+                </span>
+                <span>
+                  總共 $1500
+                </span>
+              </div>
             </TableCell>
           </TableRow>
         ))}
