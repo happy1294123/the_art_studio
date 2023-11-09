@@ -54,17 +54,20 @@ export function DataTable<TData, TValue>({
   }
 
   return (<>
-    {data.length > 0 && <div className="flex w-fit ml-auto justify-end items-center relative ">
-      <div className="absolute left-3 text-headingColor">
-        <BiSearch />
+    {data.length > 0
+      &&
+      <div className="flex w-fit ml-auto justify-end items-center relative ">
+        <div className="absolute left-3 text-headingColor">
+          <BiSearch />
+        </div>
+        <Input
+          placeholder="搜尋"
+          value={globalFilter ?? ''}
+          onChange={e => setGlobalFilter(String(e.target.value))}
+          className="w-[150px] md:w-[200px] rounded-full border-headingColor/70 text-headingColor pl-8"
+        />
       </div>
-      <Input
-        placeholder="搜尋"
-        value={globalFilter ?? ''}
-        onChange={e => setGlobalFilter(String(e.target.value))}
-        className="max-w-[200px] rounded-full border-headingColor/70 text-headingColor pl-8"
-      />
-    </div>}
+    }
     <div className={`rounded-md whitespace-nowrap`}>
       <Table>
         <TableHeader>

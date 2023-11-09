@@ -1,14 +1,20 @@
 import { DialogDescription, DialogHeader } from '@/components/ui/dialog'
 import { useCourse } from '@/lib/contexts/ManageCourseContent';
 import { Course } from '@/type'
-import React, { Dispatch } from 'react'
-import { BiTime } from 'react-icons/bi';
+import React from 'react'
+import { BiTime, BiSolidChevronsRight } from 'react-icons/bi';
 import Image from 'next/image'
 import { GoPerson } from 'react-icons/go';
 import { Label } from '@/components/ui/label';
 import { DataTable } from '@/components/table/data-table';
 import { columns } from './reserve-columns'
 import CreateReserve from './CreateReserve';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 type Props = {
   courseForm: Course,
@@ -65,7 +71,7 @@ export default function CourseDetail({ courseForm }: Props) {
           </div>
         </DialogDescription>
       </DialogHeader >
-      <div className='-mt-3 ml-3 overflow-hidden'>
+      <div className='-mt-3 overflow-hidden'>
         <div >
           <Label htmlFor="">開課狀態：</Label>
           {getCourseState()}
@@ -79,8 +85,23 @@ export default function CourseDetail({ courseForm }: Props) {
           <Label >預約人數：</Label>
           {courseForm.Reservation.length > 0
             ? <>
-              {courseForm.Reservation.length} 人
-              <DataTable columns={columns} data={courseForm.Reservation} mutate={coursesMutate} customClass="border-none overflow-auto -ml-2" />
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger
+                    className='flex justify-start gap-1 pb-2 -mt-[28px] ml-[73px] -mb-12 h-2'
+                  >
+                    {courseForm.Reservation.length} 人
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className='rounded-2xl shadow-md drop-shadow-lg border border-gray-300 mt-2'>
+                      <DataTable columns={columns} data={courseForm.Reservation} mutate={coursesMutate} customClass="border-none overflow-auto" />
+                    </div>
+                    <div className='float-right -mt-4 mr-1'>
+                      <BiSolidChevronsRight color="#B2B2B2" />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </>
             : '尚無預約'
           }

@@ -99,6 +99,7 @@ model User {
   UserDiscount     UserDiscount[]
   CancelLog        CancelLog[]
   Payment          Payment[]
+  Salary           Salary?
 
   @@unique([email])
   @@map("users")
@@ -115,6 +116,19 @@ enum Gender {
   MALE
   FEMALE
   UNKNOW
+}
+
+model Salary {
+  user        User    @relation(fields: [teacher_id], references: [id])
+  teacher_id  Int
+  hourly_pay  Int?
+  bonus       String?
+  pay_method  String?
+  pay_account String?
+  unPayMonth  String?
+
+  @@unique([teacher_id])
+  @@map("salary")
 }
 
 model Discount {

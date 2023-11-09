@@ -78,20 +78,5 @@ export const columns: ColumnDef<Partial<User>>[] = [
         return <span>{dateFormatter(new Date(row.original.point_deadline))}</span>
       }
     }
-  },
-  // {
-  //   accessorKey: "schedule_service",
-  //   header: '行事曆'
-  // },
-  // {
-  //   accessorKey: "email_varified",
-  //   header: '信箱驗證',
-  //   cell: ({ row }) => {
-  //     return row.original.email_varified ? '通過' : '未通過'
-  //   }
-  // },
-  // {
-  //   accessorKey: "note",
-  //   header: '備註'
-  // },
+  }
 ]

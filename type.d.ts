@@ -1,5 +1,4 @@
-import { number } from "zod"
-import { Payment, ReservationState, Reservation } from "@prisma/client"
+import { Payment, ReservationState, Reservation, User } from "@prisma/client"
 
 type Todo = {
   userId: number,
@@ -22,24 +21,24 @@ type Teacher = {
   image: string
 }
 
-type Course = {
-  id: number,
-  name: string,
-  type: string | null,
-  date: string,
-  start_time: string,
-  end_time: string,
-  teacher_id: number,
-  Reservation: Reservation[],
-  Payment: Payment[],
-  total_rez: number,
-  baseline_rez: number,
-  point: number,
-  price: number,
-  createdAt?: Date,
-  updatedAt?: Date,
-  teacher: Teacher
-}
+// type Course = {
+//   id: number,
+//   name: string,
+//   type: string | null,
+//   date: string,
+//   start_time: string,
+//   end_time: string,
+//   teacher_id: number,
+//   Reservation: Reservation[],
+//   Payment: Payment[],
+//   total_rez: number,
+//   baseline_rez: number,
+//   point: number,
+//   price: number,
+//   createdAt?: Date,
+//   updatedAt?: Date,
+//   teacher: Teacher
+// }
 
 type Option = {
   label: string,
@@ -58,16 +57,17 @@ type Session = {
   }
 }
 
-type Reservation = {
-  course_id: number,
-  user_id: number,
-  state: 'SUCCESS' | 'PENDING' | 'CANCEL',
-  plan_name: string,
-  plan_value: number,
-  created_at: Date,
-  updated_at: Date,
-  course: Course
-}
+// type Reservation = {
+//   course_id: number,
+//   user_id: number,
+//   state: 'SUCCESS' | 'PENDING' | 'CANCEL',
+//   plan_name: string,
+//   plan_value: number,
+//   created_at: Date,
+//   updated_at: Date,
+//   course: Course,
+//   user?: User
+// }
 
 type CourseEvent = {
   title: string,
@@ -112,4 +112,18 @@ type Review = {
   text: string,
   time: number,
   translated: boolean
+}
+
+type Salary = {
+  id: number,
+  name: string,
+  Salary: {
+    teacher_id: number,
+    hourly_pay: number,
+    bonus: string,
+    pay_method: string,
+    pay_account: string,
+    unPayMonth: string,
+  },
+  Course: Course[]
 }

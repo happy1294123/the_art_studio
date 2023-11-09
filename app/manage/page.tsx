@@ -13,6 +13,7 @@ import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { CourseContent } from '@/lib/contexts/ManageCourseContent'
 import dynamic from "next/dynamic"
+import dateFormatter from "@/lib/dateFormatter"
 const SalaryTable = dynamic(() => import('@/components/manage/Salary/SalaryTable'))
 
 async function courseFetcher(url: string): Promise<Course[]> {
@@ -57,7 +58,7 @@ export default function ManagePage() {
     course: false,
     discount: false,
     receive: false,
-    salary: false
+    salary: true
   })
 
   const handleValueChange = (value: string) => {
@@ -99,13 +100,11 @@ export default function ManagePage() {
   )
 
   // salary data
+  const [salaryMonth, setSalaryMonth] = useState(dateFormatter().slice(0, 7))
   const { data: salary } = useSWR(
-    fetchTrigger.salary && '/api/manage/salary',
+    fetchTrigger.salary && `/api/manage/salary?month=${salaryMonth}`,
     salaryFetcher
   )
-
-  console.log('salary', salary);
-
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -115,9 +114,9 @@ export default function ManagePage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="user" onValueChange={handleValueChange}>
+      <Tabs defaultValue="salary" onValueChange={handleValueChange}>
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="user">學員</TabsTrigger>
+          <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
           <TabsTrigger value="discount">折扣</TabsTrigger>
           <TabsTrigger value="receive">收款</TabsTrigger>
@@ -125,7 +124,11 @@ export default function ManagePage() {
         </TabsList>
         {/* 學員 */}
         <TabsContent value="user">
-          <UsersTable users={users} usersMutate={usersMutate} />
+          {users
+            ? <UsersTable users={users} usersMutate={usersMutate} />
+            : <div className="flex-center">
+              <ClipLoader color="#D1C0AD" />
+            </div>}
         </TabsContent>
         {/* 課程 */}
         <TabsContent value="course">
@@ -141,17 +144,30 @@ export default function ManagePage() {
         </TabsContent >
         {/* 折扣碼 */}
         <TabsContent value="discount">
-          <DiscountTable discount={discount} discountMutate={discountMutate} />
+          {discount
+            ? <DiscountTable discount={discount} discountMutate={discountMutate} />
+            : <div className="flex-center">
+              <ClipLoader color="#D1C0AD" />
+            </div>}
         </TabsContent>
         {/* 收款 */}
         <TabsContent value="receive">
-          <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
+          {receivement
+            ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
+            : <div className="flex-center">
+              <ClipLoader color="#D1C0AD" />
+            </div>}
         </TabsContent>
         {/* 薪資 */}
         <TabsContent value="salary">
-          {fetchTrigger.salary && <SalaryTable />}
-          {/* <SalaryTable /> */}
-          {/* <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} /> */}
+          {/* {JSON.stringify(salary)} */}
+          {fetchTrigger.salary && (
+            salary
+              ? <SalaryTable salary={salary} salaryMonth={salaryMonth} setSalaryMonth={setSalaryMonth} />
+              : <div className="flex-center">
+                <ClipLoader color="#D1C0AD" />
+              </div>
+          )}
         </TabsContent>
       </Tabs >
     </div>

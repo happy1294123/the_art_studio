@@ -84,7 +84,7 @@ const groundCourseTypeList = [
 
 export default function CourseIntroPage() {
   return (
-    <>
+    <div className='max-w-screen-md mx-auto'>
       <TheTitle>課程介紹</TheTitle>
       <Card>
         <CardHeader>
@@ -127,6 +127,6 @@ export default function CourseIntroPage() {
           </ul>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 } 

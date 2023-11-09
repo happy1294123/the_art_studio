@@ -9,6 +9,7 @@ const fieldMap = {
   point_deadline: '點數期限',
   schedule_service: '行事曆',
   email_varified: '信箱驗證',
+  role: '身份',
   note: '備註'
 }
 
@@ -42,6 +43,9 @@ export default function getUserInfo(user: User) {
       }
       if (key === 'email_varified') {
         value = value ? '成功' : '尚未'
+      }
+      if (key === 'role') {
+        value = value === 'STUDENT' ? '學生' : '老師'
       }
       if (key === 'note' && !value) {
         value = ''

@@ -2,7 +2,6 @@ import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
 
 export async function GET(req: any) {
-
   const token = await getToken({ req })
   if (!token) return NextResponse.json('請先登入會員', { status: 401 })
 
@@ -40,6 +39,10 @@ export async function GET(req: any) {
 
   if (res.state === 'CANCEL') {
     return NextResponse.json({ type: 'alert', message: '此預約已經取消' })
+  }
+
+  if (new Date(`${res.course.date} ${res.course.end_time}`).getTime() <= (new Date()).getTime()) {
+    return NextResponse.json({ type: 'alert', message: '此課程已結束' })
   }
 
   // 單次

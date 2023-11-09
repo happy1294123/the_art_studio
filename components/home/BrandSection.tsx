@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function BrandSection() {
   return (
-    <div className="mt-[100px]">
+    <div className="mt-[150px]">
       <div className="flex justify-center ml-8">
         <Image className="" src="/home/brand_section/title.svg" width={300} height={300} alt="title" />
         <Image className="" src="/home/brand_section/img.svg" width={300} height={300} alt="img" />

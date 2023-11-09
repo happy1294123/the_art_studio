@@ -42,6 +42,7 @@ import LoadingButton from "@/components/LoadingButton"
 import toast from "react-hot-toast"
 import getToastOption from "@/lib/getToastOption"
 import { KeyedMutator } from "swr"
+import DialogSwitcher from "@/components/DialogSwitcher"
 
 const formSchema = z.object({
   serial_number: z.string(),
@@ -65,7 +66,7 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
     }
   }, [open, setSelectedUser])
 
-  const [showInfo, setShowInfo] = useState(true)
+  const [showInfo, setShowInfo] = useState(false)
   const { userInfo, userDetail, userEmDetail } = getUserInfo(selectedUser)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -108,18 +109,18 @@ export default function UserDetailDialog({ selectedUser, setSelectedUser, userMu
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-white overflow-y-auto">
+      <DialogContent className="bg-white">
         <DialogHeader>
-          <div className="absolute right-9 top-3 flex items-baseline gap-1">
-            <span className="text-sm text-fontColor/60">資料/更新</span>
-            <Switch onCheckedChange={(check: boolean) => setShowInfo(!check)} />
-          </div>
-          <DialogTitle className="text-left">會員資料</DialogTitle>
+          <DialogSwitcher label="資料/更新" status={showInfo} setStatus={setShowInfo} />
+          <DialogTitle className="text-left">
+            會員資料
+            {showInfo && '更新'}
+          </DialogTitle>
           <DialogDescription>
           </DialogDescription>
         </DialogHeader>
-        {showInfo ? (
-          <div>
+        {!showInfo ? (
+          <div className="overflow-y-auto max-h-[500px]">
             {userInfo.map(data => (
               <div key={data.field} className="grid md:grid-cols-5 mt-2 items-center">
                 <Label className="whitespace-nowrap col-span-1 text-fontColor/60 ">{data.field}:</Label>

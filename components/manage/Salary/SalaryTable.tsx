@@ -1,23 +1,40 @@
-import { User } from "@prisma/client"
 import { DataTable } from "@/components/table/data-table";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { KeyedMutator } from "swr";
+import { Salary } from "@/type";
+import { Dispatch, useState } from "react";
+import { Input } from "@/components/ui/input";
+import SalaryDialog from "./SalaryDialog";
 
-// type Props = {
-//   users?: User[],
-//   usersMutate: KeyedMutator<User[]>
-// }
+type Props = {
+  salary: Salary[],
+  salaryMonth: string,
+  setSalaryMonth: Dispatch<string>
+  // usersMutate: KeyedMutator<User[]>
+}
 
-
-export default function SalaryTable() {
-  console.log('render salary');
-
-  return (
+export default function SalaryTable({ salary, salaryMonth, setSalaryMonth }: Props) {
+  const [selectRow, setSelectRow] = useState<Salary | undefined>()
+  return (<>
     <div>
-      {<div className="mx-auto bg-bgColorOther rounded-2xl p-3">
-        test salary
-        {/* <DataTable columns={columns} data={users.filter(user => user?.role === 'TEACHER')} mutate={usersMutate} /> */}
-      </div>}
+      <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
+        <div className="w-[130px] md:w-[200px] -mb-10">
+          <Input
+            type='month'
+            className="border-headingColor/70 text-headingColor rounded-full"
+            value={salaryMonth.replaceAll('/', '-')}
+            onChange={e => setSalaryMonth(e.target.value.replaceAll('-', '/'))}
+          />
+        </div>
+        {/* {salaryMonth} */}
+        <DataTable
+          columns={getColumns(salaryMonth)}
+          data={salary}
+          hasSearch
+          setSelectRow={setSelectRow}
+        />
+      </div>
     </div>
-  )
+    {selectRow && <SalaryDialog data={selectRow} setData={setSelectRow} monthString={salaryMonth} />}
+  </>)
 }

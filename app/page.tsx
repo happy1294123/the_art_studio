@@ -13,12 +13,12 @@ export default function Home() {
       </div>
       <div className="grid grid-cols-2 mt-[120px]">
         <div className="col-span-1 text-2xl md:text-3xl whitespace-nowrap text-center leading-8 tracking-widest text-[#789759] md:mr-[150px]">
-          <Image className="ml-[70px] md:ml-[20px] mb-3 drop-shadow-lg md:invisible" src="/logo.svg" width={60} height={60} alt="" priority />
+          <Image className="mx-auto mb-3 drop-shadow-lg md:invisible" src="/logo.svg" width={60} height={60} alt="" priority />
           <div className="ml-5">瑜伽 放鬆伸展</div>
           <div>身體訓練 舒緩釋放</div>
         </div>
       </div>
-      <div className="absolute top-0 right-10 md:left-[250px] -z-10">
+      <div className="absolute top-0 right-10 md:left-[380px] -z-10">
         <Image src="/hero_img.png" width={250} height={250} alt='' />
       </div>
       <div className="flex-center mt-[30px] md:mt-0">

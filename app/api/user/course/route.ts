@@ -32,12 +32,18 @@ export async function GET(req: any) {
       },
     }
   })
+  const nowTime = (new Date()).getTime()
   const groupData = reservations.reduce((group, reservation) => {
-    const date: string = reservation.course.date
-    group[date as keyof typeof group] = group[date as keyof typeof group] ?? [];
-    (<typeof reservation[]>group[date as keyof typeof group]).push(reservation)
+    const date = reservation.course.date as keyof typeof group
+    if (new Date(`${date} ${reservation.course.end_time}`).getTime() <= nowTime) {
+      return group
+    }
+    group[date] = group[date] ?? [];
+    (<typeof reservation[]>group[date]).push(reservation)
     return group
   }, {})
+
+
   return NextResponse.json(groupData)
 }
 

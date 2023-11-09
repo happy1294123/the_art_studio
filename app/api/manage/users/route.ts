@@ -7,8 +7,14 @@ export async function GET(req: any) {
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
 
   const res = await prisma.user.findMany({
+    orderBy: {
+      role: 'desc'
+    },
     where: {
-      role: 'STUDENT'
+      OR: [
+        { role: 'STUDENT' },
+        { role: 'TEACHER' },
+      ]
     }
   })
 

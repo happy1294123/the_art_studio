@@ -1,4 +1,5 @@
 import { JSX } from 'react'
+import toast from 'react-hot-toast'
 import { AiFillInfoCircle, AiFillCheckCircle } from 'react-icons/ai'
 import { BiSolidError } from 'react-icons/bi'
 
@@ -33,5 +34,13 @@ export default function getToastOption(icon?: string | JSX.Element | undefined, 
         border: '2px solid #D1C0AD'
       }
     }
+  }
+}
+
+export const toastResult = (result: Response, operate: string) => {
+  if (result.ok) {
+    toast(`${operate}成功`, getToastOption())
+  } else {
+    toast(`${operate}失敗`, getToastOption('error'))
   }
 }

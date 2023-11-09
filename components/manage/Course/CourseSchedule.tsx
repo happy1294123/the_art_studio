@@ -179,7 +179,7 @@ export default function CourseSchedule() {
   return (<>
     {!!courseForm && (<>
       <Dialog open={!!courseForm} onOpenChange={() => setCourseForm(null)}>
-        <DialogContent className="bg-white">
+        <DialogContent className="bg-white w-11/12">
           <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
             <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
             <Switch
@@ -245,7 +245,7 @@ function renderEventContent(eventInfo: any) {
   const props = eventInfo.event._def.extendedProps
 
   return (<div className='md:p-2 py-1 space-y-1'>
-    <div style={{ display: 'flex' }}>
+    <div className='flex justify-center md:justify-start'>
       {eventInfo.timeText}
       {/* {props.reservationNum >= props.base_rez
         && <span className='ml-auto mt-1'>
