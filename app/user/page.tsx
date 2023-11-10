@@ -11,11 +11,12 @@ import Link from 'next/link'
 import UserPointTabContent from '@/components/user/UserPointTabContent'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Payment } from '@prisma/client'
-import { Reservation } from '@/type'
+import { MyReservation } from '@/type'
 import UserPaymentTabContent from '@/components/user/UserPaymentTabContent'
 import { useEffect, useState } from 'react'
+import { ClipLoader } from 'react-spinners'
 
-async function myCourseFetcher(url: string): Promise<Record<string, Reservation[]>> {
+async function myCourseFetcher(url: string): Promise<Record<string, MyReservation[]>> {
   const res = await fetch(url, { next: { tags: ['myReservation'] } })
   return await res.json()
 }
@@ -98,7 +99,7 @@ export default function UserPage() {
 
           {(reservations && Object.keys(reservations).length === 0)
             && (<><div className="flex-center">目前沒有預約課程</div>
-              <div className='flex-center mt-2'>
+              < div className='flex-center mt-2'>
                 <Button className="mx-auto"><Link href="/course">前往預約</Link></Button>
               </div>
             </>)
@@ -108,7 +109,11 @@ export default function UserPage() {
           <UserPointTabContent myPoint={point} mutateUnPayNum={mutateUnPayNum} />
         </TabsContent>
         <TabsContent value="payment">
-          <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} mutateUnPayNum={mutateUnPayNum} />
+          {payments
+            ? <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} mutateUnPayNum={mutateUnPayNum} />
+            : <div className="flex-center">
+              <ClipLoader color="#D1C0AD" />
+            </div>}
         </TabsContent>
       </Tabs >
     </div >

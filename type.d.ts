@@ -21,24 +21,24 @@ type Teacher = {
   image: string
 }
 
-// type Course = {
-//   id: number,
-//   name: string,
-//   type: string | null,
-//   date: string,
-//   start_time: string,
-//   end_time: string,
-//   teacher_id: number,
-//   Reservation: Reservation[],
-//   Payment: Payment[],
-//   total_rez: number,
-//   baseline_rez: number,
-//   point: number,
-//   price: number,
-//   createdAt?: Date,
-//   updatedAt?: Date,
-//   teacher: Teacher
-// }
+type MyCourse = {
+  id: number,
+  name: string,
+  type: string | null,
+  date: string,
+  start_time: string,
+  end_time: string,
+  teacher_id: number,
+  Reservation: Reservation[],
+  Payment: Payment[],
+  total_rez: number,
+  baseline_rez: number,
+  point: number,
+  price: number,
+  createdAt?: Date,
+  updatedAt?: Date,
+  teacher: Teacher
+}
 
 type Option = {
   label: string,
@@ -57,17 +57,16 @@ type Session = {
   }
 }
 
-// type Reservation = {
-//   course_id: number,
-//   user_id: number,
-//   state: 'SUCCESS' | 'PENDING' | 'CANCEL',
-//   plan_name: string,
-//   plan_value: number,
-//   created_at: Date,
-//   updated_at: Date,
-//   course: Course,
-//   user?: User
-// }
+type MyReservation = {
+  course_id: number,
+  user_id: number,
+  state: 'SUCCESS' | 'PENDING' | 'CANCEL',
+  plan_name: string,
+  plan_value: number,
+  created_at: Date,
+  updated_at: Date,
+  course: Course,
+}
 
 type CourseEvent = {
   title: string,

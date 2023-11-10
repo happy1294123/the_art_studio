@@ -11,7 +11,6 @@ import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
-import { Course } from '@/type'
 import { Progress } from "@/components/ui/progress"
 const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 import CourseTypeDialog from './CourseTypeDialog'
@@ -21,8 +20,13 @@ import CourseDetail from './CourseDialog/CourseDetail'
 const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))
 import { Switch } from "@/components/ui/switch"
 import { Label } from '@/components/ui/label'
+import { MyCourse } from '@/type'
 
-export default function CourseSchedule() {
+type Props = {
+  isTeacherMode?: boolean
+}
+
+export default function CourseSchedule({ isTeacherMode }: Props) {
   const {
     courses,
     coursesMutate,
@@ -30,7 +34,7 @@ export default function CourseSchedule() {
     courseTypeMutate,
     teacherOpt,
   } = useCourse()
-  const [courseForm, setCourseForm] = useState<Partial<Course> | null>(null)
+  const [courseForm, setCourseForm] = useState<Partial<MyCourse> | null>(null)
   useEffect(() => {
     if (!courseForm) return
     const selectedCourse = courses?.find(c => c.id === courseForm.id)
@@ -47,9 +51,9 @@ export default function CourseSchedule() {
       date: course.date,
       start: `${course.date.replaceAll('/', '-')} ${course.start_time}`,
       end: `${course.date.replaceAll('/', '-')} ${course.end_time}`,
-      color: courseType.find((type: { name: string | null }) => type.name === course.type)?.color,
+      color: courseType?.find((type: { name: string | null }) => type.name === course.type)?.color,
       textColor: '#000',
-      reservationNum: course.Reservation.length,
+      reservationNum: course.Reservation.filter(r => r.state === 'SUCCESS').length,
       base_rez: course.baseline_rez,
       total_rez: course.total_rez,
     }))
@@ -57,6 +61,7 @@ export default function CourseSchedule() {
 
   const calendarRef = useRef(null)
   const handleDateClick = (dateInfo: any) => {
+    if (isTeacherMode) return
     const clickDate = new Date(dateInfo.date)
     const delta = {
       start: clickDate.getDay() === 0 ? -5 : +2,
@@ -103,6 +108,7 @@ export default function CourseSchedule() {
   }
 
   const handleDrag = async (info: any) => {
+    if (isTeacherMode) return
     const courseId = info.event._def.extendedProps.courseId
     const date = dateFormatter(info.event._instance.range.start)
     await fetch('/api/manage/course', {
@@ -112,9 +118,11 @@ export default function CourseSchedule() {
         date
       })
     })
-    const clickedCourse = courses?.find(c => c.id === courseId) as Course
+    const clickedCourse = courses?.find(c => c.id === courseId) as MyCourse
     clickedCourse.date = date
-    await coursesMutate()
+    if (coursesMutate) {
+      await coursesMutate()
+    }
     setCourseForm(clickedCourse)
   }
 
@@ -133,7 +141,7 @@ export default function CourseSchedule() {
         })
       })
       if (res.ok) {
-        coursesMutate()
+        coursesMutate && coursesMutate()
         toast('當週 -> 下週，複製成功', getToastOption())
       }
     }
@@ -155,7 +163,7 @@ export default function CourseSchedule() {
         })
       })
       if (res.ok) {
-        coursesMutate()
+        coursesMutate && coursesMutate()
         toast('當週 -> 下3週，複製成功', getToastOption())
       }
     }
@@ -180,16 +188,18 @@ export default function CourseSchedule() {
     {!!courseForm && (<>
       <Dialog open={!!courseForm} onOpenChange={() => setCourseForm(null)}>
         <DialogContent className="bg-white w-11/12">
-          <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
-            <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
-            <Switch
-              id='dialog-state'
-              checked={dialogState === 'modify'}
-              onCheckedChange={checked => setDialogState(checked ? 'modify' : 'courseDetail')}
-            />
-          </div>
-          {dialogState === 'courseDetail' && <CourseDetail courseForm={courseForm as Course} />}
-          {dialogState === 'modify' && <ModifyForm courseForm={courseForm} setCourseForm={setCourseForm} />}
+          {!isTeacherMode && (
+            <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
+              <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
+              <Switch
+                id='dialog-state'
+                checked={dialogState === 'modify'}
+                onCheckedChange={checked => setDialogState(checked ? 'modify' : 'courseDetail')}
+              />
+            </div>
+          )}
+          {dialogState === 'courseDetail' && <CourseDetail courseForm={courseForm as MyCourse} isTeacherMode={isTeacherMode} />}
+          {(dialogState === 'modify' && !isTeacherMode) && <ModifyForm courseForm={courseForm} setCourseForm={setCourseForm} />}
         </DialogContent>
       </Dialog>
     </>)}
@@ -221,7 +231,7 @@ export default function CourseSchedule() {
         dateClick={handleDateClick}
         eventDrop={handleDrag}
         droppable={false}
-        editable={true}
+        editable={!isTeacherMode}
         eventClick={handleClickEvent}
         events={events}
         eventContent={renderEventContent}
@@ -234,17 +244,19 @@ export default function CourseSchedule() {
         ref={calendarRef}
       />
     </div>
-    <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
-    <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
-    {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
-    {openCourseTypeDialog && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
+    {!isTeacherMode && (<>
+      <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
+      <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
+      {openCourseTypeDialog && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
+      {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
+    </>)}
   </>)
 }
 
 function renderEventContent(eventInfo: any) {
   const props = eventInfo.event._def.extendedProps
 
-  return (<div className='md:p-2 py-1 space-y-1'>
+  return (<div className='md:p-2 py-1 space-y-1 cursor-pointer'>
     <div className='flex justify-center md:justify-start'>
       {eventInfo.timeText}
       {/* {props.reservationNum >= props.base_rez

@@ -1,13 +1,13 @@
-import { Course, Teacher } from "@/type";
+import { MyCourse, Teacher } from "@/type";
 import { CourseType, User } from "@prisma/client";
 import { KeyedMutator } from "swr";
 import { createContext, useContext } from "react";
 
 export const CourseContent = createContext<{
-  courses?: Course[],
-  coursesMutate: KeyedMutator<Course[]>,
-  courseType: CourseType[],
-  courseTypeMutate: KeyedMutator<CourseType[]>,
+  courses?: MyCourse[],
+  coursesMutate?: KeyedMutator<MyCourse[]>,
+  courseType?: CourseType[],
+  courseTypeMutate?: KeyedMutator<CourseType[]>,
   teacherOpt?: Teacher[],
   users?: Partial<User>[]
 } | undefined>(undefined)

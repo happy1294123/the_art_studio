@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select"
 import { useCourse } from "@/lib/contexts/ManageCourseContent"
 import { Dispatch, useEffect, useState } from "react"
-import { Course, Teacher } from "@/type"
+import { MyCourse, Teacher } from "@/type"
 
 const formSchema = z.object({
   id: z.number().optional(),
@@ -54,8 +54,8 @@ const formSchema = z.object({
 })
 
 type Props = {
-  courseForm: Partial<Course>,
-  setCourseForm: Dispatch<Course | null>
+  courseForm: Partial<MyCourse>,
+  setCourseForm: Dispatch<MyCourse | null>
 }
 
 export default function ModifyContent({ courseForm, setCourseForm }: Props) {

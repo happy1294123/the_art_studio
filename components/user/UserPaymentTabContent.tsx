@@ -45,7 +45,11 @@ export default function UserPaymentTabContent({ payments, mutatePayment, mutateU
 
   const handleCancelPayment = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>, payment: Payment) => {
     e.stopPropagation()
-    const isConfirm = confirm('是否要取消購買？')
+    let text = '是否要取消購買？'
+    if (payment.course_id) {
+      text += '(此課程預約將一併取消)'
+    }
+    const isConfirm = confirm(text)
     if (!isConfirm) return
     const res = await fetch(`/api/user/payment?id=${payment.id}`, {
       method: 'delete'

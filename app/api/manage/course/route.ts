@@ -38,6 +38,7 @@ export async function GET(req: any) {
             select: {
               serial_number: true,
               name: true,
+              medical: true
             }
           }
         }

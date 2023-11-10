@@ -2,9 +2,9 @@ import CourseItem from '@/components/course/CourseItem'
 import useSWR from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { Course } from '@/type'
+import { MyCourse } from '@/type'
 
-async function fetcher(url: string): Promise<Course[]> {
+async function fetcher(url: string): Promise<MyCourse[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
   return await res.json()
 }

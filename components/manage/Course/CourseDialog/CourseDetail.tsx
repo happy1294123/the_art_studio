@@ -1,13 +1,13 @@
 import { DialogDescription, DialogHeader } from '@/components/ui/dialog'
 import { useCourse } from '@/lib/contexts/ManageCourseContent';
-import { Course } from '@/type'
+import { MyCourse } from '@/type'
 import React from 'react'
 import { BiTime, BiSolidChevronsRight } from 'react-icons/bi';
 import Image from 'next/image'
 import { GoPerson } from 'react-icons/go';
 import { Label } from '@/components/ui/label';
 import { DataTable } from '@/components/table/data-table';
-import { columns } from './reserve-columns'
+import { getColumns } from './reserve-columns'
 import CreateReserve from './CreateReserve';
 import {
   Accordion,
@@ -17,14 +17,15 @@ import {
 } from "@/components/ui/accordion"
 
 type Props = {
-  courseForm: Course,
+  courseForm: MyCourse,
+  isTeacherMode?: boolean
   // setCourseForm: Dispatch<Course | null>
 }
 
-export default function CourseDetail({ courseForm }: Props) {
+export default function CourseDetail({ courseForm, isTeacherMode }: Props) {
   const { courseType, coursesMutate } = useCourse()
-  const typeColor = courseType.find(type => type.name === courseForm.type)?.color
-  const current_rez = courseForm.Reservation?.length
+  const typeColor = courseType?.find(type => type.name === courseForm.type)?.color
+  const current_rez = courseForm.Reservation.filter(r => r.state === 'SUCCESS')?.length
   const startCourseTime = (new Date(`${courseForm.date} ${courseForm.start_time}`)).getTime()
   const nowTime = (new Date()).getTime() as number
 
@@ -39,6 +40,8 @@ export default function CourseDetail({ courseForm }: Props) {
     return current_rez >= courseForm.baseline_rez ? '開課成功' : '尚未開課'
   }
   const isLessThanThreeHours = (startCourseTime > nowTime && Math.abs(nowTime - startCourseTime) / 36e5 <= 3)
+
+  const isPassCourse = getCourseState() === '上課中' || getCourseState() === '已下課'
 
   return (
     <>
@@ -83,22 +86,22 @@ export default function CourseDetail({ courseForm }: Props) {
         </div>
         <div>
           <Label >預約人數：</Label>
-          {courseForm.Reservation.length > 0
+          {current_rez > 0
             ? <>
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
                   <AccordionTrigger
-                    className='flex justify-start gap-1 pb-2 -mt-[28px] ml-[73px] -mb-12 h-2'
+                    className='flex justify-start gap-1 pb-2 -mt-[28px] ml-[73px] -mb-12 h-2 outline-none'
                   >
-                    {courseForm.Reservation.length} 人
+                    {current_rez} 人
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className='rounded-2xl shadow-md drop-shadow-lg border border-gray-300 mt-2'>
-                      <DataTable columns={columns} data={courseForm.Reservation} mutate={coursesMutate} customClass="border-none overflow-auto" />
+                      <DataTable columns={getColumns(isPassCourse, isTeacherMode)} data={courseForm.Reservation} mutate={coursesMutate} customClass="border-none overflow-auto" />
                     </div>
-                    <div className='float-right -mt-4 mr-1'>
+                    {/* <div className='float-right -mt-4 mr-1'>
                       <BiSolidChevronsRight color="#B2B2B2" />
-                    </div>
+                    </div> */}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -106,7 +109,7 @@ export default function CourseDetail({ courseForm }: Props) {
             : '尚無預約'
           }
         </div>
-        <CreateReserve courseForm={courseForm} />
+        {!isTeacherMode && <CreateReserve courseForm={courseForm} />}
       </div>
     </>
   )

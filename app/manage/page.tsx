@@ -6,18 +6,18 @@ import DiscountTable from '@/components/manage/DiscountTable/page'
 import UserDropDownMenu from "@/components/user/UserDropDownMenu"
 import ReceivementTable from "@/components/manage/ReceivementTable/page"
 import useSWR from "swr"
-import { Discount, Salary, Teacher } from "@/type"
-import { Course, CourseType, Payment, User } from "@prisma/client"
+import { Discount, MyCourse, Salary, Teacher } from "@/type"
+import { CourseType, Payment, User } from "@prisma/client"
 import UsersTable from "@/components/manage/UsersTable/page"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { CourseContent } from '@/lib/contexts/ManageCourseContent'
-import dynamic from "next/dynamic"
 import dateFormatter from "@/lib/dateFormatter"
 import { useSession } from "next-auth/react"
+import dynamic from "next/dynamic"
 const SalaryTable = dynamic(() => import('@/components/manage/Salary/SalaryTable'))
 
-async function courseFetcher(url: string): Promise<Course[]> {
+async function courseFetcher(url: string): Promise<MyCourse[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
   return await res.json()
 }
@@ -38,8 +38,6 @@ async function discountFetcher(url: string): Promise<Discount[]> {
 }
 
 async function receivementFetcher(url: string): Promise<Payment[]> {
-  console.log('fetch rec');
-
   const res = await fetch(url)
   return await res.json()
 }
@@ -50,7 +48,6 @@ async function usersFetcher(url: string): Promise<User[]> {
 }
 
 async function salaryFetcher(url: string): Promise<Salary[]> {
-  console.log('fetch salary');
   const res = await fetch(url)
   return await res.json()
 }
@@ -138,7 +135,7 @@ export default function ManagePage() {
             薪資
           </TabsTrigger>
         </TabsList>
-        {/* 學員 */}
+        {/* 會員 */}
         <TabsContent value="user">
           {users
             ? <UsersTable users={users} usersMutate={usersMutate} />

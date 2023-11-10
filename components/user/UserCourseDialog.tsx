@@ -10,17 +10,17 @@ import { KeyedMutator } from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
-import { Course, Reservation } from '@/type'
+import { MyCourse, MyReservation } from '@/type'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 type Props = {
   open: boolean,
   setOpen: Dispatch<boolean>,
-  course: Course,
+  course: MyCourse,
   current_rez: number,
-  mutateReservation: KeyedMutator<Record<string, Reservation[]>> | undefined,
-  mutate?: KeyedMutator<Course[]>,
+  mutateReservation: KeyedMutator<Record<string, MyReservation[]>> | undefined,
+  mutate?: KeyedMutator<MyCourse[]>,
   payState?: string
 }
 

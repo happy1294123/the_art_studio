@@ -76,5 +76,34 @@ export async function DELETE(req: any) {
     return NextResponse.json('', { status: 400 })
   }
   revalidateTag('unPayNum')
+
+  if (res.course_id) {
+    await prisma.reservation.delete({
+      where: {
+        course_id_user_id: {
+          course_id: res.course_id,
+          user_id: token.id
+        }
+      }
+    })
+  }
+
+  return NextResponse.json('')
+}
+
+export async function PUT(req: any) {
+  const token = await getToken({ req })
+  if (!token) return NextResponse.json('請先登入會員', { status: 401 })
+
+  const payment_id = await req.json()
+  const res = await prisma.payment.update({
+    where: {
+      id: payment_id
+    },
+    data: {
+      state: 'PENDING'
+    }
+  })
+
   return NextResponse.json('')
 }

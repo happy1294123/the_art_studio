@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button'
-import { Course } from '@/type'
 import {
   Accordion,
   AccordionContent,
@@ -15,9 +13,10 @@ import { useCourse } from '@/lib/contexts/ManageCourseContent'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import LoadingButton from '@/components/LoadingButton'
+import { MyCourse } from "@/type"
 
 type Props = {
-  courseForm: Course
+  courseForm: MyCourse
 }
 
 export default function CreateReserve({ courseForm }: Props) {

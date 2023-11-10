@@ -15,8 +15,9 @@ import { Dispatch, FormEvent, useState } from "react"
 import { Input } from "../ui/input"
 import LoadingButton from "../LoadingButton"
 import { toast } from "react-hot-toast"
-import getToastOption from "@/lib/getToastOption"
+import getToastOption, { toastResult } from "@/lib/getToastOption"
 import { KeyedMutator } from "swr"
+import { Label } from "../ui/label"
 
 type props = {
   open: boolean,
@@ -26,7 +27,7 @@ type props = {
 }
 
 const stateMap = {
-  CHECKING: '資料核對中',
+  CHECKING: '專人將核對資料',
   SUCCESS: '匯款完成',
   ERROR: '匯款有誤',
 }
@@ -91,6 +92,15 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
     setIsLoading(false)
   }
 
+  const handleCancel = async () => {
+    const res = await fetch('/api/user/payment', {
+      method: 'PUT',
+      body: JSON.stringify(payment.id)
+    })
+    mutatePayment()
+    toastResult(res, '取消紀錄')
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="bg-white">
@@ -101,7 +111,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
             <li>戶名：何亭儀</li>
             <li>銀行：玉山銀行(808) 北投分行</li>
             <li>帳號：0864979149975</li>
-            <li>金額：NT$ {payment.price}</li>
+            <li>金額：{payment.price} 元</li>
           </ul>
           <hr />
         </DialogHeader>
@@ -113,20 +123,24 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
           </Popover>
         </DialogTitle>
         <form className="-mt-2 space-y-2" onSubmit={handleSubmit}>
-          <div className="ml-2">金額：NT$ {payment.price}</div>
-          <div>
-            <Input
-              type="text"
-              className={`rounded-full h-9 border-gray-400 ${error.date && 'border-primary'}`}
-              placeholder="請輸入匯款日期"
-              onFocus={e => e.target.type = 'date'}
-              onBlur={e => e.target.type = 'text'}
-              onChange={e => handleOnChange('date', e.target.value)}
-              value={formData.date || ''}
-              disabled={payment.state !== 'PENDING'}
-            />
-            {error.date && <span className="ml-2 text-primary/80">{error.date}</span>}
+          {/* <div className="ml-2">匯款金額：{payment.price} 元</div> */}
+          <div className="flex items-center ml-2">
+            <Label htmlFor="pay-date" className="text-base whitespace-nowrap">匯款日期：</Label>
+            {payment.state === 'SUCCESS'
+              ? <span>{formData.date}</span>
+              : <Input
+                id="pay-date"
+                type="text"
+                className={`ml-2 rounded-full h-9 border-gray-400 ${error.date && 'border-primary'}`}
+                placeholder="請輸入匯款日期"
+                onFocus={e => e.target.type = 'date'}
+                onBlur={e => e.target.type = 'text'}
+                onChange={e => handleOnChange('date', e.target.value)}
+                value={formData.date || ''}
+                disabled={payment.state !== 'PENDING'}
+              />}
           </div>
+          {error.date && <span className="ml-[100px] text-primary/80">{error.date}</span>}
           {/* <div>
             <Input
               type="number"
@@ -138,18 +152,21 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
             />
             {error.price && <span className="ml-2 text-primary/80">{error.price}</span>}
           </div> */}
-          <div>
-            <Input
-              type="text"
-              className={`rounded-full h-9 border-gray-400 ${error.account && 'border-primary'}`}
-              placeholder="請輸入您的帳號末5碼"
-              onChange={e => handleOnChange('account', e.target.value)}
-              value={formData.account || ''}
-              disabled={payment.state !== 'PENDING'}
-            />
-            {error.account && <span className="ml-2 text-primary/80">{error.account}</span>}
+          <div className="flex items-center ml-2">
+            <Label htmlFor="pay-date" className="text-base whitespace-nowrap">帳號末5碼：</Label>
+            {payment.state === 'SUCCESS'
+              ? <span>{formData.account}</span>
+              : <Input
+                type="text"
+                className={`rounded-full h-9 border-gray-400 ${error.account && 'border-primary'}`}
+                placeholder="請輸入您的帳號末5碼"
+                onChange={e => handleOnChange('account', e.target.value)}
+                value={formData.account || ''}
+                disabled={payment.state !== 'PENDING'}
+              />}
           </div>
-          <div>
+          {error.account && <span className="ml-[100px] text-primary/80">{error.account}</span>}
+          {/* <div>
             <Input
               type="text"
               className="rounded-full h-9 border-gray-400"
@@ -158,7 +175,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               value={formData.note || ''}
               disabled={payment.state !== 'PENDING'}
             />
-          </div>
+          </div> */}
           <div>
             {payment.state === 'PENDING' && <LoadingButton
               isLoading={isLoading}
@@ -169,6 +186,14 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
             <span className="flex-center text-gray-400">
               {stateMap[payment.state as keyof typeof stateMap]}
             </span>
+            {payment.state === 'CHECKING' && (
+              <span
+                className="text-gray-400 flex-center cursor-pointer text-sm"
+                onClick={handleCancel}
+              >
+                取消紀錄
+              </span>
+            )}
           </div>
         </form>
       </DialogContent>

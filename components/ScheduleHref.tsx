@@ -3,13 +3,13 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import dynamic from 'next/dynamic'
-import { Course } from '@/type'
+import { MyCourse } from '@/type'
 const SelectScheduleServiceDialog = dynamic(() => import('@/components/user/SelectScheduleServiceDialog'))
 
 export default function ScheduleHref({
   children, course
 }: {
-  children: React.ReactNode, course: Course
+  children: React.ReactNode, course: MyCourse
 }) {
   const [openDialog, setOpenDialog] = useState(false)
   const { data: session }: any = useSession()

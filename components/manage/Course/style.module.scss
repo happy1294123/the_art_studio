@@ -29,19 +29,22 @@
        :global(.fc-toolbar h2) {
             position: block;
             text-align: center;
-            width: max-content;
-            // margin-top: -50px;
-            margin: -50px -100px 0;
-            font-size: 20px;
+            max-width: 103px;
+            margin: 0 auto;
+            font-size: 18px;
         }
         :global(.fc-header-toolbar) {
-            margin-top: 30px;
+            // margin-top: 30px;
+            margin-bottom: -30px;
         }
         :global(.fc-view-harness) {
             font-size: 14px;
             overflow-x: auto;
         }
         :global(.fc-event-main) {
+            font-size: 12px;
+        }
+        :global(.fc-button) {
             font-size: 12px;
         }
    }

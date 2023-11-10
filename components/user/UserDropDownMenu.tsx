@@ -1,3 +1,4 @@
+'use client'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { IoMdArrowDropdownCircle } from 'react-icons/io'
 import { LuLogOut } from 'react-icons/lu'
-import { BiSolidEdit } from 'react-icons/bi'
+import { BiSolidEdit } from 'react-icons/bi'  
 import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 import { AiOutlineSchedule } from 'react-icons/ai'

@@ -22,14 +22,14 @@ import getToastOption from '@/lib/getToastOption'
 import { KeyedMutator } from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import { useSession } from 'next-auth/react'
-import { Course, Reservation } from '@/type'
+import { MyCourse, MyReservation } from '@/type'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 type Props = {
-  course: Course,
+  course: MyCourse,
   setOpen?: Dispatch<boolean>,
-  mutate?: KeyedMutator<Course[]>,
-  mutateReservation?: KeyedMutator<Record<string, Reservation[]>>,
+  mutate?: KeyedMutator<MyCourse[]>,
+  mutateReservation?: KeyedMutator<Record<string, MyReservation[]>>,
   isUser?: Boolean,
 }
 

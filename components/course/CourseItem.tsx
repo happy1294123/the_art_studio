@@ -8,14 +8,14 @@ import { KeyedMutator } from 'swr'
 import dynamic from 'next/dynamic'
 import getColorByCourseType from '@/lib/course/getColorByCourseType'
 import { useSearchParams } from 'next/navigation'
-import { Course, Reservation } from '@/type'
+import { MyCourse, MyReservation } from '@/type'
 const ReserveDialog = dynamic(() => import("./ReserveDialog"))
 const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 
 type Props = {
-  course: Course,
-  mutate?: KeyedMutator<Course[]>,
-  mutateReservation?: KeyedMutator<Record<string, Reservation[]>>,
+  course: MyCourse,
+  mutate?: KeyedMutator<MyCourse[]>,
+  mutateReservation?: KeyedMutator<Record<string, MyReservation[]>>,
   isInUserPage?: boolean
 }
 
@@ -64,7 +64,8 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
   return (
     <>
       <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md cursor-pointer
-      ${(current_rez === course.total_rez || hasReserve) && !isInUserPage && 'opacity-40'}`}
+      ${(current_rez === course.total_rez || hasReserve) && !isInUserPage && ''}`}
+        // opacity-40
         onClick={() => setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>

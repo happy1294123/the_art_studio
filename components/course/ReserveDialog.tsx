@@ -17,13 +17,13 @@ import ReserveDialogUpper from '@/components/course/ReserveDialogUpper'
 import ScheduleHref from '@/components/ScheduleHref'
 import LoadingButton from '../LoadingButton'
 import DiscountInput from '@/components/course/DiscountInput'
-import { Course } from '@/type'
+import { MyCourse } from '@/type'
 
 type Props = {
   open: boolean,
   setOpen: Dispatch<boolean>,
-  course: Course,
-  mutate?: KeyedMutator<Course[]>
+  course: MyCourse,
+  mutate?: KeyedMutator<MyCourse[]>
 }
 
 export default function ReserveDialog({ open, setOpen, course, mutate }: Props) {
@@ -170,8 +170,7 @@ export default function ReserveDialog({ open, setOpen, course, mutate }: Props) 
                   <span className="flex text-[50px] gap-3">保留預約</span>
                   <div className="text-center text-gray-400">{plan.label}</div>
                   <div className='text-gray-400 text-center'>
-                    <p>匯款完成後</p>
-                    <p>即可完成預約</p>
+                    <p>匯款後完成預約</p>
                   </div>
                   {paymentId && <div className='flex-center mt-1'><Button className='' onClick={() => router.push(`/user?tab=payment&id=${paymentId}`)}>前往匯款</Button></div>}
                 </div>}

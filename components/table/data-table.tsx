@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className="border-headingColor cursor-pointer"
+                className={`border-headingColor ${setSelectRow && 'cursor-pointer'}`}
                 onClick={() => setSelectRow && setSelectRow(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
