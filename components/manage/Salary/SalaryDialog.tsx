@@ -138,9 +138,9 @@ export default function SalaryDialog({ data, setData, monthString }: Props) {
               {JSON.stringify(data.Course)} */}
             </>)}
         </div>
-        <div className={`-mt-8 ml-auto mr-3 z-10 ${!isCourseNum && 'hidden'}`}>
+        {/* <div className={`-mt-8 ml-auto mr-3 z-10 ${!isCourseNum && 'hidden'}`}>
           <BiSolidChevronsRight color="#B2B2B2" />
-        </div>
+        </div> */}
       </DialogContent>
     </Dialog>
 

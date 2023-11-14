@@ -2,7 +2,7 @@ import { DialogDescription, DialogHeader } from '@/components/ui/dialog'
 import { useCourse } from '@/lib/contexts/ManageCourseContent';
 import { MyCourse } from '@/type'
 import React from 'react'
-import { BiTime, BiSolidChevronsRight } from 'react-icons/bi';
+import { BiTime } from 'react-icons/bi';
 import Image from 'next/image'
 import { GoPerson } from 'react-icons/go';
 import { Label } from '@/components/ui/label';

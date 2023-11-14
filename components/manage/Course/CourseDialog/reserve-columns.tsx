@@ -69,7 +69,7 @@ export const getColumns = (isPass: boolean, isTeacherMode: boolean | undefined):
     {
       accessorKey: "created_at",
       header: '預約時間',
-      cell: ({ row }) => (<span className="whitespace-normal text-center">{dateFormatter(new Date(row.getValue('created_at')), '/', true, true)}</span>)
+      cell: ({ row }) => (<span className="whitespace-normal text-center">{dateFormatter(new Date(row.getValue('created_at')), '/', true, true).slice(0, -3)}</span>)
     },
   ]
 

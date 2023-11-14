@@ -247,7 +247,7 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
     {!isTeacherMode && (<>
       <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
       <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
-      {openCourseTypeDialog && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
+      {(openCourseTypeDialog && courseTypeMutate && courseType) && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
       {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
     </>)}
   </>)

@@ -32,6 +32,6 @@ export default function TeacherSection() {
       </div>
       <div className="-mt-4 -mr-5 border-t border-[#B2B2B2] w-[180px] md:w-[300px] ml-auto"></div>
       <div className="mt-4 ml-auto mr-[45px] border-t border-[#B2B2B2] w-[150px] md:w-[350px] "></div>
-    </>
+    </ >
   )
 }

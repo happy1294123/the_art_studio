@@ -2,7 +2,15 @@
 import { Button } from "@/components/ui/button"
 import { BiSolidError } from "react-icons/bi"
 
-export default function error() {
+export default function error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  console.log(error);
+
   return (
     <div className="flex-center items-center" style={{ height: `calc(100vh - 200px)` }}>
       <div className="bg-bgColorOther rounded-3xl p-5 px-9">
@@ -13,7 +21,7 @@ export default function error() {
           <span className="mb-3">
             發生錯誤
           </span>
-          <Button onClick={() => location.reload()}>重新整理</Button>
+          <Button onClick={reset}>返回</Button>
         </div>
       </div>
     </div>

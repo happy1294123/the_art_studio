@@ -18,7 +18,7 @@ async function courseTypeFetcher(url: string): Promise<CourseType[]> {
 
 export default function TeacherCourseContent() {
   const { data: courses } = useSWR(
-    `/api/teacher/course`,
+    `/api/manage/course`,
     courseFetcher
   )
 

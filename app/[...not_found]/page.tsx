@@ -13,7 +13,7 @@ export default function NotFoundPage() {
           <span className="mb-3">
             找不到此頁面
           </span>
-          <Button onClick={() => history.back()}>上一頁</Button>
+          <Button onClick={() => history.back()}>返回</Button>
         </div>
       </div>
     </div>

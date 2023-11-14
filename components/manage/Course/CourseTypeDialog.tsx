@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { KeyedMutator } from 'swr'
+import { BiSolidTrashAlt } from 'react-icons/bi'
 
 type Props = {
   openDialog: boolean,
@@ -131,8 +132,13 @@ export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType
                     style={{ backgroundColor: allType[type.id] }}
                   />
                 </div>
-                <div className='col-span-1 flex-center'>
-                  <Button variant="secondary" onClick={() => handleDelete(type.id)}>刪除</Button>
+                <div className='col-span-1 flex-center whitespace-nowrap'>
+                  <BiSolidTrashAlt
+                    className="cursor-pointer"
+                    fontSize={20}
+                    onClick={() => handleDelete(type.id)}
+                  />
+                  {/* <Button variant="secondary" onClick={() => handleDelete(type.id)}>刪除</Button> */}
                 </div>
               </div>))}
 

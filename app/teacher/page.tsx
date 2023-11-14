@@ -2,6 +2,7 @@ import TheTitle from '@/components/TheTitle'
 import UserDropDownMenu from '@/components/user/UserDropDownMenu'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import TeacherCourseContent from '@/components/teacher/TeacherCourseContent'
+import TeacherSalaryContent from '@/components/teacher/TeacherSalaryContent'
 
 export default function TeacherPage() {
   return (
@@ -23,7 +24,7 @@ export default function TeacherPage() {
         </TabsContent >
         {/* 薪資 */}
         <TabsContent value="salary">
-          salary
+          <TeacherSalaryContent />
         </TabsContent>
       </Tabs >
     </div>

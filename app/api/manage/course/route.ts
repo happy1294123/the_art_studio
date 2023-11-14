@@ -28,8 +28,10 @@ export async function DELETE(req: any) {
 
 export async function GET(req: any) {
   const token = await getToken({ req })
-  if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  if (!token || !['ADMIN', 'EDITOR', 'TEACHER'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
+  const where = token.role === 'TEACHER' ? { teacher_id: token.id } : undefined
   const allCourses = await prisma.course.findMany({
+    where,
     include: {
       teacher: true,
       Reservation: {

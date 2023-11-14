@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import BorderWithCorner from "./BorderWithCorner"
+import { motion } from "framer-motion"
 
 export default function MoblieSection1() {
   return (
@@ -11,9 +12,17 @@ export default function MoblieSection1() {
         <Image className="ml-[200px] -mb-[300px] md:hidden " src="/home/course_section/img2.svg" width={180} height={180} alt="img" />
         <div className="border-b border-[#B2B2B2] -mb-[0px] ml-8 w-[180px] md:w-[420px] rotate-[-192deg]"></div>
         <BorderWithCorner className="rotate-180" />
-        <p className="absolute -mt-[140px] md:-mt-[100px] ml-5 md:ml-14 w-[210px] md:w-[420px] tracking-wider md:text-lg ">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            delay: 0.7,
+            duration: 0.5
+          }}
+          className="absolute -mt-[140px] md:-mt-[100px] ml-5 md:ml-14 w-[210px] md:w-[420px] tracking-wider md:text-lg "
+        >
           課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文
-        </p>
+        </motion.p>
         <div>
           <div className="mt-[30px] mr-10 float-right">
             <Button asChild className="text-lg md:text-xl h-8 md:h-10 px-4 z-50">
@@ -33,6 +42,6 @@ export default function MoblieSection1() {
         {/* <Image src="/home/course_section/img.svg" width={550} height={550} alt="img" /> */}
         <Image src="/home/course_section/img2.svg" width={250} height={250} alt="img" />
       </div>
-    </div>
+    </div >
   )
 }
