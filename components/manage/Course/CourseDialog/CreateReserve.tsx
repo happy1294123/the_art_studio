@@ -45,7 +45,7 @@ export default function CreateReserve({ courseForm }: Props) {
 
     if (res.ok) {
       toast('預約成功', getToastOption())
-      coursesMutate()
+      coursesMutate && coursesMutate()
     } else {
       toast('預約失敗', getToastOption('error'))
     }

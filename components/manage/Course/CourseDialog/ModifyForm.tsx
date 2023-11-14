@@ -105,7 +105,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
       body: JSON.stringify(values)
     })
     if (res.ok) {
-      coursesMutate()
+      coursesMutate && coursesMutate()
       toast(courseForm.id ? '修改成功' : '新增成功', getToastOption())
     }
     setLoading(false)
@@ -122,7 +122,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
     if (res.ok) {
       toast('刪除成功', getToastOption())
       setCourseForm(null)
-      coursesMutate()
+      coursesMutate && coursesMutate()
     } else {
       toast('刪除失敗', getToastOption('error'))
     }
@@ -217,7 +217,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                         <Select onValueChange={field.onChange} defaultValue={field.value || '空中課程'}>
                           <FormControl>
                             <SelectTrigger className="mt-1 ml-3 text-xs rounded-full w-[90px] h-6 border-none"
-                              style={{ backgroundColor: courseType.find(type => type.name === (field.value || '空中課程'))?.color }}>
+                              style={{ backgroundColor: courseType?.find(type => type.name === (field.value || '空中課程'))?.color }}>
                               <SelectValue />
                             </SelectTrigger>
                           </FormControl>
