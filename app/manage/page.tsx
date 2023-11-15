@@ -11,7 +11,7 @@ import { CourseType, Payment, User } from "@prisma/client"
 import UsersTable from "@/components/manage/UsersTable/page"
 import { useState } from "react"
 import { ClipLoader } from "react-spinners"
-import { CourseContent } from '@/lib/contexts/ManageCourseContent'
+import { CourseContent } from '@/context/ManageCourseContent'
 import dateFormatter from "@/lib/dateFormatter"
 import { useSession } from "next-auth/react"
 import dynamic from "next/dynamic"

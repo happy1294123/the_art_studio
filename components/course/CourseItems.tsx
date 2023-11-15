@@ -2,19 +2,17 @@ import CourseItem from '@/components/course/CourseItem'
 import useSWR from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { MyCourse, MyCourseFilter } from '@/type'
+import { MyCourse } from '@/type'
+import { useReserveContent } from '@/context/ReserveContent'
 
 async function fetcher(url: string): Promise<MyCourse[]> {
   const res = await fetch(url, { next: { tags: ['course'] } })
   return await res.json()
 }
 
-type Props = {
-  selectedDate: Date,
-  filter?: MyCourseFilter
-}
+export default function CourseItems() {
+  const { selectedDate, filter } = useReserveContent()
 
-export default function CourseItems({ selectedDate, filter }: Props) {
   const { data: courses, mutate, isLoading } = useSWR(
     `/api/course?date=${dateFormatter(selectedDate)}`,
     fetcher

@@ -1,6 +1,4 @@
-type Props = {
-  date: Date
-}
+import dateFormatter from "@/lib/dateFormatter"
 
 const weekDayMap = {
   0: '日',
@@ -12,12 +10,10 @@ const weekDayMap = {
   6: '六',
 }
 
-export default function DateHeading({ date }: Props) {
+export default function DateHeading({ date }: { date: Date }) {
   return (
-    <div className="text-center text-lg p-1 bg-bgColorSecondary rounded-full mb-1 md:">
-      {date.getFullYear()}/
-      {date.getMonth() + 1}/
-      {String(date.getDate()).padStart(2, '0')}
+    <div className="text-center text-lg p-1 bg-bgColorSecondary rounded-full mb-1">
+      {dateFormatter(date)}
       ({getWeekDayByDate(date)})
     </div>
   )

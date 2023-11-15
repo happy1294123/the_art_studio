@@ -1,5 +1,5 @@
 import { DialogDescription, DialogHeader } from '@/components/ui/dialog'
-import { useCourse } from '@/lib/contexts/ManageCourseContent';
+import { useCourse } from '@/context/ManageCourseContent';
 import { MyCourse } from '@/type'
 import React from 'react'
 import { BiTime } from 'react-icons/bi';

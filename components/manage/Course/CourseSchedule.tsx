@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic'
 import { Progress } from "@/components/ui/progress"
 const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 import CourseTypeDialog from './CourseTypeDialog'
-import { useCourse } from '@/lib/contexts/ManageCourseContent'
+import { useCourse } from '@/context/ManageCourseContent'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import CourseDetail from './CourseDialog/CourseDetail'
 const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))

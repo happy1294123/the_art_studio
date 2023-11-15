@@ -4,6 +4,10 @@ import dateFormatter from '@/lib/dateFormatter'
 import DateItems from './DateItems'
 import MyCalander from './MyCalendar'
 import { MyDate } from '@/type'
+import { IoFilter } from 'react-icons/io5'
+import { useReserveContent } from '@/context/ReserveContent'
+import { Badge } from "@/components/ui/badge"
+import StaticCourseSchedule from '../StaticCourseSchedule'
 
 const createDateList = (coursesDateSet: string[]) => {
   const today = new Date()
@@ -25,14 +29,10 @@ const createDateList = (coursesDateSet: string[]) => {
   return tempDateList
 }
 
-type Props = {
-  selectedDate: Date,
-  setSelectedDate: Function,
-  dateSet: string[],
-}
-
-export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateSet }: Props) {
+export default function OneLineDatePicker() {
+  const { selectedDate, setSelectedDate, dateSet, staticSchedulePath } = useReserveContent()
   const dateList = useMemo(() => createDateList(dateSet), [dateSet])
+  const { filter, setFilter } = useReserveContent()
 
   return (
     <div className="w-full h-50 p-2 grid gap-2">
@@ -40,7 +40,19 @@ export default function OneLineDatePicker({ selectedDate, setSelectedDate, dateS
         <div className="flex md:hidden">
           <MyCalander dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
         </div>
-        <span className="text-gray-400 pb-2 rounded-xl underline underline-offset-4 cursor-pointer ml-auto" onClick={() => setSelectedDate(new Date())}>今天</span>
+        {/* 選擇器 */}
+        <button onClick={() => setFilter({ ...filter, isShow: true })} className='mb-3 ml-2'>
+          {(filter.column && filter.value) ? (
+            <Badge className='bg-bgColorSecondary text-black hover:bg-bgColorSecondary'>
+              <IoFilter color="black" className="mr-1" />
+              {filter.showText}
+            </Badge>
+          ) : <IoFilter color="#9CA3AF" />}
+        </button>
+        <div className='ml-auto'>
+          <StaticCourseSchedule staticSchedulePath={staticSchedulePath} />
+          <span className="text-gray-400 pb-2 rounded-xl underline underline-offset-4 cursor-pointer" onClick={() => setSelectedDate(new Date())}>今天</span>
+        </div>
       </div>
       <DateItems dateList={dateList} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
     </div >

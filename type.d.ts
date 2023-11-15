@@ -130,5 +130,6 @@ type Salary = {
 type MyCourseFilter = {
   column: string,
   value: string,
+  showText: string,
   isShow: boolean
 }

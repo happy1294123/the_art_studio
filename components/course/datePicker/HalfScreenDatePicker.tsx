@@ -3,14 +3,12 @@ import { Calendar } from "@/components/ui/calendar"
 import { zhCN } from "date-fns/locale"
 import { useMemo } from "react"
 import dateFormatter from "@/lib/dateFormatter"
+import { useReserveContent } from "@/context/ReserveContent"
+import { SelectSingleEventHandler } from "react-day-picker"
 
-type Props = {
-  selectedDate: Date,
-  setSelectedDate: any,
-  dateSet: string[]
-}
+export default function HalfScreenDatePicker() {
+  const { selectedDate, setSelectedDate, dateSet } = useReserveContent()
 
-export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, dateSet }: Props) {
   const disabledDays = useMemo(() => {
     const after = new Date(dateSet[dateSet.length - 1])
     const hasNotCourse: Date[] = []
@@ -31,7 +29,7 @@ export default function HalfScreenDatePicker({ selectedDate, setSelectedDate, da
         <Calendar
           mode="single"
           selected={selectedDate}
-          onSelect={setSelectedDate}
+          onSelect={setSelectedDate as SelectSingleEventHandler}
           required={true}
           locale={zhCN}
           className="p-12"

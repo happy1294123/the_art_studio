@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useCourse } from "@/lib/contexts/ManageCourseContent"
+import { useCourse } from "@/context/ManageCourseContent"
 import { Dispatch, useEffect, useState } from "react"
 import { MyCourse, Teacher } from "@/type"
 

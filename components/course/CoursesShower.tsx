@@ -7,10 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
 import FilterDialog from './FilterDialog'
 import { MyCourseFilter } from '@/type'
-import { IoFilter } from 'react-icons/io5'
+import { ReserveContent } from '@/context/ReserveContent'
 
 type Props = {
   dateOptions: string[],
@@ -25,43 +24,37 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
   const [filter, setFilter] = useState<MyCourseFilter>({
     column: '',
     value: '',
-    isShow: false
+    showText: '',
+    isShow: false,
   })
 
   useEffect(() => {
     if (window) {
-      window.scrollTo(0, 0)
+      window.scrollTo({ top: 0 })
     }
-  }, [selectedDate, filter.isShow])
+  }, [selectedDate, filter])
 
   return (
     <>
-      <div className="gap-8">
-        <div className='-mb-9 ml-[65px] z-10 w-fit'>
-          <button onClick={() => setFilter({ ...filter, isShow: true })} className='hover:bg-fuchsia-300'>
-            <IoFilter color="#9CA3AF" />
-          </button>
-        </div>
-        {filter && <FilterDialog filter={filter} setFilter={setFilter} />}
-        <div className="w-full">
-          <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
-          <DateHeading date={selectedDate} />
-          <div className='flex gap-6'>
-            <div className='hidden md:block col'>
-              <HalfScreenDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
-            </div>
-            <div className="col w-full">
-              <Suspense fallback={Array(3).fill(<CourseItemSkeleton />)}>
-                <CourseItems selectedDate={selectedDate} filter={filter} />
-              </Suspense >
+      <ReserveContent.Provider value={{ filter, setFilter, selectedDate, setSelectedDate, dateSet, staticSchedulePath }}>
+        <div className="gap-8">
+          <FilterDialog />
+          <div className="w-full">
+            <OneLineDatePicker />
+            <DateHeading date={selectedDate} />
+            <div className='flex gap-6'>
+              <div className='hidden md:block col'>
+                <HalfScreenDatePicker />
+              </div>
+              <div className="col w-full">
+                <Suspense fallback={Array(3).fill(<CourseItemSkeleton />)}>
+                  <CourseItems />
+                </Suspense >
+              </div>
             </div>
           </div>
-        </div>
-      </div >
-      <div className='mt-8 grid place-content-center ml-3 rounded-3xl overflow-hidden'>
-        {/* <Zmage src="/course_schedule.jpg" alt="course schedule" backdrop='#FFF5ED' edge={25} controller={{ rotate: false }} /> */}
-        <Image src={staticSchedulePath} width={800} height={800} alt="course schedule" />
-      </div>
+        </div >
+      </ReserveContent.Provider>
     </>
   )
 }

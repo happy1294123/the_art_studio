@@ -1,5 +1,5 @@
 'use client'
-import { CourseContent } from '@/lib/contexts/ManageCourseContent'
+import { CourseContent } from '@/context/ManageCourseContent'
 import useSWR from 'swr'
 import { MyCourse } from '@/type'
 import CourseSchedule from '../manage/Course/CourseSchedule'
