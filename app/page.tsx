@@ -5,15 +5,11 @@ import CourseSection from "@/components/home/CourseSection"
 import DownArrow from "@/components/home/DownArrow"
 import TeacherSection from "@/components/home/TeacherSection"
 import BrandSection from "@/components/home/BrandSection"
-import { motion, useScroll } from "framer-motion"
-import { useRef } from "react"
+import { motion, useMotionValueEvent, useScroll } from "framer-motion"
+import { Dispatch, SetStateAction, useRef, useState } from "react"
 
 export default function Home() {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1", "1.33 1"]
-  })
+  const [activeAnimate, setActiveAnimate] = useState(false)
 
   return (
     <div>
@@ -52,20 +48,55 @@ export default function Home() {
       <div className="flex-center mt-[250px] md:mt-[150px] relative">
         <div>
           <div className="absolute -top-[100px] md:-top-[30px]" id="start"></div>
-          <motion.div
-            ref={ref}
-            style={{
-              scale: scrollYProgress,
-              opacity: scrollYProgress
-            }}
-          >
-            <CourseSection />
-            <Image className="rotate-[340deg] ml-4 md:-ml-[50px]" src="/home/course_section/S__5988398.svg" width={130} height={130} alt="decorate" />
-          </motion.div>
-          <TeacherSection />
-          <BrandSection />
+          <ScrollShowAnimate setActiveAnimate={setActiveAnimate}>
+            <CourseSection activeAnimate={activeAnimate} />
+          </ScrollShowAnimate>
+          <Image className="rotate-[340deg] ml-4 md:-ml-[50px]" src="/home/course_section/S__5988398.svg" width={130} height={130} alt="decorate" />
+          <ScrollShowAnimate>
+            <TeacherSection />
+          </ScrollShowAnimate>
+          <ScrollShowAnimate>
+            <BrandSection />
+          </ScrollShowAnimate>
         </div>
       </div>
-    </div>
+    </div >
   )
+}
+
+
+const ScrollShowAnimate = ({
+  children,
+  className,
+  setActiveAnimate
+}: {
+  children: React.ReactNode,
+  className?: string,
+  setActiveAnimate?: Dispatch<SetStateAction<boolean>>
+}) => {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "0 0.5"]
+  })
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.8 && setActiveAnimate) {
+      setActiveAnimate(true)
+    }
+  })
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{
+        scale: scrollYProgress,
+        opacity: scrollYProgress
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
+
 }

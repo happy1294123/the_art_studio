@@ -4,7 +4,11 @@ import Image from "next/image"
 import BorderWithCorner from "./BorderWithCorner"
 import { motion } from "framer-motion"
 
-export default function MoblieSection1() {
+type Props = {
+  activeAnimate: Boolean
+}
+
+export default function CourseSection({ activeAnimate }: Props) {
   return (
     <div className="flex justify-center">
       <div className="relative md:mt-20" >
@@ -13,10 +17,10 @@ export default function MoblieSection1() {
         <div className="border-b border-[#B2B2B2] -mb-[0px] ml-8 w-[180px] md:w-[420px] rotate-[-192deg]"></div>
         <BorderWithCorner className="rotate-180" />
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, filter: 'blur(5px)' }}
+          whileInView={{ opacity: activeAnimate ? 1 : 0, filter: 'blur(0px)' }}
           transition={{
-            delay: 0.7,
+            delay: 0.3,
             duration: 0.5
           }}
           className="absolute -mt-[140px] md:-mt-[100px] ml-5 md:ml-14 w-[210px] md:w-[420px] tracking-wider md:text-lg "
@@ -24,7 +28,15 @@ export default function MoblieSection1() {
           課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文課程介紹內文
         </motion.p>
         <div>
-          <div className="mt-[30px] mr-10 float-right">
+          <motion.div
+            initial={{ opacity: 0, filter: 'blur(5px)' }}
+            whileInView={{ opacity: activeAnimate ? 1 : 0, filter: 'blur(0px)' }}
+            transition={{
+              delay: 0.6,
+              duration: 0.5
+            }}
+            className="mt-[30px] mr-10 float-right"
+          >
             <Button asChild className="text-lg md:text-xl h-8 md:h-10 px-4 z-50">
               <Link href="/course">
                 預約課程
@@ -35,7 +47,7 @@ export default function MoblieSection1() {
                 了解更多
               </Link>
             </Button>
-          </div>
+          </motion.div>
         </div>
       </div>
       <div className="hidden md:block -mx-[50px]">

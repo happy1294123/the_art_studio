@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo, Suspense } from 'react'
+import { useState, useMemo, Suspense, useEffect } from 'react'
 import OneLineDatePicker from '@/components/course/datePicker/OneLineDatePicker'
 import HalfScreenDatePicker from '@/components/course/datePicker/HalfScreenDatePicker'
 import dateFormatter from '@/lib/dateFormatter'
@@ -8,6 +8,9 @@ import CourseItems from '@/components/course/CourseItems'
 import DateHeading from './DateHeading'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
+import FilterDialog from './FilterDialog'
+import { MyCourseFilter } from '@/type'
+import { IoFilter } from 'react-icons/io5'
 
 type Props = {
   dateOptions: string[],
@@ -19,10 +22,27 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
   const dateSet = useMemo(() => (dateOptions.filter(d => d >= today)), [today, dateOptions])
   const id_date = useSearchParams().get('id_date')
   const [selectedDate, setSelectedDate] = useState(id_date ? new Date(id_date.split('_')[1]) : new Date())
+  const [filter, setFilter] = useState<MyCourseFilter>({
+    column: '',
+    value: '',
+    isShow: false
+  })
+
+  useEffect(() => {
+    if (window) {
+      window.scrollTo(0, 0)
+    }
+  }, [selectedDate, filter.isShow])
 
   return (
     <>
       <div className="gap-8">
+        <div className='-mb-9 ml-[65px] z-10 w-fit'>
+          <button onClick={() => setFilter({ ...filter, isShow: true })} className='hover:bg-fuchsia-300'>
+            <IoFilter color="#9CA3AF" />
+          </button>
+        </div>
+        {filter && <FilterDialog filter={filter} setFilter={setFilter} />}
         <div className="w-full">
           <OneLineDatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} dateSet={dateSet} />
           <DateHeading date={selectedDate} />
@@ -32,7 +52,7 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
             </div>
             <div className="col w-full">
               <Suspense fallback={Array(3).fill(<CourseItemSkeleton />)}>
-                <CourseItems selectedDate={selectedDate} />
+                <CourseItems selectedDate={selectedDate} filter={filter} />
               </Suspense >
             </div>
           </div>

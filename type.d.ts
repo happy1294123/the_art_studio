@@ -126,3 +126,9 @@ type Salary = {
   },
   Course: Course[]
 }
+
+type MyCourseFilter = {
+  column: string,
+  value: string,
+  isShow: boolean
+}
