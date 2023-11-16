@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function StaticCourseSchedule({ staticSchedulePath }: { staticSchedulePath: string }) {
   const [show, setShow] = useState(false)
 
-  const ImageMemo = useMemo(() => (<Image src={staticSchedulePath} width={800} height={800} alt="course schedule" priority />), [staticSchedulePath])
+  const ImageMemo = useMemo(() => (<Image src={staticSchedulePath} width={700} height={700} alt="course schedule" priority />), [staticSchedulePath])
 
   return (<>
     <Button variant="ghost"
