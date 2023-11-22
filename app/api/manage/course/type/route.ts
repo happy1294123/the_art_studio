@@ -1,7 +1,7 @@
 import prisma from "@/lib/initPrisma";
 import { getToken } from "next-auth/jwt";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
-import { number } from "zod";
 
 export async function GET() {
   const courseType = await prisma.courseType.findMany()
@@ -35,6 +35,7 @@ export async function POST(req: any) {
   await prisma.courseType.createMany({
     data
   })
+  revalidateTag('courseType')
   return NextResponse.json('')
 }
 
@@ -50,5 +51,6 @@ export async function DELETE(req: any) {
     })
   });
 
+  revalidateTag('courseType')
   return NextResponse.json('')
 }

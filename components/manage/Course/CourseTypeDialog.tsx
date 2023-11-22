@@ -13,17 +13,20 @@ import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { KeyedMutator } from 'swr'
 import { BiSolidTrashAlt } from 'react-icons/bi'
+import { useCourse } from '@/context/ManageCourseContent'
+import LoadingButton from '@/components/LoadingButton'
 
 type Props = {
   openDialog: boolean,
   setOpenDialog: Dispatch<boolean>,
-  courseType: CourseType[],
-  courseTypeMutate: KeyedMutator<CourseType[]>
+  // courseType: CourseType[],
+  // courseTypeMutate: KeyedMutator<CourseType[]>
 }
 
-export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType, courseTypeMutate }: Props) {
+export default function CourseTypeDialog({ openDialog, setOpenDialog }: Props) {
+  const { courseTypeMutate, courseType } = useCourse()
   const [allType, setAllType] = useState<Record<number | string, string>>()
-  const [allCourseType, setAllCourseType] = useState(courseType)
+  const [allCourseType, setAllCourseType] = useState(courseType || [])
   useEffect(() => {
     const allType: Record<number | string, string> = {}
     allCourseType.forEach(type => {
@@ -33,6 +36,7 @@ export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType
   }, [allCourseType])
   const [newType, setNewType] = useState<{ name: string, color: string }[]>()
   const [deleteId, setDeleteId] = useState<number[]>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChangeType = (typeId: number, value: string) => {
     setAllType(prev => ({ ...prev, [typeId]: value }))
@@ -72,6 +76,7 @@ export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType
   }
 
   const handleSave = async () => {
+    setIsLoading(true)
     const updateRes = await fetch('/api/manage/course/type', {
       method: 'PUT',
       body: JSON.stringify(allType)
@@ -103,7 +108,8 @@ export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType
 
     toast('儲存變更成功', getToastOption())
     setOpenDialog(false)
-    courseTypeMutate()
+    courseTypeMutate && courseTypeMutate()
+    setIsLoading(false)
   }
 
   return (<>
@@ -155,12 +161,17 @@ export default function CourseTypeDialog({ openDialog, setOpenDialog, courseType
                   />
                 </div>
                 <div className='col-span-1 flex-center'>
-                  <Button variant="secondary" onClick={() => handleDeleteAdd(i)}>刪除</Button>
+                  <BiSolidTrashAlt
+                    className="cursor-pointer"
+                    fontSize={20}
+                    onClick={() => handleDeleteAdd(i)}
+                  />
+                  {/* <Button variant="secondary" onClick={() => handleDeleteAdd(i)}>刪除</Button> */}
                 </div>
               </div>))}
             </div>
 
-            <Button className='float-right mt-3' onClick={handleSave}>儲存變更</Button>
+            <LoadingButton disabledWhileLoading isLoading={isLoading} className='float-right mt-3 w-[90px]' onClick={handleSave}>儲存變更</LoadingButton>
             <Button variant="secondary" className='float-right mt-3 mr-2' onClick={handleAdd}>新增種類</Button>
           </DialogDescription>
         </DialogHeader>

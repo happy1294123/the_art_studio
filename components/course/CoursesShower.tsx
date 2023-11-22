@@ -28,12 +28,6 @@ export default function CoursesShower({ dateOptions, staticSchedulePath }: Props
     isShow: false,
   })
 
-  useEffect(() => {
-    if (window) {
-      window.scrollTo({ top: 0 })
-    }
-  }, [selectedDate, filter])
-
   return (
     <>
       <ReserveContent.Provider value={{ filter, setFilter, selectedDate, setSelectedDate, dateSet, staticSchedulePath }}>

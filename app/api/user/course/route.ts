@@ -102,7 +102,8 @@ export async function DELETE(req: any) {
       course_id,
       user_id: token.id as number,
       stateTo,
-      returnPoint
+      returnPoint,
+      point_balance: point
     }
   })
   return NextResponse.json(point)

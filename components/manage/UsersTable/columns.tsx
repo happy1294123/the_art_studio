@@ -1,56 +1,28 @@
 "use client"
 import { User } from "@prisma/client"
 import { ColumnDef, Row } from "@tanstack/react-table"
-import { BsFilter } from 'react-icons/bs'
+import dateFormatter from "@/lib/dateFormatter"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import dateFormatter from "@/lib/dateFormatter"
+import { FiMoreHorizontal } from "react-icons/fi"
+import { FaListUl, FaUserAlt } from "react-icons/fa"
+import { AiFillEdit } from "react-icons/ai"
 
-const roleMap = {
-  STUDENT: '學生',
-  TEACHER: '老師',
-  ADMIN: '管理員',
-  EDITOR: '小編',
+const handleShowDetail = (row: any, tableMeta: any) => {
+  tableMeta.handleRowAction(row.original, 'detail')
 }
 
-const handleSelectFilter = (value: string, tableMeta: any) => {
-  for (let key in roleMap) {
-    if (roleMap[key as keyof typeof roleMap] === value) {
-      tableMeta.filterColumn(key)
-      return
-    }
-  }
-  tableMeta.filterColumn('')
+const handleShowEdit = (row: any, tableMeta: any) => {
+  tableMeta.handleRowAction(row.original, 'edit')
 }
 
-const roleFilterOptions = ['無', '學生', '老師', '小編', '管理員']
-
-// id               Int @id @default (autoincrement())
-//   serial_number    String ?
-//   name             String
-//   email            String
-//   password         String
-//   image            String ?
-//   role             Role @default (STUDENT)
-//   point            Int @default (0)
-//   point_deadline   DateTime ?
-//   schedule_service String ? @default ("")
-//   email_varified   Boolean @default (false)
-//   gender           Gender @default (UNKNOW)
-//   birth            String ?
-//   phone            String ?
-//     medical          String ?
-//       em_name          String ?
-//         em_relation      String ?
-//           em_phone         String ?
-//             address          String ?
-//               note             String ?
+const handleShowBuyLog = (row: any, tableMeta: any) => {
+  tableMeta.handleRowAction(row.original, 'buyLog')
+}
 
 export const columns: ColumnDef<Partial<User>>[] = [
   {
@@ -60,10 +32,6 @@ export const columns: ColumnDef<Partial<User>>[] = [
   {
     accessorKey: "name",
     header: "名稱",
-  },
-  {
-    accessorKey: "email",
-    header: "電子郵件",
   },
   {
     accessorKey: "point",
@@ -77,6 +45,39 @@ export const columns: ColumnDef<Partial<User>>[] = [
       if (row.original.point_deadline) {
         return <span>{dateFormatter(new Date(row.original.point_deadline))}</span>
       }
+    }
+  },
+  {
+    id: 'actions',
+    cell: ({ row, table }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger className="text-right" onFocus={e => e.target.blur()}><FiMoreHorizontal /></DropdownMenuTrigger>
+          <DropdownMenuContent >
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => handleShowDetail(row, table.options.meta)}
+            >
+              <FaUserAlt className="mr-2" />
+              詳細資料
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => handleShowEdit(row, table.options.meta)}
+            >
+              <AiFillEdit className="mr-2" />
+              編輯資料
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => handleShowBuyLog(row, table.options.meta)}
+            >
+              <FaListUl className="mr-2" />
+              購買記錄
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
     }
   }
 ]

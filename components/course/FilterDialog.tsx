@@ -61,11 +61,11 @@ export default function FilterDialog() {
             key={random}
             onValueChange={(value: 'courseType' | 'teacherName') => setFilter({ ...filter, column: value, value: '' })}
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <RadioGroupItem value="courseType" id="courseType" checked={filter.column === 'courseType'} className="radioRef" />
               <Label htmlFor="courseType">課程種類</Label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <RadioGroupItem value="teacherName" id="teacherName" checked={filter.column === 'teacherName'} className="radioRef" />
               <Label htmlFor="teacherName">老師名稱</Label>
             </div>

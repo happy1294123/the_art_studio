@@ -17,6 +17,16 @@ export async function DELETE(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
   const id = await req.json()
+  const reservationNum = await prisma.reservation.count({
+    where: {
+      course_id: id
+    }
+  })
+
+  if (reservationNum > 0) {
+    return NextResponse.json('已有預約，無法刪除', { status: 400 })
+  }
+
   await prisma.course.delete({
     where: {
       id

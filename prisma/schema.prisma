@@ -44,16 +44,17 @@ model CourseType {
 }
 
 model Reservation {
-  course     Course           @relation(fields: [course_id], references: [id])
-  course_id  Int
-  user       User             @relation(fields: [user_id], references: [id])
-  user_id    Int
-  plan_name  String
-  plan_value Int
-  state      ReservationState @default(SUCCESS)
-  category   Category         @default(POINT)
-  created_at DateTime         @default(now())
-  updated_at DateTime         @updatedAt
+  course        Course           @relation(fields: [course_id], references: [id])
+  course_id     Int
+  user          User             @relation(fields: [user_id], references: [id])
+  user_id       Int
+  plan_name     String
+  plan_value    Int
+  state         ReservationState @default(SUCCESS)
+  category      Category         @default(POINT)
+  point_balance Int?
+  created_at    DateTime         @default(now())
+  updated_at    DateTime         @updatedAt
 
   @@unique([course_id, user_id])
   @@index([user_id])
@@ -163,15 +164,16 @@ model UserDiscount {
 }
 
 model CancelLog {
-  id          Int      @id @default(autoincrement())
-  course      Course   @relation(fields: [course_id], references: [id])
-  course_id   Int
-  user        User     @relation(fields: [user_id], references: [id])
-  user_id     Int
-  stateTo     String
-  returnPoint Int      @default(0)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  course        Course   @relation(fields: [course_id], references: [id])
+  course_id     Int
+  user          User     @relation(fields: [user_id], references: [id])
+  user_id       Int
+  stateTo       String
+  returnPoint   Int      @default(0)
+  point_balance Int?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   @@index([course_id])
   @@index([user_id])
@@ -193,6 +195,7 @@ model Payment {
   receive_note    String?
   state           PaymentState @default(PENDING)
   category        Category     @default(POINT)
+  point_balance   Int?
   created_at      DateTime     @default(now())
   updated_at      DateTime     @updatedAt
 

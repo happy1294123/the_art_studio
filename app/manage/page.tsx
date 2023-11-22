@@ -110,7 +110,8 @@ export default function ManagePage() {
   )
 
   return (
-    <div className="max-w-screen-md mx-auto">
+    <div className="max-w-screen-lg mx-auto">
+      {/* max-w-screen-md */}
       <div className="flex justify-between -mt-5">
         <TheTitle>後台管理</TheTitle>
         <div className="flex mt-8">
@@ -118,7 +119,7 @@ export default function ManagePage() {
         </div>
       </div>
       <Tabs defaultValue="user" onValueChange={handleValueChange}>
-        <TabsList className={`grid w-full grid-cols-${isAdmin ? '5' : '3'}`}>
+        <TabsList className={`grid grid-cols-${isAdmin ? '5' : '3'}`}>
           <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
           <TabsTrigger value="discount">折扣</TabsTrigger>

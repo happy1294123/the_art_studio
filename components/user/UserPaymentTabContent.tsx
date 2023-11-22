@@ -78,7 +78,7 @@ export default function UserPaymentTabContent({ payments, mutatePayment, mutateU
             {payment.state === 'PENDING' && <div className='absolute right-3 top-3 p-1' onClick={(e) => handleCancelPayment(e, payment)}><AiOutlineClose /></div>}
             <CardTitle className='-mb-2 md:text-left text-center'>
               <div>
-                {payment.name}
+                {payment.category === 'POINT' && '+'}{payment.name}
                 <span className='mt-auto ml-4 text-base'>NT$ {payment.price}</span>
               </div>
               <div className="md:flex justify-between">

@@ -60,18 +60,22 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    let hasError = false
     setIsLoading(true)
     if (!formData.date) {
       error.date = '請填寫匯款日期'
       setError(prev => ({ ...prev, date: '請填寫匯款日期' }))
+      hasError = true
     }
     // if (!formData.price) {
     //   setError(prev => ({ ...prev, price: '請填寫匯款金額' }))
     // }
     if (!formData.account || formData.account.length !== 5) {
       setError(prev => ({ ...prev, account: '請填寫您的帳號末5碼' }))
+      hasError = true
     }
-    if (error.date || error.price || error.account || error.note) {
+
+    if (hasError) {
       setIsLoading(false)
       return
     }
@@ -130,10 +134,13 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               ? <span>{formData.date}</span>
               : <Input
                 id="pay-date"
-                type="text"
+                type={`${window.innerWidth < 768 ? 'date' : 'text'}`}
                 className={`ml-2 rounded-full h-9 border-gray-400 ${error.date && 'border-primary'}`}
                 placeholder="請輸入匯款日期"
-                onFocus={e => e.target.type = 'date'}
+                onFocus={e => {
+                  e.target.type = 'date'
+                  e.target?.showPicker()
+                }}
                 onBlur={e => e.target.type = 'text'}
                 onChange={e => handleOnChange('date', e.target.value)}
                 value={formData.date || ''}
@@ -153,13 +160,15 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
             {error.price && <span className="ml-2 text-primary/80">{error.price}</span>}
           </div> */}
           <div className="flex items-center ml-2">
-            <Label htmlFor="pay-date" className="text-base whitespace-nowrap">帳號末5碼：</Label>
+            <Label htmlFor="pay-date" className="text-base whitespace-nowrap">
+              帳號末5碼：
+            </Label>
             {payment.state === 'SUCCESS'
               ? <span>{formData.account}</span>
               : <Input
                 type="text"
                 className={`rounded-full h-9 border-gray-400 ${error.account && 'border-primary'}`}
-                placeholder="請輸入您的帳號末5碼"
+                placeholder="請輸入帳號末5碼"
                 onChange={e => handleOnChange('account', e.target.value)}
                 value={formData.account || ''}
                 disabled={payment.state !== 'PENDING'}
@@ -191,7 +200,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
                 className="text-gray-400 flex-center cursor-pointer text-sm"
                 onClick={handleCancel}
               >
-                取消紀錄
+                更改紀錄
               </span>
             )}
           </div>

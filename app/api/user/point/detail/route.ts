@@ -10,16 +10,23 @@ export async function GET(req: any) {
     where: {
       AND: [
         { user_id: token.id },
-        { category: 'POINT' }
+        { category: 'POINT' },
+        { state: 'SUCCESS' }
       ]
     },
     select: {
       name: true,
+      point_balance: true,
       created_at: true
     }
   })
 
-  const paymentDetail = myPayments.map(p => ({ title: '購買點數', point: `+${p.name.replace('點', '')}`, created_at: p.created_at }))
+  const paymentDetail = myPayments.map(p => ({
+    title: '購買點數',
+    point: `+${p.name.replace('點', '')}`,
+    balance: p.point_balance,
+    created_at: p.created_at
+  }))
 
   const myReservations = await prisma.reservation.findMany({
     where: {
@@ -30,14 +37,30 @@ export async function GET(req: any) {
     },
     include: {
       course: {
-        select: {
-          name: true
-        }
+        include: {
+          teacher: {
+            select: {
+              name: true,
+              image: true
+            }
+          },
+        },
       }
     }
   })
 
-  const reservationDetail = myReservations.map(r => ({ title: r.course.name, point: `-${r.plan_value}`, created_at: r.created_at }))
+  const reservationDetail = myReservations.map(r => ({
+    title: r.course.name,
+    teacherName: r.course.teacher.name,
+    teacherImage: r.course.teacher.image,
+    courseDate: r.course.date,
+    courseStartTime: r.course.start_time,
+    courseEndTime: r.course.end_time,
+    courseType: r.course.type,
+    balance: r.point_balance,
+    point: `-${r.plan_value}`,
+    created_at: r.created_at
+  }))
 
   const details = [
     ...paymentDetail,
@@ -45,36 +68,6 @@ export async function GET(req: any) {
   ].sort(function (a, b) {
     return b.created_at.getTime() - a.created_at.getTime()
   })
-
-
-
-
-
-
-  // let pointDetails: { name: string | number, created_at: Date }[] = await prisma.$queryRaw`
-  // SELECT name, created_at FROM payment WHERE user_id = ${token.id} AND category = 'POINT'
-  // UNION
-  // SELECT reservations.plan_value as name, reservations.created_at FROM reservations WHERE user_id = ${token.id} AND category = 'POINT' 
-  // `
-
-  // console.log(pointDetails);
-
-
-  // if (pointDetails) {
-  //   pointDetails = pointDetails.sort(function (a: { created_at: Date }, b: { created_at: Date }) {
-  //     return b.created_at.getTime() - a.created_at.getTime()
-  //   })
-  //   pointDetails = pointDetails.map(detail => {
-  //     const detailName = detail.name as string
-  //     let name: number;
-  //     if (detailName.includes('點')) {
-  //       name = parseInt(detailName.replace('點', ''))
-  //     } else {
-  //       name = -parseInt(detailName)
-  //     }
-  //     return { name, created_at: detail.created_at }
-  //   })
-  // }
 
   return NextResponse.json(details)
 }

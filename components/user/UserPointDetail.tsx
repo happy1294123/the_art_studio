@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UserPointDetailItem from "./UserPointDetailItem";
 import { ClipLoader } from 'react-spinners'
-
+import { Accordion } from "@/components/ui/accordion"
 
 export default function UserPointDetail() {
   const [pointDetails, setPointDetails] = useState<{ title: string, point: string, created_at: Date }[]>()
@@ -20,9 +20,13 @@ export default function UserPointDetail() {
         ? <div className="flex-center">
           <ClipLoader color="#D1C0AD" />
         </div>
-        : pointDetails.length > 0 ? pointDetails?.map(detail => (
-          <UserPointDetailItem key={String(detail.created_at)} detail={detail} />
-        )) : <span className="flex-center">無點數明細</span>
+        : pointDetails.length > 0
+          ? (<Accordion type="multiple" >
+            {pointDetails?.map(detail => (
+              <UserPointDetailItem key={String(detail.created_at)} detail={detail} />
+            ))}
+          </Accordion>)
+          : <span className="flex-center">無點數明細</span>
       }
     </div>
   )

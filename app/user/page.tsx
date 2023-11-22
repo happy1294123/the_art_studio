@@ -15,6 +15,7 @@ import { MyReservation } from '@/type'
 import UserPaymentTabContent from '@/components/user/UserPaymentTabContent'
 import { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
+import { IoIosArrowForward } from 'react-icons/io'
 
 async function myCourseFetcher(url: string): Promise<Record<string, MyReservation[]>> {
   const res = await fetch(url, { next: { tags: ['myReservation'] } })
@@ -85,7 +86,7 @@ export default function UserPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="course">
-          {reservations && Object.keys(reservations).map(date => (
+          {reservations && (<>{Object.keys(reservations).map(date => (
             <>
               <DateHeading date={new Date(date)} />
               {reservations[date as keyof typeof reservations].map((reservation, i) => (
@@ -93,6 +94,13 @@ export default function UserPage() {
               ))}
             </>
           ))}
+            {Object.keys(reservations).length > 0 && (
+              <Link href="/course" className='text-headingColor float-right flex-center mb-1'>
+                預約課程
+                <IoIosArrowForward />
+              </Link>
+            )}
+          </>)}
           {!reservations && [1, 2, 3].map(i => (
             <CourseItemSkeleton key={i} />
           ))}

@@ -28,7 +28,8 @@ interface DataTableProps<TData, TValue> {
   customClass?: string,
   mutate?: KeyedMutator<any>,
   hasSearch?: boolean,
-  setSelectRow?: Dispatch<TData>
+  setSelectRow?: Dispatch<TData>,
+  handleRowAction?: Function
 }
 
 export function DataTable<TData, TValue>({
@@ -37,7 +38,8 @@ export function DataTable<TData, TValue>({
   customClass,
   mutate,
   hasSearch,
-  setSelectRow
+  setSelectRow,
+  handleRowAction
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
@@ -51,6 +53,7 @@ export function DataTable<TData, TValue>({
     },
     meta: {
       mutate: () => mutate && mutate(),
+      handleRowAction: (data: TData, params: any) => handleRowAction && handleRowAction(data, params)
     }
   })
 
