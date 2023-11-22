@@ -34,7 +34,8 @@ export async function POST(req: any) {
         plan_name: body.plan_name,
         plan_value: +body.plan_value,
         state: body.plan_name.startsWith('單次') && +body.plan_value > 0 ? 'PENDING' : 'SUCCESS',
-        category: body.plan_name.startsWith('單次') ? 'SINGLE' : 'POINT'
+        category: body.plan_name.startsWith('單次') ? 'SINGLE' : 'POINT',
+        point_balance: token.point - parseInt(body.plan_value)
       }
     })
     if (!newData) NextResponse.json('預約失敗', { status: 500 })

@@ -24,6 +24,7 @@ import dateFormatter from '@/lib/dateFormatter'
 import { useSession } from 'next-auth/react'
 import { MyCourse, MyReservation } from '@/type'
 import ClipLoader from 'react-spinners/ClipLoader'
+import CourseTypeBadge from '../CourseTypeBadge'
 
 type Props = {
   course: MyCourse,
@@ -72,8 +73,8 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
       body: JSON.stringify({ course_id: course.id, stateTo: checkResData.stateTo, returnPoint: checkResData.returnPoint })
     })
     if (res.ok) {
-      toast('取消課程成功', getToastOption())
       setOpen && setOpen(false)
+      toast('取消課程成功', getToastOption())
       mutate && mutate()
       mutateReservation && mutateReservation()
       const currentPoint = await res.json()
@@ -160,7 +161,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
       <DialogHeader>
         <DialogTitle className='text-left'>
           <span className="font-bold text-3xl tracking-wider">{course.name}</span>
-          <span className="ml-3 px-2 py-0.5 text-xs bg-secondary text-secondary-foreground rounded-full">{course.type}</span>
+          {course.type && <CourseTypeBadge name={course.type} className='ml-3 text-xs' />}
         </DialogTitle>
         <DialogDescription className="text-gray-500">
           <div className="flex gap-2.5">

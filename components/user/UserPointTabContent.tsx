@@ -31,7 +31,8 @@ type props = {
 
 export default function UserPointTabContent({ myPoint, mutateUnPayNum }: props) {
   const { data: session, update: updateSession } = useSession()
-  if (myPoint?.point !== session?.user.point) {
+
+  if ((myPoint?.point !== session?.user.point) || (myPoint?.point_deadline !== session?.user.point_deadline)) {
     updateSession({
       point: myPoint?.point,
       point_deadline: myPoint?.point_deadline

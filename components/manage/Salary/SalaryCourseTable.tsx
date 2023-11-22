@@ -1,15 +1,14 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Salary } from "@/type"
-import getColorByCourseType from '@/lib/course/getColorByCourseType'
 import checkIsPass from "@/lib/checkIsPass"
+import CourseTypeBadge from "@/components/CourseTypeBadge"
 
 type Props = {
   data: Salary
@@ -68,11 +67,12 @@ export default function SalaryCourseTable({ data }: Props) {
                 <TableCell >
                   <div className="flex-center flex-col">
                     {course.name}
-                    <span
+                    <CourseTypeBadge name={course.type} />
+                    {/* <span
                       className="rounded-full px-2"
                       style={{ background: getColorByCourseType(course.type) }}>
                       {course.type}
-                    </span>
+                    </span> */}
                   </div>
                 </TableCell>
                 <TableCell>

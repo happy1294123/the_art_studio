@@ -35,6 +35,9 @@ export default function DateItems({ dateList, selectedDate, setSelectedDate }: P
 
   const handleSelect = (e: MouseEvent): void => {
     const target = e.target as Element
+    // console.log('target', target);
+
+    target.scrollIntoView({ inline: 'center' })
     // // set selectDate
     const parentNode = target.parentNode as HTMLElement
     if (parentNode.hasAttribute('data-date')) {

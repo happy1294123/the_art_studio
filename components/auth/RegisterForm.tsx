@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from '../ui/textarea'
+import style from './registerStyle.module.scss'
+import { Input } from '../ui/input'
 
 export default function RegisterForm() {
   const ref = useRef<HTMLFormElement>(null)
@@ -197,11 +199,15 @@ export default function RegisterForm() {
           }}
           name="birth"
           labelText='生日'
-          type='text'
-          onFocus={e => e.target.type = 'date'}
+          type={`${window.innerWidth < 768 ? 'date' : 'text'}`}
+          onFocus={e => {
+            const target = e.target as HTMLInputElement
+            target.type = 'date'
+            target.showPicker()
+          }}
           onBlur={e => e.target.type = 'text'}
-          className='mt-8
-          bg-bgColorSecondary' />
+          className={`mt-8
+          bg-bgColorSecondary ${'style.autoDatePopover'}`} />
         <FloatLabelInput
           error={checkError('phone')}
           onChange={(e) => {

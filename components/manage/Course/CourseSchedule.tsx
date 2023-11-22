@@ -10,17 +10,17 @@ import dateFormatter from '@/lib/dateFormatter'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
 import { Button } from '@/components/ui/button'
-import dynamic from 'next/dynamic'
 import { Progress } from "@/components/ui/progress"
-const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 import CourseTypeDialog from './CourseTypeDialog'
 import { useCourse } from '@/context/ManageCourseContent'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import CourseDetail from './CourseDialog/CourseDetail'
-const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))
 import { Switch } from "@/components/ui/switch"
 import { Label } from '@/components/ui/label'
 import { MyCourse } from '@/type'
+import dynamic from 'next/dynamic'
+const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
+const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))
 
 type Props = {
   isTeacherMode?: boolean
@@ -247,7 +247,7 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
     {!isTeacherMode && (<>
       <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
       <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
-      {(openCourseTypeDialog && courseTypeMutate && courseType) && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} courseTypeMutate={courseTypeMutate} courseType={courseType} />}
+      {(openCourseTypeDialog && courseTypeMutate && courseType) && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} />}
       {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
     </>)}
   </>)
@@ -256,16 +256,11 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
 function renderEventContent(eventInfo: any) {
   const props = eventInfo.event._def.extendedProps
 
-  return (<div className='md:p-2 py-1 space-y-1 cursor-pointer'>
-    <div className='flex justify-center md:justify-start'>
+  return (<div className={`md:p-2 py-1 space-y-1 cursor-pointer mx-auto max-w-[120px] ${eventInfo.isPast && 'opacity-40'}`}>
+    <div className='flex md:justify-between justify-center'>
       {eventInfo.timeText}
-      {/* {props.reservationNum >= props.base_rez
-        && <span className='ml-auto mt-1'>
-          <BsCheck />
-        </span>
-      } */}
+      <div className='hidden md:block'>{eventInfo.event.title}</div>
     </div>
-    <div className='hidden md:block'>{eventInfo.event.title}</div>
     <div className='relative flex'>
       <div className="absolute flex-center w-full z-10 text-black/60">
         {props.reservationNum}/{props.total_rez}

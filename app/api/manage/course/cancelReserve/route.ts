@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt"
 import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
+import prisma from '@/lib/initPrisma'
 
 export async function POST(req: any) {
   const token = await getToken({ req })

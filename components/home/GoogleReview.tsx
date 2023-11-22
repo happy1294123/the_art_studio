@@ -13,7 +13,7 @@ type Props = {
 
 export default function GoogleReview({ review }: Props) {
   return (
-    <div className="bg-white rounded-3xl p-5 mx-2 w-[300px]">
+    <div className="bg-white rounded-3xl p-5 w-[300px]">
       <div className="flex">
         <Avatar>
           <AvatarImage src={review.profile_photo_url} alt="avatar" className="p-1" />

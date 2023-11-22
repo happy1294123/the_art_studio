@@ -124,7 +124,8 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
       setCourseForm(null)
       coursesMutate && coursesMutate()
     } else {
-      toast('刪除失敗', getToastOption('error'))
+      const errorMsg = await res.json()
+      toast(errorMsg || '刪除失敗', getToastOption('error'))
     }
   }
 
@@ -222,9 +223,10 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-bgColor border-headingColor rounded-2xl shadow-xl">
-                            <SelectItem value="空中課程">空中課程</SelectItem>
+                            {courseType?.map(type => (<SelectItem key={type.id} value={type.name}>{type.name}</SelectItem>))}
+                            {/* <SelectItem value="空中課程">空中課程</SelectItem>
                             <SelectItem value="地面課程">地面課程</SelectItem>
-                            <SelectItem value="兒童課程">兒童課程</SelectItem>
+                            <SelectItem value="兒童課程">兒童課程</SelectItem> */}
                           </SelectContent>
                         </Select>
                         <FormMessage />
