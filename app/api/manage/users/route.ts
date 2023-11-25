@@ -21,11 +21,21 @@ export async function GET(req: any) {
   return NextResponse.json(res)
 }
 
-export async function POST(req: any) {
+export async function PUT(req: any) {
   const token = await getToken({ req })
   if (!token || !['ADMIN', 'EDITOR'].includes(token.role)) return NextResponse.json('權限不足', { status: 401 })
 
   const data = await req.json()
+  const dupSerialNumberUser = await prisma.user.findFirst({
+    where: {
+      serial_number: data.serial_number,
+      id: {
+        not: data.id
+      }
+    }
+  })
+  if (dupSerialNumberUser) return NextResponse.json('編號重複: ' + data.serial_number, { status: 400 })
+
   const newUser = await prisma.user.update({
     where: {
       id: data.id,

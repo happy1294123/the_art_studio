@@ -119,14 +119,11 @@ export default function ManagePage() {
         </div>
       </div>
       <Tabs defaultValue="user" onValueChange={handleValueChange}>
-        <TabsList className={`grid grid-cols-${isAdmin ? '5' : '3'}`}>
+        <TabsList className={`grid grid-cols-${isAdmin ? '5' : '4'}`}>
           <TabsTrigger value="user">會員</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>
           <TabsTrigger value="discount">折扣</TabsTrigger>
-          <TabsTrigger
-            className={`hidden ${isAdmin && 'block'}`}
-            value="receive"
-          >
+          <TabsTrigger value="receive">
             收款
           </TabsTrigger>
           <TabsTrigger
@@ -164,15 +161,15 @@ export default function ManagePage() {
               <ClipLoader color="#D1C0AD" />
             </div>}
         </TabsContent>
+        {/* 收款 */}
+        < TabsContent value="receive">
+          {receivement
+            ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
+            : <div className="flex-center">
+              <ClipLoader color="#D1C0AD" />
+            </div>}
+        </TabsContent>
         {isAdmin && (<>
-          {/* 收款 */}
-          < TabsContent value="receive">
-            {receivement
-              ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
-              : <div className="flex-center">
-                <ClipLoader color="#D1C0AD" />
-              </div>}
-          </TabsContent>
           {/* 薪資 */}
           <TabsContent value="salary">
             {/* {JSON.stringify(salary)} */}

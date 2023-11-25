@@ -26,28 +26,6 @@ const handleShowBuyLog = (row: any, tableMeta: any) => {
 
 export const columns: ColumnDef<Partial<User>>[] = [
   {
-    accessorKey: "serial_number",
-    header: "編號",
-  },
-  {
-    accessorKey: "name",
-    header: "名稱",
-  },
-  {
-    accessorKey: "point",
-    header: '點數',
-    cell: ({ row }) => <span>{row.original.point} 點</span>
-  },
-  {
-    accessorKey: "point_deadline",
-    header: '點數期限',
-    cell: ({ row }) => {
-      if (row.original.point_deadline) {
-        return <span>{dateFormatter(new Date(row.original.point_deadline))}</span>
-      }
-    }
-  },
-  {
     id: 'actions',
     cell: ({ row, table }) => {
       return (
@@ -78,6 +56,28 @@ export const columns: ColumnDef<Partial<User>>[] = [
           </DropdownMenuContent>
         </DropdownMenu>
       )
+    }
+  },
+  {
+    accessorKey: "serial_number",
+    header: "編號",
+  },
+  {
+    accessorKey: "name",
+    header: "名稱",
+  },
+  {
+    accessorKey: "point",
+    header: '點數',
+    cell: ({ row }) => <span>{row.original.point} 點</span>
+  },
+  {
+    accessorKey: "point_deadline",
+    header: '點數期限',
+    cell: ({ row }) => {
+      if (row.original.point_deadline) {
+        return <span>{dateFormatter(new Date(row.original.point_deadline))}</span>
+      }
     }
   }
 ]

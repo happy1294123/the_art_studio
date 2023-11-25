@@ -9,10 +9,10 @@ import { useRouter } from 'next/navigation'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from '../ui/textarea'
-import style from './registerStyle.module.scss'
-import { Input } from '../ui/input'
+import useWindowWidth from '@/lib/useWindowWidth'
 
 export default function RegisterForm() {
+  const windowWidth = useWindowWidth()
   const ref = useRef<HTMLFormElement>(null)
   const [error, setError] = useState({ name: '', message: '' })
   const [formData, setFormData] = useState({
@@ -199,7 +199,7 @@ export default function RegisterForm() {
           }}
           name="birth"
           labelText='生日'
-          type={`${window.innerWidth < 768 ? 'date' : 'text'}`}
+          type={`${windowWidth < 768 ? 'date' : 'text'}`}
           onFocus={e => {
             const target = e.target as HTMLInputElement
             target.type = 'date'
@@ -335,7 +335,7 @@ export default function RegisterForm() {
         </div>
 
         <div className="flex gap-2 text-sm justify-end mr-2 text-gray-500  underline-offset-4 mt-5">
-          <Link href="/login" className="hover:underline underline-offset-4">已經是會員？</Link>
+          <Link href="/login" className="hover:underline underline-offset-4 text-fontColor/60">已經是會員？</Link>
         </div>
         {error.name === 'database' && <span className="text-primary/80 -mt-6 animate-shake">{error.message}</span>}
         <Button className="w-full my-1 h-9 text-xl" onClick={handleSubmit}>

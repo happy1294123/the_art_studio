@@ -18,6 +18,7 @@ import { toast } from "react-hot-toast"
 import getToastOption, { toastResult } from "@/lib/getToastOption"
 import { KeyedMutator } from "swr"
 import { Label } from "../ui/label"
+import useWindowWidth from "@/lib/useWindowWidth"
 
 type props = {
   open: boolean,
@@ -33,6 +34,7 @@ const stateMap = {
 }
 
 export default function UserPaymentDialog({ open, setOpen, payment, mutatePayment }: props) {
+  const windowWidth = useWindowWidth()
   const [formData, setFormData] = useState({
     paymentId: payment.id,
     date: payment.receive_date,
@@ -134,7 +136,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
               ? <span>{formData.date}</span>
               : <Input
                 id="pay-date"
-                type={`${window.innerWidth < 768 ? 'date' : 'text'}`}
+                type={`${windowWidth < 768 ? 'date' : 'text'}`}
                 className={`ml-2 rounded-full h-9 border-gray-400 ${error.date && 'border-primary'}`}
                 placeholder="請輸入匯款日期"
                 onFocus={e => {

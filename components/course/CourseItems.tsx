@@ -1,4 +1,4 @@
-import CourseItem from '@/components/course/CourseItem'
+import CourseItem from './CourseItem'
 import useSWR from 'swr'
 import dateFormatter from '@/lib/dateFormatter'
 import ClipLoader from 'react-spinners/ClipLoader'

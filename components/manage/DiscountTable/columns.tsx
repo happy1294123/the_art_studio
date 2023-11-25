@@ -34,29 +34,6 @@ const handleDeleteDiscount = async (id: number, tableMeta: any) => {
 
 export const columns: ColumnDef<Discount>[] = [
   {
-    accessorKey: "code",
-    header: "折扣碼",
-  },
-  {
-    accessorKey: "description",
-    header: "描述訊息",
-  },
-  {
-    accessorKey: "point_discount",
-    header: '點數折扣',
-  },
-  {
-    accessorKey: "price_discount",
-    header: '價錢折扣'
-  },
-  {
-    accessorKey: "active",
-    header: '啟用狀態',
-    cell: ({ row }) => {
-      return row.getValue('active') ? '啟用中' : '停用中'
-    }
-  },
-  {
     id: 'actions',
     cell: ({ row, table }) => {
       return (
@@ -87,6 +64,29 @@ export const columns: ColumnDef<Discount>[] = [
           </DropdownMenuContent>
         </DropdownMenu>
       )
+    }
+  },
+  {
+    accessorKey: "code",
+    header: "折扣碼",
+  },
+  {
+    accessorKey: "description",
+    header: "描述訊息",
+  },
+  {
+    accessorKey: "point_discount",
+    header: '點數折扣',
+  },
+  {
+    accessorKey: "price_discount",
+    header: '價錢折扣'
+  },
+  {
+    accessorKey: "active",
+    header: '啟用狀態',
+    cell: ({ row }) => {
+      return row.getValue('active') ? '啟用中' : '停用中'
     }
   }
 ]

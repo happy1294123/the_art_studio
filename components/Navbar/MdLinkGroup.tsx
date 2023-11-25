@@ -23,7 +23,7 @@ export default function MdLinkGroup({ isLogin, isManager, isTeacher }: Props) {
 
   return (
     <>
-      <NavigationMenu className="opacity-70">
+      <NavigationMenu className="opacity-70 whitespace-nowrap">
         <NavigationMenuList className="flex flex-col md:flex-row gap-2 md:gap-4">
           <NavigationMenuItem className="data-[highlighted]:bg-red-400">
             <LinkWithAnim href="/news" className="text-xl ml-1 md:ml-0">最新消息</LinkWithAnim>

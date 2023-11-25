@@ -62,8 +62,8 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "receive_date",
     header: () => <div className="w-20">匯款日期</div>,
   },
-  {
-    accessorKey: "receive_note",
-    header: () => <div className="whitespace-nowrap">用戶備註</div>,
-  },
+  // {
+  //   accessorKey: "receive_note",
+  //   header: () => <div className="whitespace-nowrap">用戶備註</div>,
+  // },
 ]

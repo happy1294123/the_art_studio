@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button'
 import Image from "next/image"
 import { useSession } from 'next-auth/react'
 import { KeyedMutator } from 'swr'
-import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { MyCourse, MyReservation } from '@/type'
 import CourseTypeBadge from '../CourseTypeBadge'
-const ReserveDialog = dynamic(() => import("./ReserveDialog"))
-const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
+import UserCourseDialog from '../user/UserCourseDialog'
+import ReserveDialog from './ReserveDialog'
+// import dynamic from 'next/dynamic'
+// const ReserveDialog = dynamic(() => import("./ReserveDialog"))
+// const UserCourseDialog = dynamic(() => import("../user/UserCourseDialog"))
 
 type Props = {
   course: MyCourse,
@@ -43,6 +45,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
   }
 
   const getCoursePageSpan = () => {
+
     if (current_rez === course.total_rez) {
       return <span className="px-4 text-sm mt-auto text-gray-800">額滿</span>
     }
@@ -62,13 +65,14 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
 
   return (
     <>
-      <div className={`p-4 rounded-3xl mb-3 border border-gray-300 shadow-md cursor-pointer
+      <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md cursor-pointer
       ${(current_rez === course.total_rez || hasReserve) && !isInUserPage && ''}`}
         // opacity-40
         onClick={() => setOpen(true)}>
         <div className="flex">
           <span className="font-bold text-lg tracking-wider">{course.name}</span>
           {course.type && <CourseTypeBadge name={course.type} className='text-xs my-auto ml-3' />}
+          {/* <span className="my-auto ml-3 px-2 text-xs rounded-full" style={{ backgroundColor: getColorByCourseType(course.type) }}>{course.type}</span> */}
         </div>
         <div className="flex gap-2.5 ml-1">
           <BiTime className="my-auto" />
@@ -86,9 +90,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
               <GoPerson className="text-xs mr-[2px] mt-[1px]" />
               <span className="text-xs">{current_rez}/{course.total_rez}</span>
             </div>
-            <div className='drop-shadow-lg'>
-              {isInUserPage ? getUserPageBtn() : getCoursePageSpan()}
-            </div>
+            {isInUserPage ? getUserPageBtn() : getCoursePageSpan()}
           </div>
         </div>
       </div >

@@ -74,8 +74,8 @@ export default function LoginForm() {
         <div className="flex text-sm justify-between mr-2 text-gray-500  underline-offset-4 mt-5">
           {error && <span className="text-primary/80 animate-shake">{error}</span>}
           <div className='ml-auto'>
-            <Link href="/register" className="hover:underline underline-offset-4 mr-2">註冊會員</Link>
-            <Link href="/user/forgetPwd" className="hover:underline underline-offset-4">忘記密碼</Link>
+            <Link href="/register" className="hover:underline underline-offset-4 mr-2 text-fontColor/60">註冊會員</Link>
+            <Link href="/user/forgetPwd" className="hover:underline underline-offset-4 text-fontColor/60">忘記密碼</Link>
           </div>
         </div>
         <LoadingButton className="w-full my-1 h-9 text-xl" onClick={handleSubmitLogin} isLoading={isLoading}>登入</LoadingButton>

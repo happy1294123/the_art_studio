@@ -38,7 +38,7 @@ export default function UserActionDialog({ rowAction, setRowAction, userMutate }
           ? <UserDetail user={rowAction.data} />
           : rowAction.action === 'edit'
             ? <UserEdit user={rowAction.data} setRowAction={setRowAction} userMutate={userMutate} />
-            : <UserBuyLog />}
+            : <UserBuyLog user={rowAction.data} />}
       </DialogContent>
     </Dialog >
 

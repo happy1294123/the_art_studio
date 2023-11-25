@@ -1,4 +1,3 @@
-
 'use client'
 import Image from "next/image"
 import style from './homeStyle.module.scss'
@@ -16,7 +15,7 @@ export default function Home() {
   return (
     <div>
       <div className={`w-full h-[760px] absolute top-0 left-0 -z-10 ${style.bg}`}></div>
-      <div className="flex items-center justify-center md:justify-start gap-0 md:gap-10 -mt-[84px] ml-2 md:ml-[100px] ">
+      <div className="flex-center md:justify-start gap-0 md:gap-10 -mt-[84px] ml-2 md:ml-[100px]">
         <div className="md:left-[200px]">
           {/* -mr-[150px] */}
           <motion.div
@@ -42,7 +41,7 @@ export default function Home() {
           transition={{
             duration: 0.5,
           }}
-          className="top-0 right-10 -z-10 -ml-[150px] md:left-[380px] "
+          className="top-0 right-10 -z-10 -ml-[150px] md:left-[380px]"
         >
           <Image src="/hero_img.png" width={250} height={250} alt='' />
         </motion.div>
