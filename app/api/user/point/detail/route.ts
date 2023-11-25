@@ -5,11 +5,16 @@ import { NextResponse } from "next/server"
 export async function GET(req: any) {
   const token = await getToken({ req })
   if (!token) return NextResponse.json('請先登入會員', { status: 401 })
+  const details = await getDetails(token.id)
 
+  return NextResponse.json(details)
+}
+
+export const getDetails = async (user_id: number) => {
   const myPayments = await prisma.payment.findMany({
     where: {
       AND: [
-        { user_id: token.id },
+        { user_id },
         { category: 'POINT' },
         { state: 'SUCCESS' }
       ]
@@ -31,7 +36,7 @@ export async function GET(req: any) {
   const myReservations = await prisma.reservation.findMany({
     where: {
       AND: [
-        { user_id: token.id },
+        { user_id },
         { category: 'POINT' }
       ]
     },
@@ -69,5 +74,5 @@ export async function GET(req: any) {
     return b.created_at.getTime() - a.created_at.getTime()
   })
 
-  return NextResponse.json(details)
+  return details
 }

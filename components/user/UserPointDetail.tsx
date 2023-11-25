@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
 import UserPointDetailItem from "./UserPointDetailItem";
 import { ClipLoader } from 'react-spinners'
 import { Accordion } from "@/components/ui/accordion"
+import useSWR from "swr";
+
+const fetcher = async (url: string): Promise<{ title: string, point: string, created_at: Date }[]> => {
+  const res = await fetch(url)
+  return await res.json()
+}
 
 export default function UserPointDetail() {
-  const [pointDetails, setPointDetails] = useState<{ title: string, point: string, created_at: Date }[]>()
-
-  useEffect(() => {
-    (async function () {
-      const res = await fetch('/api/user/point/detail')
-      const data = await res.json()
-      setPointDetails(data)
-    })()
-  }, [])
+  const { data: pointDetails } = useSWR(
+    '/api/user/point/detail',
+    fetcher
+  )
 
   return (
     <div>

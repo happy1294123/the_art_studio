@@ -93,8 +93,31 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
   }, [course])
 
   const handleCopyUrl = async () => {
-    await navigator.clipboard.writeText(currentCourseUrl)
-    toast('已複製此課程網址', getToastOption('info'))
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(currentCourseUrl);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = currentCourseUrl;
+
+      // Move the textarea outside the viewport to make it invisible
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-99999999px';
+
+      document.body.prepend(textarea);
+
+      // highlight the content of the textarea element
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.log(err);
+      } finally {
+        textarea.remove();
+      }
+    }
+    // await navigator.clipboard.writeText(currentCourseUrl)
+    toast('已複製此課程網址', getToastOption())
   }
 
   return (

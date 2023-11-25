@@ -9,9 +9,9 @@ type Props = {
 }
 
 export default function DiscountTable({ receivement, receiveMutate }: Props) {
-  if (typeof receivement === 'string' && receivement === '權限不足') {
-    return <div className="flex-center">權限不足</div>
-  }
+  // if (typeof receivement === 'string' && receivement === '權限不足') {
+  //   return <div className="flex-center">權限不足</div>
+  // }
 
 
   return (<>

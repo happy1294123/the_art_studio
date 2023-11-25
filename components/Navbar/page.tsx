@@ -57,12 +57,12 @@ export default function Navbar() {
           {showSidebar ? (
             <Button variant="secondary" className="z-30 bg-bgColorOther rounded-full text-lg font-bold drop-shadow-lg px-3 my-auto" onClick={() => setShowSidebar(false)}>X</Button>
           ) : (
-            <div>
+            <div className='z-20'>
               <Button variant="link" className="p-2 md:hidden my-auto" onClick={() => setShowSidebar(true)}>
                 <IconHamburger />
               </Button>
               <div className={`hidden md:block w-50 h-[37px] my-auto`}>
-                  <MdLinkGroup isManager={isManager} isTeacher={isTeacher} isLogin={isLogin} />
+                <MdLinkGroup isManager={isManager} isTeacher={isTeacher} isLogin={isLogin} />
               </div>
             </div>
           )}

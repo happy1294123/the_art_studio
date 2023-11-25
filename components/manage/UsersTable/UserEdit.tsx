@@ -26,6 +26,7 @@ import LoadingButton from "@/components/LoadingButton"
 import { Textarea } from "@/components/ui/textarea"
 import { Dispatch, useState } from "react"
 import { KeyedMutator } from "swr"
+import { useSession } from "next-auth/react"
 
 const formSchema = z.object({
   serial_number: z.string(),
@@ -42,6 +43,7 @@ type Props = {
 }
 
 export default function UserEdit({ user, setRowAction, userMutate }: Props) {
+  const { data: session } = useSession()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,7 +60,7 @@ export default function UserEdit({ user, setRowAction, userMutate }: Props) {
     setLoading(true)
 
     const res = await fetch('/api/manage/users', {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({
         id: user.id,
         serial_number: values.serial_number,
@@ -76,7 +78,8 @@ export default function UserEdit({ user, setRowAction, userMutate }: Props) {
       setRowAction({ data: newUser, open: true, action: 'edit' })
       // setSelectedUser(newUser)
     } else {
-      toast('更新失敗', getToastOption('error'))
+      const error = await res.json()
+      toast(error || '更新失敗', getToastOption('error'))
     }
     setLoading(false)
   }
@@ -102,40 +105,42 @@ export default function UserEdit({ user, setRowAction, userMutate }: Props) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='point'
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>點數</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    className="border-gray-400"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='point_deadline'
-            render={({ field }) => (
-              <FormItem className="space-y-0">
-                <FormLabel>點數期限</FormLabel>
-                <FormControl>
-                  <Input
-                    type="date"
-                    className="border-gray-400"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {session?.user.role === 'ADMIN' && (<>
+            <FormField
+              control={form.control}
+              name='point'
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>點數</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      className="border-gray-400"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='point_deadline'
+              render={({ field }) => (
+                <FormItem className="space-y-0">
+                  <FormLabel>點數期限</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      className="border-gray-400"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>)}
           <FormField
             control={form.control}
             name='email_varified'

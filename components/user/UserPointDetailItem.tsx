@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { v4 as uuidv4 } from 'uuid';
 import { BiTime } from 'react-icons/bi';
 import Image from 'next/image'
 
@@ -21,15 +20,16 @@ type Props = {
     courseType?: string,
     teacherName?: string,
     teacherImage?: string,
-  }
+  },
+  isManage?: boolean
 }
 
-export default function UserPointDetailItem({ detail }: Props) {
+export default function UserPointDetailItem({ detail, isManage }: Props) {
   const dateString = dateFormatter(new Date(detail.created_at))
 
   return (
-    <AccordionItem value={uuidv4()}>
-      <AccordionTrigger className='bg-bgColorOther rounded-2xl mb-1 p-3 px-5 flex text-fontColor text-lg hover:no-underline'>
+    <AccordionItem value={String(detail.created_at)}>
+      <AccordionTrigger className={`bg-bgColorOther rounded-2xl mb-1 ${isManage ? 'p-2 text-xs' : 'p-3 px-5 text-lg'} flex text-fontColor  hover:no-underline`}>
         <div>
           {dateString.slice(5)}
           <span className='ml-5'>
@@ -42,8 +42,8 @@ export default function UserPointDetailItem({ detail }: Props) {
           </span>
         </div>
       </AccordionTrigger>
-      <AccordionContent className={`bg-bgColorOther mx-3 mb-3 rounded-b-2xl p-3 shadow-lg border-b border-headingColor/70 ${detail.courseDate ? ' h-[65px]' : ' h-[40px]'}`}>
-        <div className='flex justify-between'>
+      <AccordionContent>
+        <div className={`flex justify-between bg-bgColorOther rounded-b-2xl shadow-lg border-b border-headingColor/70 ${detail.courseDate ? ' h-[65px]' : ' h-[40px]'} ${isManage ? 'text-xs p-1.5 whitespace-nowrap' : 'mx-3 p-3'}`}>
           <div className={`${!detail.courseDate && 'invisible'}`}>
             <div className="flex items-center gap-4">
               <BiTime className="ml-2 my-auto" />

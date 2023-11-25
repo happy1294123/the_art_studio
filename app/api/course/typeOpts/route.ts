@@ -1,5 +1,6 @@
 import prisma from "@/lib/initPrisma";
 import { NextResponse } from "next/server";
+import prisma from '@/lib/initPrisma'
 
 export async function GET() {
   const types = await prisma.courseType.findMany({
