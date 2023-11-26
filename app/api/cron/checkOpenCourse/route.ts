@@ -4,16 +4,18 @@ import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
-  const result = await fetch(
-    'http://worldtimeapi.org/api/timezone/America/Chicago',
-    {
-      cache: 'no-store',
-    },
-  );
-  const data = await result.json();
+export async function GET(req: Request) {
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', {
+      status: 401,
+    });
+  }
 
-  return Response.json({ datetime: data.datetime });
+  console.log('test cron');
+
+
+  return Response.json({ success: true });
   // const now = new Date()
   // const tomorrow = now.setDate(now.getDate() + 1)
 
