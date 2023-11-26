@@ -1,7 +1,7 @@
 {
     "crons": [
         {
-            "path": "/api/cron/checkOpenCourse",
+            "path": "/api/cron/checkOpenCourse.ts",
             "schedule": "1 */1 * * *"
         }
     ]
