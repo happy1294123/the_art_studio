@@ -2,20 +2,10 @@ import dateFormatter from "@/lib/dateFormatter";
 import prisma from "@/lib/initPrisma";
 import { NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic'
-
-export async function GET(req: Request) {
-  const authHeader = req.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response('Unauthorized', {
-      status: 401,
-    });
-  }
-
+export async function GET() {
   console.log('test cron');
 
-
-  return Response.json({ success: true });
+  return Response.json(new Date());
   // const now = new Date()
   // const tomorrow = now.setDate(now.getDate() + 1)
 
