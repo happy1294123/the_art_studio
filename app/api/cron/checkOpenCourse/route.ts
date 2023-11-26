@@ -6,64 +6,66 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const now = new Date()
-  const tomorrow = now.setDate(now.getDate() + 1)
+  console.log(now);
 
-  const tomorrowString = dateFormatter(new Date(tomorrow), '/', true)
+  // const tomorrow = now.setDate(now.getDate() + 1)
 
-  const tomorrowCourses = await prisma.course.findMany({
-    where: {
-      date: tomorrowString
-    },
-    select: {
-      id: true,
-      date: true,
-      start_time: true,
-      end_time: true,
-      baseline_rez: true,
-      isOpen: true,
-    }
-  })
+  // const tomorrowString = dateFormatter(new Date(tomorrow), '/', true)
 
-  const checkCourse = tomorrowCourses.filter(course => {
-    const start = new Date(`${course.date} ${course.start_time}`).getTime()
-    const end = new Date(`${course.date} ${course.end_time}`).getTime()
-    return start < tomorrow && tomorrow < end
-  })
+  // const tomorrowCourses = await prisma.course.findMany({
+  //   where: {
+  //     date: tomorrowString
+  //   },
+  //   select: {
+  //     id: true,
+  //     date: true,
+  //     start_time: true,
+  //     end_time: true,
+  //     baseline_rez: true,
+  //     isOpen: true,
+  //   }
+  // })
 
-  if (checkCourse.length > 1) {
-    console.log('發生錯誤，同時段有兩個課程');
-    return NextResponse.json('發生錯誤，同時段有兩個課程', { status: 400 })
-  }
+  // const checkCourse = tomorrowCourses.filter(course => {
+  //   const start = new Date(`${course.date} ${course.start_time}`).getTime()
+  //   const end = new Date(`${course.date} ${course.end_time}`).getTime()
+  //   return start < tomorrow && tomorrow < end
+  // })
 
-  if (checkCourse.length === 0) {
-    console.log('24小時後無課程');
-    return NextResponse.json('24小時後無課程', { status: 400 })
-  }
+  // if (checkCourse.length > 1) {
+  //   console.log('發生錯誤，同時段有兩個課程');
+  //   return NextResponse.json('發生錯誤，同時段有兩個課程', { status: 400 })
+  // }
 
-  // to be confirmed course
-  const tbcCourse = checkCourse[0]
-  const reservationNum = await prisma.reservation.count({
-    where: {
-      course_id: tbcCourse.id
-    }
-  })
+  // if (checkCourse.length === 0) {
+  //   console.log('24小時後無課程');
+  //   return NextResponse.json('24小時後無課程', { status: 400 })
+  // }
 
-  let isOpen: boolean
-  if (reservationNum < tbcCourse.baseline_rez) { // 確定開課
-    isOpen = false
-  } else {
-    // make notify
-    isOpen = true
-  }
+  // // to be confirmed course
+  // const tbcCourse = checkCourse[0]
+  // const reservationNum = await prisma.reservation.count({
+  //   where: {
+  //     course_id: tbcCourse.id
+  //   }
+  // })
 
-  await prisma.course.update({
-    where: {
-      id: tbcCourse.id
-    },
-    data: {
-      isOpen
-    }
-  })
+  // let isOpen: boolean
+  // if (reservationNum < tbcCourse.baseline_rez) { // 確定開課
+  //   isOpen = false
+  // } else {
+  //   // make notify
+  //   isOpen = true
+  // }
 
-  return NextResponse.json(checkCourse)
+  // await prisma.course.update({
+  //   where: {
+  //     id: tbcCourse.id
+  //   },
+  //   data: {
+  //     isOpen
+  //   }
+  // })
+
+  return NextResponse.json('checkCourse')
 }
