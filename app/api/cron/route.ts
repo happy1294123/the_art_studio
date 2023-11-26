@@ -9,6 +9,10 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   // const headersList = headers();
   const now = new Date()
+  if (now.getTimezoneOffset() !== -480) {
+    now.setUTCHours(now.getUTCHours() + 8);
+  }
+
   const tomorrow = now.setDate(now.getDate() + 1)
 
   const tomorrowString = dateFormatter(new Date(tomorrow), '/', true)
