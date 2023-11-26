@@ -9,5 +9,5 @@ export async function GET() {
   if (data.status === 'OK') {
     return NextResponse.json(data.result.reviews)
   }
-  return NextResponse.json('', { status: 400 })
+  return NextResponse.json(data, { status: 400 })
 }
