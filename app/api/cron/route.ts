@@ -1,12 +1,13 @@
 import dateFormatter from "@/lib/dateFormatter";
 import prisma from "@/lib/initPrisma";
 import { NextResponse } from "next/server";
-import { headers } from 'next/headers';
+// import { headers } from 'next/headers';
 
 // export const revalidate = 0
+export const dynamic = "force-dynamic"
 
 export async function GET() {
-  const headersList = headers();
+  // const headersList = headers();
   const now = new Date()
   const tomorrow = now.setDate(now.getDate() + 1)
 
@@ -39,7 +40,7 @@ export async function GET() {
 
   if (checkCourse.length === 0) {
     console.log('24小時後無課程');
-    return NextResponse.json('24小時後無課程', { status: 400 })
+    return NextResponse.json('24小時後無課程' + now, { status: 400 })
   }
 
   // to be confirmed course
