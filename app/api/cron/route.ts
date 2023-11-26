@@ -1,10 +1,12 @@
 import dateFormatter from "@/lib/dateFormatter";
 import prisma from "@/lib/initPrisma";
 import { NextResponse } from "next/server";
+import { headers } from 'next/headers';
 
-export const revalidate = 0
+// export const revalidate = 0
 
 export async function GET() {
+  const headersList = headers();
   const now = new Date()
   const tomorrow = now.setDate(now.getDate() + 1)
 
