@@ -43,8 +43,8 @@ export default function UserPointDetailItem({ detail, isManage }: Props) {
         </div>
       </AccordionTrigger>
       <AccordionContent>
-        <div className={`flex justify-between bg-bgColorOther rounded-b-2xl shadow-lg border-b border-headingColor/70 ${detail.courseDate ? ' h-[65px]' : ' h-[40px]'} ${isManage ? 'text-xs p-1.5 whitespace-nowrap' : 'mx-3 p-3'}`}>
-          <div className={`${!detail.courseDate && 'invisible'}`}>
+        <div className={`flex justify-between bg-bgColorOther rounded-b-2xl shadow-lg border-b border-headingColor/70 ${detail.courseDate ? ' h-[65px]' : ' h-[40px]'} ${isManage ? 'text-xs p-1.5 whitespace-nowrap w-11/12 mx-auto' : 'mx-3 p-3'}`}>
+          <div className={`${!detail.courseDate && 'invisible'} ${isManage && '-mr-6'}`}>
             <div className="flex items-center gap-4">
               <BiTime className="ml-2 my-auto" />
               {detail.courseDate?.slice(5)} {detail.courseStartTime}~{detail.courseEndTime}

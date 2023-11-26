@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/lib/initPrisma'
 import dateFormatter from '@/lib/dateFormatter'
 
 export default async function getDateOptions() {
-  const prisma = new PrismaClient()
   const coursesDate = await prisma.course.findMany({
     where: {
       date: {

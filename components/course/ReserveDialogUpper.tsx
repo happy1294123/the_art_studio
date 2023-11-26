@@ -25,6 +25,7 @@ import { useSession } from 'next-auth/react'
 import { MyCourse, MyReservation } from '@/type'
 import ClipLoader from 'react-spinners/ClipLoader'
 import CourseTypeBadge from '../CourseTypeBadge'
+import Link from 'next/link'
 
 type Props = {
   course: MyCourse,
@@ -120,6 +121,17 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
     toast('已複製此課程網址', getToastOption())
   }
 
+  const handleShareLine = () => {
+    if (window) {
+      const myWindow = window.open(`http://line.naver.jp/R/msg/text/?一起去【媞藝術空間】上課吧！ \n ${currentCourseUrl}1`, '_blank')
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { // check is moblie
+        setTimeout(() => {
+          myWindow?.close()
+        }, 2000)
+      }
+    }
+  }
+
   return (
     <>
       <div className="absolute top-3 right-9 flex">
@@ -133,13 +145,19 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
                     data-[state=closed]:animate-[dialog-content-hide_300ms] min-w-[10px]">
             <DropdownMenuLabel >
               <div>
-                <a href={`https://social-plugins.line.me/lineit/share?url=${currentCourseUrl}`}
+                <span
+                  className='flex gap-1 align-middle cursor-pointer'
+                  onClick={handleShareLine}
+                >
+                  <FaLine size={21} />
+                  <span className='my-auto'>分享至Line</span>
+                </span>
+                {/* <a href={`http://line.naver.jp/R/msg/text/?一起去【媞藝術空間】上課吧！ \n ${currentCourseUrl}`}
                   target='_blank'
                   className='flex gap-1 align-middle'>
                   <FaLine size={21} />
                   <span className='my-auto'>分享至Line</span>
-
-                </a>
+                </a> */}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuLabel >

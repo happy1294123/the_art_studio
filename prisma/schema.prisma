@@ -24,6 +24,7 @@ model Course {
   baseline_rez Int            @default(2)
   point        Int            @default(10)
   price        Int            @default(250)
+  isOpen       Boolean?
   created_at   DateTime       @default(now())
   updated_at   DateTime       @updatedAt
   Reservation  Reservation[]

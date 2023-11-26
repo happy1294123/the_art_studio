@@ -4,10 +4,11 @@ import Link from 'next/link'
 import FloatLabelInput from '@/components/FloatLabelInput'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LoadingButton from '../LoadingButton'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
+import useWindowWidth from '@/lib/useWindowWidth'
 
 export default function LoginForm() {
   const [error, setError] = useState('')
@@ -24,7 +25,6 @@ export default function LoginForm() {
       toast('請至Email完成信箱驗證', getToastOption('info'))
     }
   }, [searchParams])
-
 
   const handleSubmitLogin = async () => {
     setIsLoading(true)
@@ -57,8 +57,10 @@ export default function LoginForm() {
     }
   }
 
+  const windowWidth = useWindowWidth()
+
   return (
-    <div className="bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl">
+    <div className={`bg-bgColorSecondary rounded-xl p-5 pb-3 shadow-xl ${windowWidth < 768 && 'mb-[150px]'}`}>
       <div className="max-w-fit rounded-full mx-auto -mt-14 relative cursor-pointer"
         onClick={() => router.push('/')}
       >
@@ -66,7 +68,7 @@ export default function LoginForm() {
       </div>
       <form onSubmit={e => e.preventDefault()}>
         <div className="flex flex-col">
-          <FloatLabelInput autoFocus name="email" labelText='電子郵件' type='email' className='mt-8 bg-bgColorSecondary'
+          <FloatLabelInput name="email" labelText='電子郵件' type='email' className='mt-8 bg-bgColorSecondary'
             onChange={(e) => setFormData({ email: e.target.value, password: formData.password })} />
           <FloatLabelInput name="password" labelText='密碼' type='password' className='mt-8 bg-bgColorSecondary'
             onChange={(e) => setFormData({ email: formData.email, password: e.target.value })} />
