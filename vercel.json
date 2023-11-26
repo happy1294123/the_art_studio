@@ -1,9 +1,4 @@
 {
-    "crons": [
-        {
-            "path": "/api/cron/checkOpenCourse",
-            "schedule": "0 */24 * * *"
-        }
-    ]
+    "$schema": "https://openapi.vercel.sh/vercel.json"
 }
 
