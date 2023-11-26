@@ -46,9 +46,12 @@ export async function GET() {
     }
   })
 
-  let isOpen = true
+  let isOpen: boolean
   if (reservationNum < tbcCourse.baseline_rez) { // 確定開課
     isOpen = false
+  } else {
+    // make notify
+    isOpen = true
   }
 
   await prisma.course.update({
