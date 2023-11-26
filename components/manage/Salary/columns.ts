@@ -14,7 +14,22 @@ export const getColumns = (monthString: string): ColumnDef<Salary>[] => {
     },
     {
       accessorKey: "",
-      header: "堂數",
+      header: "完成堂數",
+      cell: ({ row }) => {
+        const total = row.original.Course.length
+        let finish = 0
+        row.original.Course.forEach(c => {
+          const courseDate = new Date(`${c.date} ${c.end_time}`).getTime()
+          if (now > courseDate) {
+            finish += 1
+          }
+        });
+        return `${finish} / ${total}`
+      }
+    },
+    {
+      accessorKey: "",
+      header: "當月堂數",
       cell: ({ row }) => {
         const total = row.original.Course.length
         let finish = 0

@@ -1,4 +1,3 @@
-'use client'
 import { Payment } from '@prisma/client'
 import {
   Card,
@@ -8,7 +7,7 @@ import {
 import { Button } from '../ui/button'
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
-import { KeyedMutator } from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 import { useSearchParams } from 'next/navigation'
 import { AiOutlineClose } from 'react-icons/ai'
 import toast from 'react-hot-toast'
@@ -16,9 +15,10 @@ import getToastOption from '@/lib/getToastOption'
 const UserPaymentDialog = dynamic(() => import('@/components/user/UserPaymentDialog'))
 
 type props = {
-  payments?: Payment[],
-  mutatePayment: KeyedMutator<Payment[]>,
+  // payments?: Payment[],
+  // mutatePayment: KeyedMutator<Payment[]>,
   mutateUnPayNum: KeyedMutator<number>
+  unPayNum?: number,
 }
 
 const stateMap = {
@@ -28,8 +28,24 @@ const stateMap = {
   CANCEL: '已取消'
 }
 
-export default function UserPaymentTabContent({ payments, mutatePayment, mutateUnPayNum }: props) {
-  mutateUnPayNum()
+const fetcher = async (url: string) => fetch(url, { next: { tags: ['payment'] } }).then(res => res.json())
+
+export default function UserPaymentTabContent({ mutateUnPayNum, unPayNum }: props) {
+  const { data: payments, mutate: mutatePayment } = useSWR<Payment[]>(
+    '/api/user/payment',
+    fetcher,
+    // {
+    //   revalidateIfStale: false,
+    //   revalidateOnFocus: false,
+    //   revalidateOnReconnect: false
+    // }
+  )
+  // console.log('payments', payments);
+
+  if (unPayNum && unPayNum > 0) {
+    mutatePayment()
+  }
+  // mutateUnPayNum()
   const [open, setOpen] = useState(false)
   const [selectPaymentId, setSelectPaymentId] = useState(0)
   const selectPayment = useMemo(() => payments?.find(p => p.id === selectPaymentId), [payments, selectPaymentId])

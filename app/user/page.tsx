@@ -1,72 +1,38 @@
 'use client'
-import DateHeading from '@/components/course/DateHeading'
-import CourseItem from '@/components/course/CourseItem'
 import TheTitle from '@/components/TheTitle'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
 import UserDropDownMenu from '@/components/user/UserDropDownMenu'
 import useSWR from 'swr'
-import { CourseItemSkeleton } from '@/components/course/CoursesShower'
-import Link from 'next/link'
 import UserPointTabContent from '@/components/user/UserPointTabContent'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Payment } from '@prisma/client'
-import { MyReservation } from '@/type'
 import UserPaymentTabContent from '@/components/user/UserPaymentTabContent'
-import { useEffect, useState } from 'react'
-import { ClipLoader } from 'react-spinners'
-import { IoIosArrowForward } from 'react-icons/io'
+import { useLayoutEffect, useState } from 'react'
+import LazyTabContent from '@/components/LazyTabContent'
+import UserCourseTabContent from '@/components/user/UserCourseTabContent'
 
-async function myCourseFetcher(url: string): Promise<Record<string, MyReservation[]>> {
-  const res = await fetch(url, { next: { tags: ['myReservation'] } })
-  return await res.json()
-}
-
-async function myPointFetcher(url: string): Promise<{ point: number, point_deadline: Date }> {
-  const res = await fetch(url, { next: { tags: ['myPoint'] } })
-  return await res.json()
-}
-
-async function myPaymentFetcher(url: string): Promise<Payment[]> {
-  const res = await fetch(url, { next: { tags: ['payment'] } })
-  return await res.json()
-}
-
-async function unPayNumFetcher(url: string): Promise<number> {
-  const res = await fetch(url, { next: { tags: ['unPayNum'] } })
-  return await res.json()
-}
+const fetcher = async (url: string) => fetch(url).then(res => res.json())
 
 export default function UserPage() {
-  const [tab, setTab] = useState('course')
+  const [tab, setTab] = useState<string | null>()
   const params = useSearchParams()
-  const router = useRouter()
-  useEffect(() => {
+  useLayoutEffect(() => {
+    let tab = 'course'
     if (params.get('tab')) {
-      const tab = params.get('tab') as string
-      setTab(tab)
+      tab = params.get('tab') as string
     }
+    setTab(tab)
   }, [params])
 
-  const { data: reservations, mutate: mutateReservation } = useSWR(
-    tab === 'course' && '/api/user/course',
-    myCourseFetcher
-  )
-
-  const { data: point } = useSWR(
-    tab === 'point' && '/api/user/point',
-    myPointFetcher
-  )
-
-  const { data: payments, mutate: mutatePayment } = useSWR(
-    tab === 'payment' && '/api/user/payment',
-    myPaymentFetcher
-  )
-
-  const { data: unPayNum, mutate: mutateUnPayNum } = useSWR(
+  const { data: unPayNum, mutate: mutateUnPayNum } = useSWR<number>(
     '/api/user/payment?unPay=1',
-    unPayNumFetcher
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
   )
+  const router = useRouter()
 
   return (
     <div className="max-w-screen-md mx-auto">
@@ -76,52 +42,32 @@ export default function UserPage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs value={tab}>
+      <Tabs value={tab || 'course'} onValueChange={(value: string) => router.push(`/user?tab=${value}`)}>
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="course" onClick={() => router.push('/user?tab=course')}>課表</TabsTrigger>
-          <TabsTrigger value="point" onClick={() => router.push('/user?tab=point')}>點數</TabsTrigger>
-          <TabsTrigger value="payment" onClick={() => router.push('/user?tab=payment')}>
+          <TabsTrigger value="course">課表</TabsTrigger>
+          <TabsTrigger value="point">點數</TabsTrigger>
+          <TabsTrigger value="payment">
             匯款記錄
             {(typeof unPayNum === 'number' && unPayNum !== 0) && <div className='text-xs -mr-5 -mt-5 -ml-1  outline-2 outline-bgColorSecondary bg-primary rounded-full w-4 h-4 text-white'>{unPayNum}</div>}
           </TabsTrigger>
         </TabsList>
+        {/* course */}
         <TabsContent value="course">
-          {reservations && (<>{Object.keys(reservations).map(date => (
-            <>
-              <DateHeading date={new Date(date)} />
-              {reservations[date as keyof typeof reservations].map((reservation, i) => (
-                <CourseItem course={reservation['course']} isInUserPage={true} mutateReservation={mutateReservation} key={i} />
-              ))}
-            </>
-          ))}
-            {Object.keys(reservations).length > 0 && (
-              <Link href="/course" className='text-headingColor float-right flex-center mb-1'>
-                預約課程
-                <IoIosArrowForward />
-              </Link>
-            )}
-          </>)}
-          {!reservations && [1, 2, 3].map(i => (
-            <CourseItemSkeleton key={i} />
-          ))}
-
-          {(reservations && Object.keys(reservations).length === 0)
-            && (<><div className="flex-center">目前沒有預約課程</div>
-              < div className='flex-center mt-2'>
-                <Button className="mx-auto"><Link href="/course">前往預約</Link></Button>
-              </div>
-            </>)
-          }
+          <LazyTabContent show={tab === 'course'}>
+            <UserCourseTabContent />
+          </LazyTabContent>
         </TabsContent >
+        {/* point */}
         <TabsContent value="point">
-          <UserPointTabContent myPoint={point} mutateUnPayNum={mutateUnPayNum} />
+          <LazyTabContent show={tab === 'point'}>
+            <UserPointTabContent mutateUnPayNum={mutateUnPayNum} />
+          </LazyTabContent>
         </TabsContent>
+        {/* payment */}
         <TabsContent value="payment">
-          {payments
-            ? <UserPaymentTabContent payments={payments} mutatePayment={mutatePayment} mutateUnPayNum={mutateUnPayNum} />
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
+          <LazyTabContent show={tab === 'payment'}>
+            <UserPaymentTabContent mutateUnPayNum={mutateUnPayNum} unPayNum={unPayNum} />
+          </LazyTabContent>
         </TabsContent>
       </Tabs >
     </div >

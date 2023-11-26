@@ -14,7 +14,12 @@ const fetcher = async (url: string): Promise<CourseType[]> => {
 export default function CourseTypeBadge({ name, className }: { name: string, className?: string }) {
   const { data: allType } = useSWR(
     '/api/course/type',
-    fetcher
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false
+    }
   )
   const backgroundColor = allType?.find(t => t.name === name)?.color || '#FFF5ED'
 
