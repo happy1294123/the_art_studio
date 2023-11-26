@@ -2,7 +2,7 @@ import dateFormatter from "@/lib/dateFormatter";
 import prisma from "@/lib/initPrisma";
 import { NextResponse } from "next/server";
 
-export const revalidate = 0
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const now = new Date()
