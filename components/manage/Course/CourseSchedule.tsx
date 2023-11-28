@@ -12,28 +12,30 @@ import getToastOption from '@/lib/getToastOption'
 import { Button } from '@/components/ui/button'
 import { Progress } from "@/components/ui/progress"
 import CourseTypeDialog from './CourseTypeDialog'
-import { useCourse } from '@/context/ManageCourseContent'
+import { CourseContent } from '@/context/ManageCourseContent'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import CourseDetail from './CourseDialog/CourseDetail'
 import { Switch } from "@/components/ui/switch"
 import { Label } from '@/components/ui/label'
-import { MyCourse } from '@/type'
+import { MyCourse, Teacher } from '@/type'
 import dynamic from 'next/dynamic'
+import { CourseType, User } from '@prisma/client'
+import useSWR from 'swr'
+import { ClipLoader } from 'react-spinners'
 const UploadStaticScheduleDialog = dynamic(() => import('./UploadStaticScheduleDialog'))
 const ModifyForm = dynamic(() => import('./CourseDialog/ModifyForm'))
 
 type Props = {
+  users?: User[],
   isTeacherMode?: boolean
 }
 
-export default function CourseSchedule({ isTeacherMode }: Props) {
-  const {
-    courses,
-    coursesMutate,
-    courseType,
-    courseTypeMutate,
-    teacherOpt,
-  } = useCourse()
+export default function CourseSchedule({ users, isTeacherMode }: Props) {
+  const { data: courses, mutate: coursesMutate, isLoading: courseLoading } = useSWR<MyCourse[]>('/api/manage/course')
+  const { data: courseType, mutate: courseTypeMutate } = useSWR<CourseType[]>('/api/manage/course/type')
+  const { data: teacherOpt } = useSWR<Teacher[]>('api/manage/teacher')
+
+
   const [courseForm, setCourseForm] = useState<Partial<MyCourse> | null>(null)
   useEffect(() => {
     if (!courseForm) return
@@ -60,8 +62,13 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
   }, [courseType, courses])
 
   const calendarRef = useRef(null)
+
   const handleDateClick = (dateInfo: any) => {
     if (isTeacherMode) return
+    if (courseType?.length === 0) {
+      toast('請先填寫課程種類', getToastOption('error'))
+      return
+    }
     const clickDate = new Date(dateInfo.date)
     const delta = {
       start: clickDate.getDay() === 0 ? -5 : +2,
@@ -80,12 +87,10 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
 
     // add course
     if (dateInfo.view.type === 'dayGridWeek') {
-      const date = dateFormatter(clickDate)
-      setDialogState('modify')
       setCourseForm({
         name: '',
         type: '空中課程',
-        date,
+        date: dateFormatter(),
         start_time: '',
         end_time: '',
         teacher_id: teacherOpt && teacherOpt[0].id || 0,
@@ -95,6 +100,7 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
         price: 600,
       })
     }
+    setDialogState('modify')
   }
 
   const handleClickEvent = (eventInfo: any) => {
@@ -182,74 +188,85 @@ export default function CourseSchedule({ isTeacherMode }: Props) {
   }
 
   const [openUploadScheduleDialog, setOpenUploadScheduleDialog] = useState(false)
-  const [openCourseTypeDialog, setCourseTypeDialog] = useState(false)
-  const [dialogState, setDialogState] = useState('courseDetail')
-  return (<>
-    {!!courseForm && (<>
-      <Dialog open={!!courseForm} onOpenChange={() => setCourseForm(null)}>
-        <DialogContent className="bg-white w-11/12">
-          {!isTeacherMode && (
-            <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
-              <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
-              <Switch
-                id='dialog-state'
-                checked={dialogState === 'modify'}
-                onCheckedChange={checked => setDialogState(checked ? 'modify' : 'courseDetail')}
-              />
-            </div>
-          )}
-          {dialogState === 'courseDetail' && <CourseDetail courseForm={courseForm as MyCourse} isTeacherMode={isTeacherMode} />}
-          {(dialogState === 'modify' && !isTeacherMode) && <ModifyForm courseForm={courseForm} setCourseForm={setCourseForm} />}
-        </DialogContent>
-      </Dialog>
-    </>)}
+  const [openCourseTypeDialog, setCourseTypeDialog] = useState(courseType?.length === 0)
+  const [dialogState, setDialogState] = useState<'courseDetail' | 'modify'>('courseDetail')
 
-    <div className={`bg-bgColorOther p-3 rounded-3xl relative overflow-auto ${style.myCalendar}`}>
-      <FullCalendar
-        initialView="dayGridMonth"
-        height='auto'
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        locale={zhCn}
-        customButtons={{
-          copyWeekToNextWeek: {
-            text: '下週照舊',
-            click: handleCopyWeekToNextWeek,
-          },
-          copyWeekToNext3Week: {
-            text: '下3週照舊',
-            click: handleCopyWeekToNext3Week
-          }
-        }}
-        headerToolbar={{
-          left: 'prev,next',
-          center: 'title',
-          right: 'dayGridMonth,dayGridWeek'
-        }}
-        selectable={true}
-        datesSet={handleChangeView}
-        // viewDidMount={handleChangeView}
-        dateClick={handleDateClick}
-        eventDrop={handleDrag}
-        droppable={false}
-        editable={!isTeacherMode}
-        eventClick={handleClickEvent}
-        events={events}
-        eventContent={renderEventContent}
-        eventDisplay='block'
-        eventTimeFormat={{
-          hour: 'numeric',
-          minute: '2-digit',
-          meridiem: 'short'
-        }}
-        ref={calendarRef}
-      />
-    </div>
-    {!isTeacherMode && (<>
-      <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
-      <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
-      {(openCourseTypeDialog && courseTypeMutate && courseType) && <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} />}
-      {openUploadScheduleDialog && <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />}
-    </>)}
+  if (courseLoading) {
+    return (<div className="flex-center">
+      <ClipLoader color="#D1C0AD" />
+    </div>)
+  }
+
+  return (<>
+    <CourseContent.Provider value={{
+      courses, coursesMutate, courseType, courseTypeMutate, teacherOpt, users
+    }}>
+      {!!courseForm && (<>
+        <Dialog open={!!courseForm} onOpenChange={() => setCourseForm(null)}>
+          <DialogContent className="bg-white w-11/12">
+            {!isTeacherMode && (
+              <div className={`absolute flex top-3 ${dialogState === 'courseDetail' ? 'right-9' : 'right-14'} ${!courseForm.id && 'hidden'}`}>
+                <Label className='mt-2 mr-2' htmlFor='dialog-state'>預約/修改</Label>
+                <Switch
+                  id='dialog-state'
+                  checked={dialogState === 'modify'}
+                  onCheckedChange={checked => setDialogState(checked ? 'modify' : 'courseDetail')}
+                />
+              </div>
+            )}
+            {dialogState === 'courseDetail' && <CourseDetail courseForm={courseForm as MyCourse} isTeacherMode={isTeacherMode} />}
+            {(dialogState === 'modify' && !isTeacherMode) && <ModifyForm courseForm={courseForm} setCourseForm={setCourseForm} />}
+          </DialogContent>
+        </Dialog>
+      </>)}
+
+      <div className={`bg-bgColorOther p-3 rounded-3xl relative overflow-auto ${style.myCalendar}`}>
+        <FullCalendar
+          initialView="dayGridMonth"
+          height='auto'
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          locale={zhCn}
+          customButtons={{
+            copyWeekToNextWeek: {
+              text: '下週照舊',
+              click: handleCopyWeekToNextWeek,
+            },
+            copyWeekToNext3Week: {
+              text: '下3週照舊',
+              click: handleCopyWeekToNext3Week
+            }
+          }}
+          headerToolbar={{
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek'
+          }}
+          selectable={true}
+          datesSet={handleChangeView}
+          // viewDidMount={handleChangeView}
+          dateClick={handleDateClick}
+          eventDrop={handleDrag}
+          droppable={false}
+          editable={!isTeacherMode}
+          eventClick={handleClickEvent}
+          events={events}
+          eventContent={renderEventContent}
+          eventDisplay='block'
+          eventTimeFormat={{
+            hour: 'numeric',
+            minute: '2-digit',
+            meridiem: 'short'
+          }}
+          ref={calendarRef}
+        />
+      </div>
+      {!isTeacherMode && (<>
+        <Button variant="secondary" className='my-2 float-right' onClick={() => setOpenUploadScheduleDialog(true)} >靜態課表</Button>
+        <Button variant="secondary" className='my-2 mx-2 float-right' onClick={() => setCourseTypeDialog(true)} >課程種類</Button>
+        <CourseTypeDialog openDialog={openCourseTypeDialog} setOpenDialog={setCourseTypeDialog} />
+        <UploadStaticScheduleDialog openDialog={openUploadScheduleDialog} setOpenDialog={setOpenUploadScheduleDialog} />
+      </>)}
+    </CourseContent.Provider>
   </>)
 }
 

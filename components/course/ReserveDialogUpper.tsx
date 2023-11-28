@@ -211,7 +211,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
           </div>
           <div className="flex gap-1 mt-2">
             <div className="w-7 h-7 my-auto rounded-full overflow-hidden">
-              <Image src={course.teacher.image} className="aspect-square h-full w-full" width={20} height={20} alt="teacher" />
+              <Image src={course.teacher.image || '/avatar/default_avatar.jpeg'} className="aspect-square h-full w-full" width={20} height={20} alt="teacher" />
             </div>
             <span className="my-auto ml-1">{course.teacher.name}</span>
           </div>

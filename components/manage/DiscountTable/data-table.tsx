@@ -1,7 +1,6 @@
 "use client"
 import {
   ColumnDef,
-  TableOptionsResolved,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -12,7 +11,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Table,
@@ -23,8 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
-import dynamic from 'next/dynamic'
 import { Discount } from "@/type"
+import dynamic from 'next/dynamic'
 const EditDiscountDialog = dynamic(() => import('./NewDiscountDialog'))
 
 interface DataTableProps<TData, TValue> {
@@ -38,7 +36,7 @@ export function DataTable<TData, TValue>({
   data,
   mutate
 }: DataTableProps<TData, TValue>) {
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openDialog, setOpenDialog] = useState<string | null>()
   const [discount, setDiscount] = useState<Discount>()
   const [discountUsers, setDiscountUsers] = useState<{
     serial_number: number,
@@ -55,13 +53,13 @@ export function DataTable<TData, TValue>({
       },
       openEditDialog: (discount: Discount) => {
         if (discount) {
-          setOpenDialog(true)
+          setOpenDialog('edit')
           setDiscount(discount)
         }
       },
       openUsedList: async (discount_id: string) => {
         if (discount_id) {
-          setOpenDialog(true)
+          setOpenDialog('userList')
           const res = await fetch(`/api/manage/discount/users?discount_id=${discount_id}`)
           const users = await res.json()
           setDiscountUsers(users)
@@ -116,39 +114,36 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-    {openDialog && discount &&
-      <EditDiscountDialog
-        openProp={openDialog}
-        setOpenProp={setOpenDialog}
-        discount={discount}
-        discountMutate={mutate}
-      />}
-    {openDialog && discountUsers &&
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogContent className="bg-white">
-          <DialogHeader>
-            <DialogTitle>使用名單</DialogTitle>
-            <DialogDescription className="pr-6">
-              {discountUsers.length
-                ? (<>
-                  <div className="grid grid-cols-3 text-center -ml-10 text-headingColor">
-                    <span>編號</span>
-                    <span>姓名</span>
-                    <span>電子郵件</span>
+    <EditDiscountDialog
+      openProp={openDialog === 'edit'}
+      setOpenProp={() => setOpenDialog(null)}
+      discount={discount}
+      discountMutate={mutate}
+    />
+    <Dialog open={openDialog === 'userList'} onOpenChange={() => setOpenDialog(null)}>
+      <DialogContent className="bg-white">
+        <DialogHeader>
+          <DialogTitle>使用名單</DialogTitle>
+          <DialogDescription className="pr-6">
+            {discountUsers?.length
+              ? (<>
+                <div className="grid grid-cols-3 text-center -ml-10 text-headingColor">
+                  <span>編號</span>
+                  <span>姓名</span>
+                  <span>電子郵件</span>
+                </div>
+                {discountUsers.map(user => (
+                  <div key={user.email} className="grid grid-cols-3 text-center -ml-10">
+                    <span>{user.serial_number}</span>
+                    <span>{user.name}</span>
+                    <span>{user.email}</span>
                   </div>
-                  {discountUsers.map(user => (
-                    <div key={user.email} className="grid grid-cols-3 text-center -ml-10">
-                      <span>{user.serial_number}</span>
-                      <span>{user.name}</span>
-                      <span>{user.email}</span>
-                    </div>
-                  ))}
-                </>)
-                : <div className="flex-center">無使用者</div>}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog >
-    }
+                ))}
+              </>)
+              : <div className="flex-center">無使用者</div>}
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog >
   </>)
 }

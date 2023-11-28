@@ -71,6 +71,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
   })
   const teacher_id = form.watch('teacher_id')
   const type = form.watch('type')
+
   useEffect(() => {
     if (type === '空中課程' || type === '兒童課程') {
       form.setValue('point', 6)
@@ -80,6 +81,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
       form.setValue('price', 500)
     }
   }, [form, type])
+
   const start_time = form.watch('start_time')
   useEffect(() => {
     if (start_time) {
@@ -141,7 +143,6 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
         <div className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="text-black text-left md:grid grid-cols-2">
-              {/* className="p-4 rounded-3xl mb-3 border border-gray-300 shadow-md mt-3 text-black" */}
               <div className="col-span-1">
                 <FormField
                   control={form.control}
@@ -174,7 +175,6 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                   )}
                 />
                 <div className="flex gap-2.5">
-                  {/* <BiTime className="mt-1" /> */}
                   <FormField
                     control={form.control}
                     name="start_time"
@@ -207,7 +207,6 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                     )}
                   />
                 </div>
-                {/* <hr className="mb-2" /> */}
                 <div className="flex">
                   <div className="mt-2 ml-2">種類：</div>
                   <FormField
@@ -224,9 +223,6 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                           </FormControl>
                           <SelectContent className="bg-bgColor border-headingColor rounded-2xl shadow-xl">
                             {courseType?.map(type => (<SelectItem key={type.id} value={type.name}>{type.name}</SelectItem>))}
-                            {/* <SelectItem value="空中課程">空中課程</SelectItem>
-                            <SelectItem value="地面課程">地面課程</SelectItem>
-                            <SelectItem value="兒童課程">兒童課程</SelectItem> */}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -239,7 +235,7 @@ export default function ModifyContent({ courseForm, setCourseForm }: Props) {
                 <div className="flex gap-2 -mb-2">
                   <div className="ml-2 mt-3">老師：</div>
                   <div className="w-6 h-6 my-auto rounded-full overflow-hidden -mr-2" >
-                    {teacher_id && <Image src={(teacherOpt?.find(opt => opt.id == teacher_id) as Teacher)?.image} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />}
+                    {teacher_id && <Image src={(teacherOpt?.find(opt => opt.id == teacher_id) as Teacher)?.image || '/avatar/default_avatar.jpeg'} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />}
                   </div>
                   < FormField
                     control={form.control}

@@ -74,18 +74,18 @@ enum Category {
 }
 
 model User {
-  id               Int            @id @default(autoincrement())
+  id               Int               @id @default(autoincrement())
   serial_number    String?
   name             String
   email            String
   password         String
   image            String?
-  role             Role           @default(STUDENT)
-  point            Int            @default(0)
+  role             Role              @default(STUDENT)
+  point            Int               @default(0)
   point_deadline   DateTime?
-  schedule_service String?        @default("")
-  email_varified   Boolean        @default(false)
-  gender           Gender         @default(UNKNOW)
+  schedule_service String?           @default("")
+  email_varified   Boolean           @default(false)
+  gender           Gender            @default(UNKNOW)
   birth            String?
   phone            String?
   medical          String?
@@ -94,14 +94,15 @@ model User {
   em_phone         String?
   address          String?
   note             String?
-  created_at       DateTime       @default(now())
-  updated_at       DateTime       @updatedAt
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
   Course           Course[]
   Reservation      Reservation[]
   UserDiscount     UserDiscount[]
   CancelLog        CancelLog[]
   Payment          Payment[]
   Salary           Salary?
+  SalaryOldRecord  SalaryOldRecord[]
 
   @@unique([email])
   @@map("users")
@@ -121,16 +122,44 @@ enum Gender {
 }
 
 model Salary {
-  user        User    @relation(fields: [teacher_id], references: [id])
-  teacher_id  Int
-  hourly_pay  Int?
-  bonus       String?
-  pay_method  String?
-  pay_account String?
-  unPayMonth  String?
+  user                   User              @relation(fields: [teacher_id], references: [id])
+  teacher_id             Int               @unique
+  rule                   SalaryRule?
+  solid_price            Int               @default(0)
+  dynamic_baseline_price Int               @default(0)
+  dynamic_add_price      Int               @default(0)
+  pay_method             String?
+  pay_account            String?
+  unPayMonth             String?
+  created_month          String?
+  old_recode             SalaryOldRecord[]
 
-  @@unique([teacher_id])
   @@map("salary")
+}
+
+enum SalaryRule {
+  SOLID
+  DYNAMIC
+}
+
+model SalaryOldRecord {
+  id                     Int         @id @default(autoincrement())
+  Salary                 Salary?     @relation(fields: [salaryTeacher_id], references: [teacher_id])
+  salaryTeacher_id       Int?
+  rule                   SalaryRule?
+  solid_price            Int         @default(0)
+  dynamic_baseline_price Int         @default(0)
+  dynamic_add_price      Int         @default(0)
+  pay_method             String?
+  pay_account            String?
+  created_at             DateTime    @default(now())
+  due_to                 String
+  User                   User?       @relation(fields: [userId], references: [id])
+  userId                 Int?
+
+  @@index([salaryTeacher_id])
+  @@index([userId])
+  @@map("salary_old_record")
 }
 
 model Discount {

@@ -62,7 +62,6 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
     return <Button>預約</Button>
   }
 
-
   return (
     <>
       <div className={`p-4 rounded-3xl mb-3 drop-shadow-lg border border-gray-300 shadow-md cursor-pointer
@@ -81,7 +80,7 @@ export default function CourseItem({ course, mutate, mutateReservation, isInUser
         <div className="flex justify-between">
           <div className="flex gap-2">
             <div className="w-6 h-6 my-auto rounded-full overflow-hidden">
-              <Image src={course.teacher.image} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />
+              <Image src={course.teacher.image || '/avatar/default_avatar.jpeg'} className="aspect-square h-full w-full" width={10} height={10} alt="teacher" />
             </div>
             <span className="my-auto">{course.teacher.name}</span>
           </div>

@@ -15,8 +15,6 @@ import getToastOption from '@/lib/getToastOption'
 const UserPaymentDialog = dynamic(() => import('@/components/user/UserPaymentDialog'))
 
 type props = {
-  // payments?: Payment[],
-  // mutatePayment: KeyedMutator<Payment[]>,
   mutateUnPayNum: KeyedMutator<number>
   unPayNum?: number,
 }
@@ -28,19 +26,8 @@ const stateMap = {
   CANCEL: '已取消'
 }
 
-const fetcher = async (url: string) => fetch(url, { next: { tags: ['payment'] } }).then(res => res.json())
-
 export default function UserPaymentTabContent({ mutateUnPayNum, unPayNum }: props) {
-  const { data: payments, mutate: mutatePayment } = useSWR<Payment[]>(
-    '/api/user/payment',
-    fetcher,
-    // {
-    //   revalidateIfStale: false,
-    //   revalidateOnFocus: false,
-    //   revalidateOnReconnect: false
-    // }
-  )
-  // console.log('payments', payments);
+  const { data: payments, mutate: mutatePayment } = useSWR<Payment[]>('/api/user/payment')
 
   if (unPayNum && unPayNum > 0) {
     mutatePayment()
@@ -115,7 +102,7 @@ export default function UserPaymentTabContent({ mutateUnPayNum, unPayNum }: prop
       }</>
       : <span className='flex-center'>無匯款紀錄</span>}
 
-    {open && selectPayment && <UserPaymentDialog open={open} setOpen={setOpen} payment={selectPayment} mutatePayment={mutatePayment} />}
+    {open && selectPayment && <UserPaymentDialog open={open} setOpen={setOpen} payment={selectPayment} mutatePayment={mutatePayment} mutateUnPayNum={mutateUnPayNum} />}
   </>
   )
 }

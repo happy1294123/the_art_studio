@@ -1,4 +1,4 @@
-import { Payment, ReservationState, Reservation, User } from "@prisma/client"
+import { Course, Payment, ReservationState, Reservation, User, Salary } from "@prisma/client"
 
 type Todo = {
   userId: number,
@@ -113,18 +113,11 @@ type Review = {
   translated: boolean
 }
 
-type Salary = {
+type TeacherSalaryCourse = {
   id: number,
   name: string,
-  Salary: {
-    teacher_id: number,
-    hourly_pay: number,
-    bonus: string,
-    pay_method: string,
-    pay_account: string,
-    unPayMonth: string,
-  },
-  Course: Course[]
+  Salary: Salary,
+  Course: (Course & { Reservation: Reservation[] })[]
 }
 
 type MyCourseFilter = {

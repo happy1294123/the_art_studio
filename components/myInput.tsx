@@ -11,7 +11,8 @@ type MyInputProps = InputProps & {
   bind?: {
     formData: any,
     setFormData: Dispatch<any>
-  }
+  },
+  desc?: string
 }
 
 
@@ -40,6 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, MyInputProps>(
           onChange={handleChange}
           {...props}
         />
+        {props.desc && <span className="ml-3 -mt-1 text-xs text-gray-400">{props.desc}</span>}
       </div>
     )
   }

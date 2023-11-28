@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from '@/components/ui/input'
 import { FiCornerDownLeft } from 'react-icons/fi'
-import { Dispatch, useMemo, useState } from 'react'
+import { Dispatch, useEffect, useMemo, useState } from 'react'
 import createRandomCode from '@/lib/createRandomCode'
 import { toast } from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
@@ -25,13 +25,18 @@ type Props = {
 }
 
 export default function NewDiscountDialog({ openProp, setOpenProp, discount, discountMutate }: Props) {
-  const [formData, setFormData] = useState(discount || {
+  const [formData, setFormData] = useState({
     code: '',
     description: '',
     point_discount: '',
     price_discount: '',
     active: true
   })
+  useEffect(() => {
+    if (discount) {
+      setFormData(discount)
+    }
+  }, [discount])
   const [error, setError] = useState('')
   const [isLoading, setIsloading] = useState(false)
 

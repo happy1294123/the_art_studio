@@ -24,7 +24,8 @@ type props = {
   open: boolean,
   setOpen: Dispatch<boolean>,
   payment: Payment,
-  mutatePayment: KeyedMutator<Payment[]>
+  mutatePayment: KeyedMutator<Payment[]>,
+  mutateUnPayNum: KeyedMutator<number>,
 }
 
 const stateMap = {
@@ -33,7 +34,7 @@ const stateMap = {
   ERROR: '匯款有誤',
 }
 
-export default function UserPaymentDialog({ open, setOpen, payment, mutatePayment }: props) {
+export default function UserPaymentDialog({ open, setOpen, payment, mutatePayment, mutateUnPayNum }: props) {
   const windowWidth = useWindowWidth()
   const [formData, setFormData] = useState({
     paymentId: payment.id,
@@ -89,7 +90,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
 
     if (res.ok) {
       mutatePayment()
-      console.log(payment);
+      mutateUnPayNum()
       toast('送出成功', getToastOption())
     } else {
       toast('送出失敗', getToastOption('error'))
@@ -104,7 +105,7 @@ export default function UserPaymentDialog({ open, setOpen, payment, mutatePaymen
       body: JSON.stringify(payment.id)
     })
     mutatePayment()
-    toastResult(res, '取消紀錄')
+    // toastResult(res, '取消紀錄')
   }
 
   return (

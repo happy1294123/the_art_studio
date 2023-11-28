@@ -1,5 +1,4 @@
 "use client"
-
 import {
   ColumnDef,
   flexRender,
@@ -29,7 +28,8 @@ interface DataTableProps<TData, TValue> {
   mutate?: KeyedMutator<any>,
   hasSearch?: boolean,
   setSelectRow?: Dispatch<TData>,
-  handleRowAction?: Function
+  handleRowAction?: Function,
+  textCenter?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -39,7 +39,8 @@ export function DataTable<TData, TValue>({
   mutate,
   hasSearch,
   setSelectRow,
-  handleRowAction
+  handleRowAction,
+  textCenter
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({
@@ -79,7 +80,7 @@ export function DataTable<TData, TValue>({
             <TableRow key={headerGroup.id} className="border-headingColor">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="whitespace-nowrap text-headingColor">
+                  <TableHead key={header.id} className={`whitespace-nowrap text-headingColor ${textCenter && 'text-center'}`}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -102,7 +103,7 @@ export function DataTable<TData, TValue>({
                 onClick={() => setSelectRow && setSelectRow(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className={`${textCenter && 'text-center'}`}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -44,7 +44,7 @@ export async function GET() {
 
   if (checkCourse.length === 0) {
     console.log('24小時後無課程');
-    return NextResponse.json('24小時後無課程' + now, { status: 400 })
+    return NextResponse.json('24小時後無課程' + now, { status: 202 })
   }
 
   // to be confirmed course

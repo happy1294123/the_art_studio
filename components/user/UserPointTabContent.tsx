@@ -29,18 +29,8 @@ type props = {
   mutateUnPayNum: KeyedMutator<number>
 }
 
-const fetcher = async (url: string) => fetch(url).then(res => res.json())
-
 export default function UserPointTabContent({ mutateUnPayNum }: props) {
-  const { data: myPoint, mutate: mutatePoint } = useSWR<{ point: number, point_deadline: Date }>(
-    '/api/user/point',
-    fetcher,
-    // {
-    //   revalidateIfStale: false,
-    //   revalidateOnFocus: false,
-    //   revalidateOnReconnect: false
-    // }
-  )
+  const { data: myPoint, mutate: mutatePoint } = useSWR<{ point: number, point_deadline: Date }>('/api/user/point')
 
   const { data: session, update: updateSession } = useSession()
 

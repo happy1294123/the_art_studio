@@ -1,18 +1,16 @@
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
-import { KeyedMutator } from 'swr'
-import { Payment } from '@prisma/client'
+import useSWR from 'swr'
+import { ClipLoader } from "react-spinners"
 
-type Props = {
-  receivement: Payment[],
-  receiveMutate: KeyedMutator<Payment[]>
-}
+export default function DiscountTable() {
+  const { data: receivement, mutate: receiveMutate, isLoading: receivmentLoading } = useSWR('/api/manage/receivement')
 
-export default function DiscountTable({ receivement, receiveMutate }: Props) {
-  // if (typeof receivement === 'string' && receivement === '權限不足') {
-  //   return <div className="flex-center">權限不足</div>
-  // }
-
+  if (receivmentLoading) {
+    return (<div className="flex-center">
+      <ClipLoader color="#D1C0AD" />
+    </div>)
+  }
 
   return (<>
     <div className="mx-auto bg-bgColorOther rounded-2xl p-3">

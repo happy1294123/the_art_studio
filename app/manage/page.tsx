@@ -5,109 +5,34 @@ import CourseSchedule from '@/components/manage/Course/CourseSchedule'
 import DiscountTable from '@/components/manage/DiscountTable/page'
 import UserDropDownMenu from "@/components/user/UserDropDownMenu"
 import ReceivementTable from "@/components/manage/ReceivementTable/page"
-import useSWR from "swr"
-import { Discount, MyCourse, Salary, Teacher } from "@/type"
-import { CourseType, Payment, User } from "@prisma/client"
+import useSWR, { SWRConfig } from "swr"
+import { User } from "@prisma/client"
 import UsersTable from "@/components/manage/UsersTable/page"
-import { useState } from "react"
-import { ClipLoader } from "react-spinners"
-import { CourseContent } from '@/context/ManageCourseContent'
-import dateFormatter from "@/lib/dateFormatter"
+import { useLayoutEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import dynamic from "next/dynamic"
+import { useRouter, useSearchParams } from "next/navigation"
+import { fetcher } from "@/lib/fetcher"
 const SalaryTable = dynamic(() => import('@/components/manage/Salary/SalaryTable'))
 
-async function courseFetcher(url: string): Promise<MyCourse[]> {
-  const res = await fetch(url, { next: { tags: ['course'] } })
-  return await res.json()
-}
-
-async function courseTypeFetcher(url: string): Promise<CourseType[]> {
-  const res = await fetch(url, { next: { tags: ['courseType'] } })
-  return await res.json()
-}
-
-async function teacherOptFetcher(url: string): Promise<Teacher[]> {
-  const res = await fetch(url)
-  return await res.json()
-}
-
-async function discountFetcher(url: string): Promise<Discount[]> {
-  const res = await fetch(url, { next: { tags: ['discount'] } })
-  return await res.json()
-}
-
-async function receivementFetcher(url: string): Promise<Payment[]> {
-  const res = await fetch(url)
-  return await res.json()
-}
-
-async function usersFetcher(url: string): Promise<User[]> {
-  const res = await fetch(url)
-  return await res.json()
-}
-
-async function salaryFetcher(url: string): Promise<Salary[]> {
-  const res = await fetch(url)
-  return await res.json()
-}
-
 export default function ManagePage() {
-  const [fetchTrigger, setFetchTrigger] = useState({
-    user: true,
-    course: false,
-    discount: false,
-    receive: false,
-    salary: false
-  })
-
   const { data: session } = useSession()
   const isAdmin = session?.user.role === 'ADMIN'
+  const [tab, setTab] = useState<string | null>()
+  const params = useSearchParams()
+  useLayoutEffect(() => {
+    let tab = 'user'
+    if (params.get('tab')) {
+      tab = params.get('tab') as string
+    }
+    if (tab === 'salary' && !isAdmin) {
+      tab = 'user'
+    }
+    setTab(tab)
+  }, [isAdmin, params])
 
-  const handleValueChange = (value: string) => {
-    setFetchTrigger(prev => ({ ...prev, [value]: true }))
-  }
-
-  // users data
-  const { data: users, mutate: usersMutate } = useSWR(
-    '/api/manage/users',
-    usersFetcher
-  )
-
-  // course data
-  const { data: courses, mutate: coursesMutate } = useSWR(
-    fetchTrigger.course && `/api/manage/course`,
-    courseFetcher
-  )
-
-  const { data: courseType, mutate: courseTypeMutate } = useSWR(
-    fetchTrigger.course && '/api/manage/course/type',
-    courseTypeFetcher
-  )
-
-  const { data: teacherOpt } = useSWR(
-    fetchTrigger.course && 'api/manage/teacher',
-    teacherOptFetcher
-  )
-
-  // discount data
-  const { data: discount, mutate: discountMutate } = useSWR(
-    fetchTrigger.discount && '/api/manage/discount',
-    discountFetcher
-  )
-
-  // receivement data 
-  const { data: receivement, mutate: receiveMutate } = useSWR(
-    fetchTrigger.receive && '/api/manage/receivement',
-    receivementFetcher
-  )
-
-  // salary data
-  const [salaryMonth, setSalaryMonth] = useState(dateFormatter().slice(0, 7))
-  const { data: salary } = useSWR(
-    fetchTrigger.salary && `/api/manage/salary?month=${salaryMonth}`,
-    salaryFetcher
-  )
+  const { data: users, mutate: usersMutate, isLoading: userLoading } = useSWR<User[]>('/api/manage/users', fetcher)
+  const router = useRouter()
 
   return (
     <div className="max-w-screen-lg mx-auto">
@@ -118,72 +43,37 @@ export default function ManagePage() {
           <UserDropDownMenu />
         </div>
       </div>
-      <Tabs defaultValue="user" onValueChange={handleValueChange}>
-        <TabsList className={`grid grid-cols-${isAdmin ? '5' : '4'}`}>
-          <TabsTrigger value="user">會員</TabsTrigger>
-          <TabsTrigger value="course">課程</TabsTrigger>
-          <TabsTrigger value="discount">折扣</TabsTrigger>
-          <TabsTrigger value="receive">
-            收款
-          </TabsTrigger>
-          <TabsTrigger
-            className={`hidden ${isAdmin && 'block'}`}
-            value="salary"
-          >
-            薪資
-          </TabsTrigger>
-        </TabsList>
-        {/* 會員 */}
-        <TabsContent value="user">
-          {users
-            ? <UsersTable users={users} usersMutate={usersMutate} />
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
-        </TabsContent>
-        {/* 課程 */}
-        <TabsContent value="course">
-          {(courseType && courses)
-            ? <CourseContent.Provider value={{
-              courses, coursesMutate, courseType, courseTypeMutate, teacherOpt, users
-            }}>
-              <CourseSchedule />
-            </CourseContent.Provider>
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
-        </TabsContent >
-        {/* 折扣碼 */}
-        <TabsContent value="discount">
-          {discount
-            ? <DiscountTable discount={discount} discountMutate={discountMutate} />
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
-        </TabsContent>
-        {/* 收款 */}
-        < TabsContent value="receive">
-          {receivement
-            ? <ReceivementTable receivement={receivement} receiveMutate={receiveMutate} />
-            : <div className="flex-center">
-              <ClipLoader color="#D1C0AD" />
-            </div>}
-        </TabsContent>
-        {isAdmin && (<>
-          {/* 薪資 */}
-          <TabsContent value="salary">
-            {/* {JSON.stringify(salary)} */}
-            {fetchTrigger.salary && (
-              salary
-                ? <SalaryTable salary={salary} salaryMonth={salaryMonth} setSalaryMonth={setSalaryMonth} />
-                : <div className="flex-center">
-                  <ClipLoader color="#D1C0AD" />
-                </div>
-            )}
+      <SWRConfig value={{ fetcher }}>
+        <Tabs value={tab || 'user'} onValueChange={(value: string) => router.push(`/manage?tab=${value}`)}>
+          <TabsList className={`grid grid-cols-${isAdmin ? '5' : '4'}`}>
+            <TabsTrigger value="user">會員</TabsTrigger>
+            <TabsTrigger value="course">課程</TabsTrigger>
+            <TabsTrigger value="discount">折扣</TabsTrigger>
+            <TabsTrigger value="receive">收款</TabsTrigger>
+            {isAdmin && <TabsTrigger value="salary">薪資</TabsTrigger>}
+          </TabsList>
+          {/* 會員 */}
+          <TabsContent value="user">
+            <UsersTable users={users} usersMutate={usersMutate} userLoading={userLoading} />
           </TabsContent>
-        </>)
-        }
-      </Tabs >
+          {/* 課程 */}
+          <TabsContent value="course">
+            <CourseSchedule users={users} />
+          </TabsContent >
+          {/* 折扣碼 */}
+          <TabsContent value="discount">
+            <DiscountTable />
+          </TabsContent>
+          {/* 收款 */}
+          < TabsContent value="receive">
+            <ReceivementTable />
+          </TabsContent>
+          {/* 薪資 */}
+          {isAdmin && (<TabsContent value="salary">
+            <SalaryTable />
+          </TabsContent>)}
+        </Tabs >
+      </SWRConfig>
     </div >
   )
 }

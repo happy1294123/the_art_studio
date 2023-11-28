@@ -25,7 +25,7 @@ type Props = {
 export default function CourseDetail({ courseForm, isTeacherMode }: Props) {
   const { courseType, coursesMutate } = useCourse()
   const typeColor = courseType?.find(type => type.name === courseForm.type)?.color
-  const current_rez = courseForm.Reservation.filter(r => r.state === 'SUCCESS')?.length
+  const current_rez = courseForm.Reservation?.filter(r => r.state === 'SUCCESS')?.length || 0
   const startCourseTime = (new Date(`${courseForm.date} ${courseForm.start_time}`)).getTime()
   const nowTime = (new Date()).getTime() as number
 

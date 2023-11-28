@@ -6,22 +6,34 @@ import { User } from "@prisma/client"
 import { useState } from "react"
 import dynamic from "next/dynamic"
 import UserActionDialog from "./UserActionDialog"
+import { ClipLoader } from "react-spinners"
 const NewTeacherDialog = dynamic(() => import('./NewTeacherDialog'))
 
 type Props = {
   users?: User[],
-  usersMutate: KeyedMutator<User[]>
+  usersMutate?: KeyedMutator<User[]>
+  userLoading?: boolean
 }
 
-export default function UsersTable({ users, usersMutate }: Props) {
+export default function UsersTable({ users, usersMutate, userLoading }: Props) {
   const [openDialog, setOpenDialog] = useState(false)
   const [rowAction, setRowAction] = useState<{ action: string, data: User, open: boolean }>()
   const handleRowAction = (data: User, action: 'detail' | 'edit' | 'buyLog') => {
     setRowAction({ data, action, open: true })
   }
 
+  if (userLoading) {
+    return (<div className="flex-center">
+      <ClipLoader color="#D1C0AD" />
+    </div>)
+  }
+
+  if (!users || !usersMutate) {
+    return null
+  }
+
   return (<>
-    {users && <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
+    <div className="mx-auto bg-bgColorOther rounded-2xl p-3">
       <DataTable
         columns={columns}
         data={users}
@@ -29,7 +41,7 @@ export default function UsersTable({ users, usersMutate }: Props) {
         hasSearch
         handleRowAction={handleRowAction}
       />
-    </div >}
+    </div >
     {rowAction && <UserActionDialog
       rowAction={rowAction}
       setRowAction={setRowAction}

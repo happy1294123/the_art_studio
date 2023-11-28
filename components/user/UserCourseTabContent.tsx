@@ -1,4 +1,4 @@
-import { MyReservation } from '@/type'
+import { MyCourse, MyReservation } from '@/type'
 import React from 'react'
 import useSWR from 'swr'
 import DateHeading from '@/components/course/DateHeading'
@@ -8,18 +8,8 @@ import { CourseItemSkeleton } from '@/components/course/CoursesShower'
 import { IoIosArrowForward } from 'react-icons/io'
 import { Button } from "@/components/ui/button"
 
-const fetcher = async (url: string) => fetch(url).then(res => res.json())
-
 export default function UserCourseTabContent() {
-  const { data: reservations, mutate: mutateReservation } = useSWR<Record<string, MyReservation[]>>(
-    '/api/user/course',
-    fetcher,
-    // {
-    //   revalidateIfStale: false,
-    //   revalidateOnFocus: false,
-    //   revalidateOnReconnect: false,
-    // }
-  )
+  const { data: reservations, mutate: mutateReservation } = useSWR<Record<string, MyReservation[]>>('/api/user/course')
 
   return (
     <div>
@@ -27,7 +17,7 @@ export default function UserCourseTabContent() {
         <>
           <DateHeading date={new Date(date)} />
           {reservations[date as keyof typeof reservations].map((reservation, i) => (
-            <CourseItem course={reservation['course']} isInUserPage={true} mutateReservation={mutateReservation} key={i} />
+            <CourseItem course={reservation['course'] as unknown as MyCourse} isInUserPage={true} mutateReservation={mutateReservation} key={i} />
           ))}
         </>
       ))}
