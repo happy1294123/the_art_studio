@@ -115,7 +115,7 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
     setIsPending(false)
   }
 
-  const [showAvatar, setShowAvatar] = useState(true)
+  const [showEm, setShowEm] = useState(false)
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -127,81 +127,83 @@ export default function SelectScheduleServiceDialog({ openDialog, setOpenDialog,
         <DialogDescription className="text-2xl">
           <form className="grid gap-2 text-fontColor/70" onSubmit={e => e.preventDefault()}>
             <div className="">
-              <Avatar
+              {/* <Avatar
                 className={`w-[200px] h-[200px] mx-auto -mb-5 cursor-pointer ${(userSession.role !== 'TEACHER' || !showAvatar) && 'hidden'}`}
                 onClick={handleTriggerFileInput}
               >
                 <AvatarImage src={preViewSrc} />
                 <AvatarFallback>{formData.name.slice(0, 2)}</AvatarFallback>
               </Avatar>
-              <Input id="file-input" className='hidden' type="file" accept="image/*" onChange={handleUploadFile} />
-              <div>
-                <Label htmlFor='name' className='ml-3'>姓名</Label>
-                <Input
-                  id="name"
-                  className='rounded-full'
-                  value={formData.name}
-                  onChange={e => handleSetValue('name', e.target.value)}
-                />
+              <Input id="file-input" className='hidden' type="file" accept="image/*" onChange={handleUploadFile} /> */}
+              <div className={`${showEm && 'hidden'}`}>
+                <div>
+                  <Label htmlFor='name' className='ml-3'>姓名</Label>
+                  <Input
+                    id="name"
+                    className='rounded-full'
+                    value={formData.name}
+                    onChange={e => handleSetValue('name', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='birth' className='ml-3'>生日</Label>
+                  <Input
+                    id="birth"
+                    type="date"
+                    className='rounded-full'
+                    value={formData.birth}
+                    onChange={e => handleSetValue('birth', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='phone' className='ml-3'>手機</Label>
+                  <Input
+                    id="phone"
+                    className='rounded-full'
+                    value={formData.phone}
+                    onChange={e => handleSetValue('phone', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='address' className='ml-3'>地址</Label>
+                  <Input
+                    id="address"
+                    className='rounded-full'
+                    value={formData.address}
+                    onChange={e => handleSetValue('address', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='gender' className='ml-3'>性別</Label>
+                  <RadioGroup value={formData.gender} className='flex gap-4 mt-1 ml-3' onValueChange={(value) => {
+                    if (value) {
+                      setFormData({ ...formData, gender: value })
+                    }
+                  }}>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="FEMALE" id="female" />
+                      <Label htmlFor="female">女性</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="MALE" id="male" />
+                      <Label htmlFor="male">男性</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <div>
+                  <Label htmlFor='medical' className='ml-3'>病史或曾經受傷部位</Label>
+                  <Textarea
+                    id="medical"
+                    className='mt-1 border-headingColor rounded-t-2xl rounded-l-2xl placeholder:text-fontColor/60'
+                    placeholder='請簡述相關病史或曾經受傷部位'
+                    value={formData.medical}
+                    onChange={e => {
+                      setFormData(prev => ({ ...prev, medical: e.target.value }))
+                    }}
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor='birth' className='ml-3'>生日</Label>
-                <Input
-                  id="birth"
-                  type="date"
-                  className='rounded-full'
-                  value={formData.birth}
-                  onChange={e => handleSetValue('birth', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor='phone' className='ml-3'>手機</Label>
-                <Input
-                  id="phone"
-                  className='rounded-full'
-                  value={formData.phone}
-                  onChange={e => handleSetValue('phone', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor='address' className='ml-3'>地址</Label>
-                <Input
-                  id="address"
-                  className='rounded-full'
-                  value={formData.address}
-                  onChange={e => handleSetValue('address', e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor='gender' className='ml-3'>性別</Label>
-                <RadioGroup value={formData.gender} className='flex gap-4 mt-1 ml-3' onValueChange={(value) => {
-                  if (value) {
-                    setFormData({ ...formData, gender: value })
-                  }
-                }}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="FEMALE" id="female" />
-                    <Label htmlFor="female">女性</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="MALE" id="male" />
-                    <Label htmlFor="male">男性</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-              <div>
-                <Label htmlFor='medical' className='ml-3'>病史或曾經受傷部位</Label>
-                <Textarea
-                  id="medical"
-                  className='mt-1 border-headingColor rounded-t-2xl rounded-l-2xl placeholder:text-fontColor/60'
-                  placeholder='請簡述相關病史或曾經受傷部位'
-                  value={formData.medical}
-                  onChange={e => {
-                    setFormData(prev => ({ ...prev, medical: e.target.value }))
-                  }}
-                />
-              </div>
-              <Accordion onValueChange={value => setShowAvatar(value !== 'item-1')} type="single" collapsible className="w-full -my-5">
+              <Accordion onValueChange={value => setShowEm(value === 'item-1')} type="single" collapsible className="w-full -my-5">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="text-[14px] px-3 flex justify-start">緊急聯絡人</AccordionTrigger>
                   <AccordionContent className="-mt-5">

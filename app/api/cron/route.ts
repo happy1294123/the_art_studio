@@ -49,18 +49,17 @@ export async function GET() {
 
   // to be confirmed course
   const tbcCourse = checkCourse[0]
-  const reservationNum = await prisma.reservation.count({
+  const reservation = await prisma.reservation.findMany({
     where: {
       course_id: tbcCourse.id
     }
   })
 
-  let isOpen: boolean
-  if (reservationNum < tbcCourse.baseline_rez) { // 確定開課
+  let isOpen = true
+  if (reservation.length < tbcCourse.baseline_rez) {
+    // TODO 返回點數，通知用戶
+    // TODO 若有用單次購客的用戶，如何通知管理員
     isOpen = false
-  } else {
-    // make notify
-    isOpen = true
   }
 
   await prisma.course.update({

@@ -32,6 +32,8 @@ export default function ManagePage() {
   }, [isAdmin, params])
 
   const { data: users, mutate: usersMutate, isLoading: userLoading } = useSWR<User[]>('/api/manage/users', fetcher)
+  const { data: paymentNum, mutate: paymentNumMutate } = useSWR<number>('/api/manage/receivement/hint', fetcher)
+
   const router = useRouter()
 
   return (
@@ -49,7 +51,10 @@ export default function ManagePage() {
             <TabsTrigger value="user">會員</TabsTrigger>
             <TabsTrigger value="course">課程</TabsTrigger>
             <TabsTrigger value="discount">折扣</TabsTrigger>
-            <TabsTrigger value="receive">收款</TabsTrigger>
+            <TabsTrigger value="receive">
+              收款
+              {(typeof paymentNum === 'number' && paymentNum !== 0) && <div className='text-xs -mr-5 -mt-5 -ml-1  outline-2 outline-bgColorSecondary bg-primary rounded-full w-4 h-4 text-white'>{paymentNum}</div>}
+            </TabsTrigger>
             {isAdmin && <TabsTrigger value="salary">薪資</TabsTrigger>}
           </TabsList>
           {/* 會員 */}
@@ -66,7 +71,7 @@ export default function ManagePage() {
           </TabsContent>
           {/* 收款 */}
           < TabsContent value="receive">
-            <ReceivementTable />
+            <ReceivementTable paymentNumMutate={paymentNumMutate} />
           </TabsContent>
           {/* 薪資 */}
           {isAdmin && (<TabsContent value="salary">

@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
+import prisma from '@/lib/initPrisma'
 
 export async function GET(req: any) {
   const token = await getToken({ req })
@@ -21,6 +22,11 @@ export async function GET(req: any) {
       }
     }
   })
+
+
+  if (!res) {
+    return NextResponse.json({ type: 'alert', message: '此預約已經取消' })
+  }
 
   let hasDiscount = false
   const userDiscount = await prisma.userDiscount.findFirst({

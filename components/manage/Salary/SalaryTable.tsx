@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import SalaryDialog from "./SalaryDialog";
 import dateFormatter from "@/lib/dateFormatter";
 import { ClipLoader } from "react-spinners";
+import React, { useRef } from 'react';
 
 export default function SalaryTable() {
   const [selectRow, setSelectRow] = useState<TeacherSalaryCourse | undefined>()

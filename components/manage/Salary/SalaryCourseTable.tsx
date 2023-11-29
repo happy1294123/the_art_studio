@@ -14,6 +14,12 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import toast from "react-hot-toast"
 import getToastOption from "@/lib/getToastOption"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { FaInfoCircle } from "react-icons/fa"
 
 type Props = {
   data: TeacherSalaryCourse
@@ -80,7 +86,7 @@ export default function SalaryCourseTable({ data, totalPrice, formData, switcher
 
   // for teacher
   const getTeacherTotalPrice = () => {
-    if (!formData.rule) return 0
+    if (!formData?.rule) return 0
     const openCourse = data.Course.filter(c => c.isOpen)
     if (data.Salary.rule === 'SOLID') {
       return openCourse.length * data.Salary.solid_price
@@ -95,9 +101,45 @@ export default function SalaryCourseTable({ data, totalPrice, formData, switcher
     return 0
   }
 
+  const makeRuleInfo = () => {
+    let rule = ''
+    let solid_price = 0
+    let dynamic_baseline_price = 0
+    let dynamic_add_price = 0
+
+    if (formData && formData.rule) {
+      rule = formData.rule
+      solid_price = formData.solid_price
+      dynamic_baseline_price = formData.dynamic_baseline_price
+      dynamic_add_price = formData.dynamic_add_price
+    } else if (data.Salary.rule) {
+      rule = data.Salary.rule
+      solid_price = data.Salary.solid_price
+      dynamic_baseline_price = data.Salary.dynamic_baseline_price
+      dynamic_add_price = data.Salary.dynamic_add_price
+    }
+
+    if (!rule) return
+
+    if (rule === 'SOLID') {
+      return <div className="flex flex-col text-center">
+        <span>{solid_price}/堂</span>
+        <span>不限人數</span>
+      </div>
+    }
+
+    if (rule === 'DYNAMIC') {
+      return <div className="flex flex-col text-center">
+        <span>2人開課底薪${dynamic_baseline_price}</span>
+        <span>多1人多${dynamic_add_price}</span>
+      </div>
+    }
+  }
+
+  // if formData exist, is manage
   return (<>
     {data.Course.length ? <>
-      <div className={`flex ${formData ? 'justify-between' : ' w-fit flex-col ml-auto'} mx-3`}>
+      <div className={`flex ${formData ? 'justify-between' : ' w-fit flex-col ml-auto'} mx-2 ${formData ? 'text-xs md:text-sm' : 'text-sm md:text-base'}`}>
         <div className="mt-auto">
           <span className="flex">
             完成課程：
@@ -162,7 +204,17 @@ export default function SalaryCourseTable({ data, totalPrice, formData, switcher
           <TableRow className="whitespace-nowrap border-headingColor">
             <TableHead className={headingClassName}>名稱</TableHead>
             <TableHead className={headingClassName}>人數</TableHead>
-            <TableHead className={headingClassName}>小計</TableHead>
+            <TableHead className={`${headingClassName} flex-center gap-1 ml-1`}>
+              小計
+              <Popover>
+                <PopoverTrigger>
+                  <FaInfoCircle />
+                </PopoverTrigger>
+                <PopoverContent className="bg-bgColor border boder-gray-400 rounded-2xl w-fit text-headingColor">
+                  {makeRuleInfo()}
+                </PopoverContent>
+              </Popover>
+            </TableHead>
             <TableHead className={headingClassName}>時間</TableHead>
           </TableRow>
         </TableHeader>

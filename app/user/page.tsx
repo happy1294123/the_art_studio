@@ -24,12 +24,7 @@ export default function UserPage() {
 
   const { data: unPayNum, mutate: mutateUnPayNum } = useSWR<number>(
     '/api/user/payment?unPay=1',
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false
-    }
+    fetcher
   )
   const router = useRouter()
 

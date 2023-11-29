@@ -16,10 +16,11 @@ type props = {
   openDialog: boolean,
   setOpenDialog: Dispatch<boolean>,
   payment: Payment,
-  paymentMutator: KeyedMutator<Payment>
+  paymentMutator: KeyedMutator<Payment>,
+  paymentNumMutate: KeyedMutator<number>,
 }
 
-export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymentMutator }: props) {
+export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymentMutator, paymentNumMutate }: props) {
   const [isLoading, setIsLoading] = useState(false)
   const handleReply = async (reply: string) => {
     setIsLoading(true)
@@ -34,6 +35,7 @@ export default function ReplyDialog({ openDialog, setOpenDialog, payment, paymen
     if (res.ok) {
       toast('回覆成功', getToastOption())
       paymentMutator()
+      paymentNumMutate()
       setOpenDialog(false)
     } else {
       const message = await res.json()

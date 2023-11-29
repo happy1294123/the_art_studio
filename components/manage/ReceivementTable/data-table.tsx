@@ -21,13 +21,15 @@ const ReplyDialog = dynamic(() => import('./ReplyDialog'))
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
-  mutate?: any
+  mutate?: any,
+  paymentNumMutate?: any,
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  mutate
+  mutate,
+  paymentNumMutate,
 }: DataTableProps<TData, TValue>) {
   const [openDialog, setOpenDialog] = useState(false)
   const [payment, setPayment] = useState<Payment>()
@@ -97,6 +99,7 @@ export function DataTable<TData, TValue>({
         setOpenDialog={setOpenDialog}
         payment={payment}
         paymentMutator={mutate}
+        paymentNumMutate={paymentNumMutate}
       />
     }
   </>)

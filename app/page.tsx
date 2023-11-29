@@ -26,7 +26,7 @@ export default function Home() {
               duration: 0.5,
               ease: [0, 0.5, 0.8, 1],
             }}
-            className="text-2xl md:text-3xl whitespace-nowrap text-center leading-8 tracking-widest text-[#789759] -mt-[180px] mr-10"
+            className="text-2xl text-[#789759] md:text-3xl whitespace-nowrap text-center leading-8 tracking-widest -mt-[180px] mr-10 "
           >
             <Link href="/">
               <Image className="mx-auto mb-3 drop-shadow-lg" src="/logo.svg" width={60} height={60} alt="" priority />

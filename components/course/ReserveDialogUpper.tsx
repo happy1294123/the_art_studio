@@ -123,7 +123,7 @@ export default function ReserveDialogUpper({ course, setOpen, mutate, mutateRese
 
   const handleShareLine = () => {
     if (window) {
-      const myWindow = window.open(`http://line.naver.jp/R/msg/text/?一起去【媞藝術空間】上課吧！ \n ${currentCourseUrl}1`, '_blank')
+      const myWindow = window.open(`http://line.naver.jp/R/msg/text/?一起去【媞藝術空間】上課吧！ \n ${currentCourseUrl}`, '_blank')
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { // check is moblie
         setTimeout(() => {
           myWindow?.close()

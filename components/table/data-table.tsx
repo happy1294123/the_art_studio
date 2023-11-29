@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({
   hasSearch,
   setSelectRow,
   handleRowAction,
-  textCenter
+  textCenter,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = useState('')
   const table = useReactTable({

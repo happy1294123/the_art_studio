@@ -20,7 +20,7 @@ export default function Navbar() {
   const { data: session } = useSession()
   const isLogin = !!session
   const isManager = session && ['ADMIN', 'EDITOR'].includes(session.user.role)
-  const isTeacher = session && session.user.role === 'TEACHER'
+  const isTeacher = session && (session.user.role === 'TEACHER' || session.user.role === 'ADMIN')
 
   useEffect(() => {
     const handleHideSidebar = (event: MouseEvent) => {

@@ -2,9 +2,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import FloatLabelInput from '@/components/FloatLabelInput'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import LoadingButton from '../LoadingButton'
 import toast from 'react-hot-toast'
 import getToastOption from '@/lib/getToastOption'
@@ -16,6 +16,10 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { data: session } = useSession()
+  if (session?.user.id) {
+    router.replace('/user')
+  }
 
   useEffect(() => {
     const register = searchParams.get('register')

@@ -31,7 +31,7 @@ type Props = {
 }
 
 export default function CourseSchedule({ users, isTeacherMode }: Props) {
-  const { data: courses, mutate: coursesMutate, isLoading: courseLoading } = useSWR<MyCourse[]>('/api/manage/course')
+  const { data: courses, mutate: coursesMutate, isLoading: courseLoading } = useSWR<MyCourse[]>(isTeacherMode ? '/api/teacher/course' : '/api/manage/course')
   const { data: courseType, mutate: courseTypeMutate } = useSWR<CourseType[]>('/api/manage/course/type')
   const { data: teacherOpt } = useSWR<Teacher[]>('api/manage/teacher')
 
