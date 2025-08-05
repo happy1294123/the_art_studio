@@ -45,6 +45,7 @@ model CourseType {
 }
 
 model Reservation {
+  id            Int              @id @default(autoincrement())
   course        Course           @relation(fields: [course_id], references: [id])
   course_id     Int
   user          User             @relation(fields: [user_id], references: [id])
@@ -122,6 +123,7 @@ enum Gender {
 }
 
 model Salary {
+  id                     Int               @id @default(autoincrement())
   user                   User              @relation(fields: [teacher_id], references: [id])
   teacher_id             Int               @unique
   rule                   SalaryRule?

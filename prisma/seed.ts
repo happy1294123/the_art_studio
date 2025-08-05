@@ -18,18 +18,18 @@ async function main() {
   }
 
   // course seeds
-  // for (let course of courses) {
-  //   await prisma.course.create({
-  //     data: course
-  //   })
-  // }
+  for (let course of courses) {
+    await prisma.course.create({
+      data: course
+    })
+  }
 
   // reservation seeds
-  // for (let relation of relations) {
-  //   await prisma.reservation.create({
-  //     data: relation
-  //   })
-  // }
+  for (let relation of relations) {
+    await prisma.reservation.create({
+      data: relation
+    })
+  }
 }
 
 main().catch(e => {
